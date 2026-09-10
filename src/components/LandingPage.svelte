@@ -518,13 +518,25 @@
 <style>
 	:global(html) {
 		scroll-behavior: smooth;
+		font-family:
+			"Inter Variable", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+			"Segoe UI", sans-serif;
+		font-synthesis: none;
 	}
 
 	:global(body) {
 		background: #f4f2ec;
 		color: #10103f;
-		font-family:
-			Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+		font-family: inherit;
+		line-height: 1.5;
+		text-rendering: optimizeLegibility;
+	}
+
+	:global(button),
+	:global(input),
+	:global(select),
+	:global(textarea) {
+		font: inherit;
 	}
 
 	:global(a) {
@@ -649,14 +661,15 @@
 		margin: 0;
 		font-size: clamp(3.15rem, 6vw, 5.8rem);
 		line-height: 0.98;
-		letter-spacing: -0.065em;
+		letter-spacing: -0.045em;
 	}
 
 	h1 em {
 		color: #4a4ab9;
-		font-family: Georgia, "Times New Roman", serif;
-		font-weight: 500;
-		letter-spacing: -0.055em;
+		font-family: inherit;
+		font-style: normal;
+		font-weight: 700;
+		letter-spacing: inherit;
 	}
 
 	.hero-intro {
@@ -705,7 +718,7 @@
 		flex-wrap: wrap;
 		gap: 0.65rem 1.5rem;
 		margin-top: 2.4rem;
-		color: #707083;
+		color: #626277;
 		font-size: 0.76rem;
 		font-weight: 650;
 	}
@@ -731,7 +744,7 @@
 		position: relative;
 		isolation: isolate;
 		min-height: 35rem;
-		border-radius: 2rem;
+		border-radius: 1.5rem;
 		background: #10105a;
 		box-shadow: 0 2rem 5rem rgb(16 16 90 / 16%);
 	}
@@ -764,7 +777,7 @@
 		inset: 3.25rem 2rem auto;
 		width: calc(100% - 4rem);
 		height: calc(100% - 6.5rem);
-		border-radius: 1.25rem;
+		border-radius: 1rem;
 		object-fit: cover;
 		object-position: 58% center;
 	}
@@ -823,10 +836,10 @@
 	.statement-band p {
 		max-width: 30rem;
 		margin: 0;
-		font-family: Georgia, "Times New Roman", serif;
 		font-size: clamp(1.25rem, 2vw, 1.65rem);
-		font-weight: 650;
+		font-weight: 700;
 		line-height: 1.2;
+		letter-spacing: -0.025em;
 	}
 
 	.statement-band div {
@@ -884,7 +897,7 @@
 		margin: 0;
 		font-size: clamp(2.3rem, 4.8vw, 4.4rem);
 		line-height: 1.02;
-		letter-spacing: -0.055em;
+		letter-spacing: -0.045em;
 	}
 
 	.section-heading > p {
@@ -906,7 +919,7 @@
 		min-height: 27rem;
 		flex-direction: column;
 		padding: clamp(1.7rem, 4vw, 2.7rem);
-		border-radius: 1.5rem;
+		border-radius: 1.25rem;
 	}
 
 	.service-card-featured {
@@ -960,7 +973,7 @@
 	}
 
 	.service-label {
-		font-size: 0.68rem;
+		font-size: 0.72rem;
 		font-weight: 800;
 		letter-spacing: 0.08em;
 		text-align: right;
@@ -1049,7 +1062,7 @@
 		padding: 0.45rem 0.65rem;
 		border-radius: 999px;
 		background: #e5e2d8;
-		font-size: 0.64rem;
+		font-size: 0.7rem;
 		font-weight: 850;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -1084,11 +1097,10 @@
 
 	.process-heading h2 {
 		margin: 0;
-		font-family: Georgia, "Times New Roman", serif;
 		font-size: clamp(2.5rem, 5vw, 4.6rem);
-		font-weight: 500;
+		font-weight: 700;
 		line-height: 1.02;
-		letter-spacing: -0.05em;
+		letter-spacing: -0.045em;
 	}
 
 	.process-heading > p:last-child {
@@ -1202,8 +1214,8 @@
 	}
 
 	.about-facts span {
-		color: #777789;
-		font-size: 0.7rem;
+		color: #626277;
+		font-size: 0.72rem;
 	}
 
 	.contact-section {
@@ -1212,7 +1224,7 @@
 		gap: clamp(2.5rem, 6vw, 5rem);
 		margin-bottom: clamp(4rem, 8vw, 7rem);
 		padding: clamp(1.5rem, 4vw, 3.5rem);
-		border-radius: 2rem;
+		border-radius: 1.5rem;
 		background: #f8a51b;
 	}
 
@@ -1271,7 +1283,7 @@
 	.consultation-form {
 		padding: clamp(1.4rem, 3vw, 2.4rem);
 		border: 1px solid rgb(16 16 63 / 10%);
-		border-radius: 1.4rem;
+		border-radius: 1.25rem;
 		background: #fff;
 		box-shadow: 0 1.5rem 4rem rgb(45 31 4 / 14%);
 	}
@@ -1293,8 +1305,8 @@
 	}
 
 	.form-heading span {
-		color: #707083;
-		font-size: 0.68rem;
+		color: #626277;
+		font-size: 0.72rem;
 	}
 
 	.form-grid {
@@ -1372,18 +1384,18 @@
 	}
 
 	.time-fields legend span {
-		color: #777789;
+		color: #626277;
 		font-weight: 600;
 	}
 
 	.time-fields label > span {
-		color: #777789;
-		font-size: 0.66rem;
+		color: #626277;
+		font-size: 0.7rem;
 	}
 
 	.field-error {
 		color: #982626;
-		font-size: 0.68rem;
+		font-size: 0.72rem;
 		line-height: 1.4;
 	}
 
@@ -1393,8 +1405,8 @@
 
 	.timezone-note {
 		margin: -0.45rem 0 0;
-		color: #777789;
-		font-size: 0.68rem;
+		color: #626277;
+		font-size: 0.72rem;
 	}
 
 	.honeypot {
@@ -1433,8 +1445,8 @@
 		padding: 0.75rem;
 		border: 1px dashed #c9c6bc;
 		border-radius: 0.65rem;
-		color: #707083;
-		font-size: 0.7rem;
+		color: #626277;
+		font-size: 0.72rem;
 	}
 
 	.form-submit-row {
@@ -1475,8 +1487,8 @@
 
 	.confirmation-note {
 		margin: 0.9rem 0 0;
-		color: #777789;
-		font-size: 0.68rem;
+		color: #626277;
+		font-size: 0.72rem;
 		line-height: 1.45;
 	}
 
@@ -1489,8 +1501,8 @@
 		margin: 0 auto;
 		padding: 1.5rem 0 2.5rem;
 		border-top: 1px solid #d0cdc3;
-		color: #737386;
-		font-size: 0.72rem;
+		color: #626277;
+		font-size: 0.75rem;
 	}
 
 	.footer-brand {
