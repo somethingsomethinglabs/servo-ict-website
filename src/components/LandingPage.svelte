@@ -92,7 +92,7 @@
 		</button>
 
 		<nav id="site-navigation" class:open={menuOpen} aria-label="Main navigation">
-			<a href="#services" onclick={closeMenu}>Services</a>
+			<a href="#services" onclick={closeMenu}>Project work</a>
 			<a href="#process" onclick={closeMenu}>How it works</a>
 			<a href="#about" onclick={closeMenu}>About</a>
 			<a href="#contact" onclick={closeMenu}>Contact</a>
@@ -102,18 +102,18 @@
 			class="header-cta"
 			href="#consultation-form"
 		>
-			Request a free consultation
+			Talk about your project
 		</a>
 	</header>
 
 	<main id="top">
 		<section class="hero" aria-labelledby="hero-title">
 			<div class="hero-copy">
-				<p class="eyebrow"><span></span> Cyber security for small business</p>
-				<h1 id="hero-title">Clear security advice.<br /><em>A practical way forward.</em></h1>
+				<p class="eyebrow"><span></span> Websites and technology for small business</p>
+				<h1 id="hero-title">Get the project done.<br /><em>Get it done properly.</em></h1>
 				<p class="hero-intro">
-					Servo ICT helps small businesses find their biggest digital risks, make a sensible plan,
-					and put the right protections in place.
+					Servo ICT builds websites and sets up the technology small businesses rely on. You get
+					clear advice, careful implementation, and a secure setup from the start.
 				</p>
 
 				<div class="hero-actions">
@@ -121,51 +121,51 @@
 						class="button button-primary"
 						href="#consultation-form"
 					>
-						Request a free consultation <span aria-hidden="true">→</span>
+						Talk about your project <span aria-hidden="true">→</span>
 					</a>
-					<a class="button button-secondary" href="#services">Explore our services</a>
+					<a class="button button-secondary" href="#services">See the work we take on</a>
 				</div>
 
 				<div class="hero-notes" aria-label="Service highlights">
 					<span>Based in Gippsland</span>
 					<span>Built for small business</span>
-					<span>Clear next steps</span>
+					<span>Built and handed over properly</span>
 				</div>
 			</div>
 
-			<div class="hero-visual" aria-label="Servo ICT cyber security risk assessment">
+			<div class="hero-visual" aria-label="Servo ICT website and technology project planning">
 				<div class="visual-grid" aria-hidden="true"></div>
 				<img
-					src="/images/cyber-security-report.webp"
-					alt="Servo ICT business cyber security report and next steps"
+					src="/images/startup-support.webp"
+					alt="Planning a small business website and technology project"
 					width="1600"
 					height="900"
 				/>
 				<div class="visual-card">
 					<span class="visual-card-mark">01</span>
-					<p>Know what matters first.</p>
+					<p>Useful work. Finished properly.</p>
 				</div>
 			</div>
 		</section>
 
 		<section class="statement-band" aria-label="Our approach">
-			<p>Good security advice should leave you knowing what to do next.</p>
+			<p>Technology should earn its place in the business.</p>
 			<div>
-				<span>Plain language</span>
-				<span>Prioritised actions</span>
-				<span>Support when you need it</span>
+				<span>Useful by design</span>
+				<span>Secure by default</span>
+				<span>Support after launch</span>
 			</div>
 		</section>
 
 		<section id="services" class="services-section section-wrap" aria-labelledby="services-title">
 			<div class="section-heading">
 				<div>
-					<p class="section-kicker">What we do</p>
-					<h2 id="services-title">Security that fits the way small businesses work.</h2>
+					<p class="section-kicker">Project work</p>
+					<h2 id="services-title">Projects that leave your business in better shape.</h2>
 				</div>
 				<p>
-					Start with a clear view of your risks, get advice on a specific problem, or bring us in
-					to help set up the systems your business relies on.
+					Bring us a new website, a technology change, or a setup that needs attention. We can
+					plan the work, do it, and make sure it is safe to run once it is yours.
 				</p>
 			</div>
 
@@ -173,98 +173,91 @@
 				<article class="service-card service-card-featured">
 					<div class="service-topline">
 						<span class="service-number">01</span>
-						<span class="service-label">For established businesses</span>
+						<span class="service-label">New sites, rebuilds and improvements</span>
 					</div>
-					<h3>Cyber security risk assessment</h3>
+					<h3>Websites and web development</h3>
 					<p>
-						Find the issues most likely to interrupt your work or expose your data. You receive a
-						clear report with priorities, practical fixes, and a sensible follow-up plan.
+						Get a site that explains the business clearly, works well on every screen, and does the
+						job you need it to do. We handle the technical decisions, deployment, security, and
+						handover.
 					</p>
-					<ul class="assessment-areas" aria-label="Assessment areas">
-						<li>Networks</li>
-						<li>Online accounts</li>
-						<li>Devices</li>
-						<li>Threat awareness</li>
-						<li>Documents</li>
+					<ul class="project-inclusions" aria-label="Website project services">
+						<li>New business websites</li>
+						<li>Rebuilds and upgrades</li>
+						<li>Forms and integrations</li>
+						<li>Hosting and deployment</li>
+						<li>Updates and maintenance</li>
 					</ul>
 					<a
 						class="text-link"
 						href="#consultation-form"
 					>
-						Discuss an assessment <span aria-hidden="true">↗</span>
+						Talk about a website <span aria-hidden="true">↗</span>
 					</a>
 				</article>
 
 				<article class="service-card service-card-light">
 					<div class="service-topline">
 						<span class="service-number">02</span>
-						<span class="service-label">Advice for a specific challenge</span>
+						<span class="service-label">Setup, migration and improvement</span>
 					</div>
-					<h3>Cyber security consulting</h3>
+					<h3>Business technology projects</h3>
 					<p>
-						Get direct, tailored advice on security decisions, risk, and the protections that make
-						sense for your size and budget.
+						Set up or improve the accounts, devices, email, domains, networks, and online tools your
+						team depends on. We can untangle an existing setup or build a cleaner one.
 					</p>
-					<a href="#consultation-form" class="text-link">Talk through a problem <span aria-hidden="true">→</span></a>
+					<a href="#consultation-form" class="text-link">Plan a technology project <span aria-hidden="true">→</span></a>
 				</article>
 
-				<article class="service-card service-card-image">
-					<img
-						src="/images/startup-support.webp"
-						alt="Illustration of digital tools and infrastructure being built"
-						width="1400"
-						height="788"
-						loading="lazy"
-					/>
-					<div class="service-image-copy">
-						<div class="service-topline">
-							<span class="service-number">03</span>
-							<span class="service-label">For new and changing businesses</span>
-						</div>
-						<h3>Startup and project support</h3>
-						<p>
-							Build on a secure base with help planning networks, websites, accounts, and business
-							devices.
-						</p>
-						<a href="#consultation-form" class="text-link">Plan your project <span aria-hidden="true">→</span></a>
+				<article class="service-card service-card-secure">
+					<div class="service-topline">
+						<span class="service-number">03</span>
+						<span class="service-label">Fixes you can see and use</span>
 					</div>
+					<h3>Secure setup and tidy-ups</h3>
+					<p>
+						If a website, laptop, account, or backup setup is exposed or out of date, we can fix it.
+						That can include updates, safer access, reliable backups, and a routine your business can
+						keep up with.
+					</p>
+					<a href="#consultation-form" class="text-link">Fix a weak setup <span aria-hidden="true">→</span></a>
 				</article>
 			</div>
 
 			<div class="coming-soon">
-				<span>In development</span>
-				<p><strong>Self-managed cyber security support</strong> for businesses that want useful intelligence without a full managed-service contract.</p>
+				<span>One project, one scope</span>
+				<p><strong>Most work crosses a few categories.</strong> A website project might also need domain, email, hosting, backup, and account security work. We can handle the pieces together.</p>
 			</div>
 		</section>
 
 		<section id="process" class="process-section" aria-labelledby="process-title">
 			<div class="process-inner">
 				<div class="process-heading">
-					<p class="section-kicker section-kicker-light">A straightforward process</p>
-					<h2 id="process-title">No scare tactics.<br />No mystery report.</h2>
-					<p>We focus on the decisions that reduce risk and keep your business running.</p>
+					<p class="section-kicker section-kicker-light">A project you can follow</p>
+					<h2 id="process-title">A clear scope.<br />A working result.</h2>
+					<p>You stay informed without having to manage every technical detail.</p>
 				</div>
 
 				<ol class="process-steps">
 					<li>
 						<span>01</span>
 						<div>
-							<h3>Start with a conversation</h3>
-							<p>Tell us how the business works, what is changing, and what is worrying you.</p>
+							<h3>Define what needs to work</h3>
+							<p>We agree on the result, the people involved, the budget, and any deadlines.</p>
 						</div>
 					</li>
 					<li>
 						<span>02</span>
 						<div>
-							<h3>Review or plan</h3>
-							<p>We examine the relevant systems and accounts, or map the setup your project needs.</p>
+							<h3>Build it and secure it</h3>
+							<p>We do the work, test it as we go, and include updates, backups, and access controls where they matter.</p>
 						</div>
 					</li>
 					<li>
 						<span>03</span>
 						<div>
-							<h3>Act on clear priorities</h3>
-							<p>You get practical next steps, ordered by what matters most, with support available to carry them out.</p>
+							<h3>Launch and hand it over</h3>
+							<p>You get a working result, useful documentation, and a clear path for maintenance or follow-up support.</p>
 						</div>
 					</li>
 				</ol>
@@ -276,19 +269,20 @@
 				<img src="/images/servo-ict-logo.png" alt="" width="500" height="500" loading="lazy" />
 			</div>
 			<div class="about-copy">
-				<p class="section-kicker">Local, practical support</p>
-				<h2 id="about-title">Advice made for small business, not an enterprise IT department.</h2>
+				<p class="section-kicker">Practical help from start to finish</p>
+				<h2 id="about-title">One person who can see the whole project through.</h2>
 				<p>
-					Servo ICT was founded by Rowan Paterson to make cyber security useful and affordable
-					for small businesses. We are based in Gippsland and support clients across Victoria.
+					Rowan Paterson founded Servo ICT to help small businesses plan, build, and look after
+					their technology without juggling several suppliers. We are based in Gippsland and work
+					with businesses across Victoria.
 				</p>
 				<p>
-					That means listening first, cutting out what you do not need, and giving you a plan you
-					can understand and use.
+					Security is part of the build, not a report added at the end. The aim is a useful result
+					that your business can operate, update, and understand.
 				</p>
 				<div class="about-facts" aria-label="About Servo ICT">
 					<div><strong>Gippsland</strong><span>Based locally</span></div>
-					<div><strong>Victoria</strong><span>Supporting small business</span></div>
+					<div><strong>Web + IT</strong><span>One project partner</span></div>
 					<div><strong>Free</strong><span>Initial consultation</span></div>
 				</div>
 			</div>
@@ -297,14 +291,14 @@
 		<section id="contact" class="contact-section section-wrap" aria-labelledby="contact-title">
 			<div class="contact-intro">
 				<p class="section-kicker">Start with a free consultation</p>
-				<h2 id="contact-title">What is the one security problem you keep putting off?</h2>
+				<h2 id="contact-title">What are you trying to build, fix, or move?</h2>
 				<p class="contact-copy">
-					Suggest a time for a short, no-obligation conversation. Rowan will check the diary and
-					reply to confirm it or arrange another time.
+					Share the rough idea, even if the scope is not clear yet. Suggest a time for a short call
+					and Rowan will reply to confirm it or arrange another time.
 				</p>
 				<div class="request-notes" aria-label="What happens after you submit">
-					<span>30-minute call</span>
-					<span>No obligation</span>
+					<span>30-minute first call</span>
+					<span>No finished brief required</span>
 					<span>Time confirmed by reply</span>
 				</div>
 				<div class="contact-details">
@@ -321,7 +315,7 @@
 				onsubmit={submitConsultation}
 			>
 				<div class="form-heading">
-					<p>Consultation request</p>
+					<p>Project consultation</p>
 					<span>Fields marked * are required</span>
 				</div>
 
@@ -384,9 +378,10 @@
 							required
 						>
 							<option value="">Choose a service</option>
-							<option value="assessment">Cyber security risk assessment</option>
-							<option value="consulting">Cyber security consulting</option>
-							<option value="project">Startup or project support</option>
+							<option value="website">Website design or development</option>
+							<option value="technology">Business technology project</option>
+							<option value="security">Secure setup or tidy-up</option>
+							<option value="consulting">Technology consulting</option>
 							<option value="other">Something else</option>
 						</select>
 						{#if fieldErrors.service}<small class="field-error">{fieldErrors.service}</small>{/if}
@@ -448,14 +443,14 @@
 					</p>
 
 					<label class="full-field">
-						<span>What would you like help with? *</span>
+						<span>What would you like to build, change, or fix? *</span>
 						<textarea
 							name="message"
 							rows="5"
 							minlength="20"
 							maxlength="2000"
 							aria-invalid={fieldErrors.message ? 'true' : undefined}
-							placeholder="A short description is plenty."
+							placeholder="A rough description is plenty. Tell us what needs to work and what is getting in the way."
 							required
 						></textarea>
 						{#if fieldErrors.message}<small class="field-error">{fieldErrors.message}</small>{/if}
@@ -514,7 +509,7 @@
 			<img src="/images/servo-ict-logo.png" alt="" width="44" height="44" />
 			<span>Servo ICT</span>
 		</a>
-		<p>Practical cyber security for small business.</p>
+		<p>Websites and technology projects for small business.</p>
 		<p class="footer-hours">Phone hours: Monday, Tuesday and Friday, 9am to 4pm.</p>
 		<span>© {new Date().getFullYear()} Servo ICT</span>
 	</footer>
@@ -940,27 +935,9 @@
 		background: #fff;
 	}
 
-	.service-card-image {
-		display: grid;
-		grid-template-columns: minmax(10rem, 0.75fr) minmax(0, 1.25fr);
-		align-items: stretch;
-		padding: 0;
-		overflow: hidden;
+	.service-card-secure {
+		border: 1px solid #cfcaee;
 		background: #dedcf6;
-	}
-
-	.service-card-image > img {
-		width: 100%;
-		height: 100%;
-		min-height: 27rem;
-		object-fit: cover;
-		object-position: 59% center;
-	}
-
-	.service-image-copy {
-		display: flex;
-		flex-direction: column;
-		padding: clamp(1.6rem, 3vw, 2.4rem);
 	}
 
 	.service-topline {
@@ -998,8 +975,7 @@
 		letter-spacing: -0.045em;
 	}
 
-	.service-card > p,
-	.service-image-copy > p {
+	.service-card > p {
 		max-width: 32rem;
 		margin: 1.5rem 0 0;
 		font-size: 0.96rem;
@@ -1011,25 +987,25 @@
 	}
 
 	.service-card-light > p,
-	.service-image-copy > p {
+	.service-card-secure > p {
 		color: #626277;
 	}
 
-	.assessment-areas {
+	.project-inclusions {
 		display: grid;
 		margin: auto 0 2rem;
 		padding: 0;
 		list-style: none;
 	}
 
-	.assessment-areas li {
+	.project-inclusions li {
 		padding: 0.9rem 0;
 		border-bottom: 1px solid rgb(255 255 255 / 17%);
 		font-size: 0.85rem;
 		font-weight: 700;
 	}
 
-	.assessment-areas li::before {
+	.project-inclusions li::before {
 		margin-right: 0.75rem;
 		color: #f8a51b;
 		content: "+";
@@ -1609,10 +1585,6 @@
 			align-items: start;
 		}
 
-		.service-card-image {
-			grid-template-columns: 0.9fr 1.1fr;
-		}
-
 		.about-mark {
 			width: min(25rem, 70vw);
 		}
@@ -1716,19 +1688,6 @@
 
 		.service-card-featured {
 			grid-row: auto;
-		}
-
-		.service-card-image {
-			display: flex;
-		}
-
-		.service-card-image > img {
-			height: 14rem;
-			min-height: 14rem;
-		}
-
-		.service-image-copy {
-			min-height: 25rem;
 		}
 
 		.coming-soon {

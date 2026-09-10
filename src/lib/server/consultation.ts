@@ -1,9 +1,10 @@
 import { DateTime, IANAZone } from 'luxon';
 
 export const serviceLabels = {
-	assessment: 'Cyber security risk assessment',
-	consulting: 'Cyber security consulting',
-	project: 'Startup or project support',
+	website: 'Website design or development',
+	technology: 'Business technology project',
+	security: 'Secure setup or tidy-up',
+	consulting: 'Technology consulting',
 	other: 'Something else'
 } as const;
 

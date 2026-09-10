@@ -12,7 +12,7 @@ function validForm(overrides: Record<string, string> = {}): FormData {
 		email: 'alex@example.com',
 		organisation: 'Example & Co',
 		phone: '0400 000 000',
-		service: 'assessment',
+		service: 'website',
 		contactPreference: 'video',
 		preferredDate: '2026-09-12',
 		preferredTime: '10:00',

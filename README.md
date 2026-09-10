@@ -1,6 +1,6 @@
 # Servo ICT website
 
-The Servo ICT landing page and consultation-request service, built with Astro, Svelte and TypeScript. Astro runs as a standalone Node server so the website can validate the form, send email through Fastmail and create a tentative calendar invitation without a separate booking SaaS.
+The Servo ICT website for small-business websites and technology projects, built with Astro, Svelte and TypeScript. Astro runs as a standalone Node server so the site can validate consultation requests, send email through Fastmail and create a tentative calendar invitation without a separate booking SaaS.
 
 ## What the consultation form does
 
