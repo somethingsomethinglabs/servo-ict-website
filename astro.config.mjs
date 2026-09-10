@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import svelte from '@astrojs/svelte';
 import node from '@astrojs/node';
+import sitemap from '@astrojs/sitemap';
 
 const staticBuild = process.env.PUBLIC_SITE_MODE === 'static';
 const githubPagesBase = '/servo-ict-website';
@@ -31,5 +32,5 @@ export default defineConfig({
 		: node({
 				mode: 'standalone'
 			}),
-	integrations: [svelte(), ...(staticBuild ? [] : [consultationApi])]
+	integrations: [sitemap(), svelte(), ...(staticBuild ? [] : [consultationApi])]
 });

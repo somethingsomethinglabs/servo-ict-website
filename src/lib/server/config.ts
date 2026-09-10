@@ -1,5 +1,3 @@
-import { IANAZone } from 'luxon';
-
 export class ConfigurationError extends Error {
 	constructor(message: string) {
 		super(message);
@@ -16,14 +14,9 @@ export interface ConsultationConfig {
 		password: string;
 	};
 	toEmail: string;
-	calendarEmail: string;
 	fromEmail: string;
 	fromName: string;
-	timezone: string;
-	durationMinutes: number;
-	minimumNoticeHours: number;
 	turnstileSecret?: string;
-	siteUrl: string;
 	allowInsecureLocal: boolean;
 }
 
@@ -72,18 +65,6 @@ function boolean(name: keyof ImportMetaEnv, fallback: boolean): boolean {
 
 export function getConsultationConfig(): ConsultationConfig {
 	const toEmail = email('CONSULTATION_TO_EMAIL');
-	const timezone = env('CONSULTATION_TIMEZONE')?.trim() || 'Australia/Melbourne';
-
-	if (!IANAZone.isValidZone(timezone)) {
-		throw new ConfigurationError('CONSULTATION_TIMEZONE must be a valid IANA timezone.');
-	}
-
-	let siteUrl: URL;
-	try {
-		siteUrl = new URL(env('SITE_URL') || 'https://servoict.com');
-	} catch {
-		throw new ConfigurationError('SITE_URL must be a valid absolute URL.');
-	}
 
 	return {
 		smtp: {
@@ -94,14 +75,9 @@ export function getConsultationConfig(): ConsultationConfig {
 			password: required('SMTP_PASSWORD')
 		},
 		toEmail,
-		calendarEmail: email('CONSULTATION_CALENDAR_EMAIL', toEmail),
 		fromEmail: email('CONSULTATION_FROM_EMAIL'),
 		fromName: env('CONSULTATION_FROM_NAME')?.trim() || 'Servo ICT Website',
-		timezone,
-		durationMinutes: positiveInteger('CONSULTATION_DURATION_MINUTES', 30),
-		minimumNoticeHours: positiveInteger('CONSULTATION_MIN_NOTICE_HOURS', 24),
 		turnstileSecret: env('TURNSTILE_SECRET_KEY')?.trim(),
-		siteUrl: siteUrl.toString(),
 		allowInsecureLocal: boolean('FORM_ALLOW_INSECURE_LOCAL', false)
 	};
 }

@@ -2,17 +2,17 @@
 
 The Servo ICT website for small-business websites and technology projects, built with Astro, Svelte and TypeScript. It has two production targets:
 
-- The standalone Node server validates consultation requests, sends email through Fastmail and creates a tentative calendar invitation.
+- The standalone Node server validates project enquiries and sends them through Fastmail.
 - The GitHub Pages build is fully static. The consultation form packages the entered details into an email draft for the visitor to review and send.
 
 ## What the consultation form does
 
-1. A visitor provides their details and suggests a preferred and optional alternate time.
+1. A visitor provides their contact details, project type and a short description.
 2. Cloudflare Turnstile checks the submission for spam.
-3. The server emails Servo ICT through Fastmail SMTP. The message includes a tentative `.ics` calendar invitation and uses the visitor's address as `Reply-To`.
-4. The visitor receives an acknowledgement explaining that the time is not confirmed until Servo ICT replies.
+3. The server emails Servo ICT through Fastmail SMTP and uses the visitor's address as `Reply-To`.
+4. The visitor receives an acknowledgement that Rowan will reply by email.
 
-No form submissions are stored in a database. The calendar request and email inbox are the record of the enquiry.
+No form submissions are stored in a database. The email inbox is the record of the enquiry.
 
 ## Local setup
 
@@ -37,11 +37,9 @@ In Fastmail:
 3. Put the generated password in `SMTP_PASSWORD` in `.env`. Do not use the normal Fastmail account password.
 4. Set `SMTP_USER` to the full Fastmail login address.
 5. Set `CONSULTATION_FROM_EMAIL` to a sending address that Fastmail has authorised for the account. The template uses `website@servoict.com`; create it as an alias or replace it with another authorised address.
-6. Set `CONSULTATION_TO_EMAIL` to the inbox that should receive enquiries and `CONSULTATION_CALENDAR_EMAIL` to the address whose calendar should receive the invitation.
+6. Set `CONSULTATION_TO_EMAIL` to the inbox that should receive enquiries.
 
 The template uses Fastmail's TLS SMTP endpoint on port 465. To use STARTTLS instead, set `SMTP_PORT=587` and `SMTP_SECURE=false`.
-
-For reliable invitation handling, keep `CONSULTATION_FROM_EMAIL` different from `CONSULTATION_CALENDAR_EMAIL`; otherwise Fastmail may treat it as a self-invite. For a tidy calendar, create a separate **Consultation requests** calendar in Fastmail and review Fastmail's invitation-handling setting for the calendar recipient. Calendar items are intentionally marked tentative; replying to the visitor is still the confirmation step.
 
 ## Turnstile setup
 
@@ -64,15 +62,10 @@ The public key is rendered into the page. The secret is used only by the server.
 | `SMTP_USER` | Full Fastmail login address | Required |
 | `SMTP_PASSWORD` | Fastmail app password | Required |
 | `CONSULTATION_TO_EMAIL` | Inbox receiving the full request | Required |
-| `CONSULTATION_CALENDAR_EMAIL` | Calendar invitation recipient | Same as inbox |
 | `CONSULTATION_FROM_EMAIL` | Authorised sender address | Required |
 | `CONSULTATION_FROM_NAME` | Sender display name | `Servo ICT Website` |
-| `CONSULTATION_TIMEZONE` | Fallback IANA timezone | `Australia/Melbourne` |
-| `CONSULTATION_DURATION_MINUTES` | Tentative event length | `30` |
-| `CONSULTATION_MIN_NOTICE_HOURS` | Earliest allowed request | `24` |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Browser-visible Turnstile key | Required in production |
 | `TURNSTILE_SECRET_KEY` | Server-only Turnstile key | Required in production |
-| `SITE_URL` | Canonical production URL | `https://servoict.com` |
 | `FORM_ALLOW_INSECURE_LOCAL` | Dev-only Turnstile bypass | `false` |
 
 ## Commands
@@ -81,7 +74,7 @@ The public key is rendered into the page. The secret is used only by the server.
 | --- | --- |
 | `npm run dev` | Start the local development server |
 | `npm run check` | Type-check Astro and Svelte files |
-| `npm test` | Run the consultation validation and calendar tests |
+| `npm test` | Run the project enquiry validation tests |
 | `npm run build` | Build the standalone Node service into `dist/` |
 | `npm run build:static` | Build the GitHub Pages version into `dist/` |
 | `npm start` | Run the built service, loading `.env` if present |

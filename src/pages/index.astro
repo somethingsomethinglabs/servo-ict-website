@@ -10,6 +10,19 @@ const siteOrigin = Astro.site ?? new URL('https://servoict.com');
 const canonicalUrl = new URL(baseUrl, siteOrigin);
 const socialImageUrl = new URL(`${baseUrl}og.png`, siteOrigin);
 
+const organisationSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'ProfessionalService',
+	name: 'Servo ICT',
+	url: canonicalUrl.toString(),
+	logo: new URL(`${baseUrl}images/servo-ict-logo.png`, siteOrigin).toString(),
+	email: 'support@servoict.com',
+	telephone: '+61-3-4148-8665',
+	areaServed: ['Gippsland', 'Victoria'],
+	founder: { '@type': 'Person', name: 'Rowan Paterson' },
+	knowsAbout: ['Website design and development', 'Business IT', 'Small business cyber security']
+};
+
 const turnstileSiteKey = consultationMode === 'server'
 	? process.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''
 	: '';
@@ -46,7 +59,8 @@ const turnstileSiteKey = consultationMode === 'server'
 		/>
 		<meta name="twitter:image" content={socialImageUrl} />
 		<meta name="twitter:image:alt" content="Servo ICT: Websites and technology, built properly." />
-		<title>Servo ICT | Websites and technology for small business</title>
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(organisationSchema)}></script>
+		<title>Servo ICT | Websites, business IT and security in Gippsland</title>
 	</head>
 	<body>
 		<LandingPage client:load {turnstileSiteKey} {consultationMode} {baseUrl} />

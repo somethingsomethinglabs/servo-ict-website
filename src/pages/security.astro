@@ -1,0 +1,28 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+
+export const prerender = true;
+---
+
+<ServiceLayout
+	title="Practical small business security | Servo ICT"
+	description="Focused account, access, update and backup security improvements for small businesses in Gippsland and across Victoria."
+	canonicalPath="/security/"
+	eyebrow="Practical security"
+	headline="Security for the systems you already use."
+	intro="Servo ICT focuses on concrete improvements: protecting important accounts, removing unnecessary access, dealing with neglected updates and checking whether recovery plans are usable."
+	goodFit={[
+		'Important accounts do not have strong sign-in protection.',
+		'Staff or suppliers may still have access they no longer need.',
+		'Updates and device settings have become inconsistent.',
+		'Backups exist, but no one is confident they can be restored.'
+	]}
+	typicalWork={[
+		{ title: 'Account protection', description: 'Strengthen sign-in, recovery details and multi-factor authentication for important services.' },
+		{ title: 'Access review', description: 'Map who can reach critical systems and remove access that is unclear or no longer needed.' },
+		{ title: 'Updates and devices', description: 'Establish a practical baseline for updates, device settings and day-to-day use.' },
+		{ title: 'Backups and recovery', description: 'Review what is backed up, where it is stored and how the business would restore it.' }
+	]}
+	closingTitle="Fix the important gaps before chasing every possible risk."
+	closingCopy="Share the systems you depend on and the issues you are worried about. Rowan will help separate the urgent work from the useful next steps."
+/>

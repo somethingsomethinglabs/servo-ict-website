@@ -1,0 +1,28 @@
+---
+import ServiceLayout from '../layouts/ServiceLayout.astro';
+
+export const prerender = true;
+---
+
+<ServiceLayout
+	title="Business IT projects | Servo ICT"
+	description="Practical business IT setup, migrations and improvements for small businesses in Gippsland and across Victoria."
+	canonicalPath="/business-it/"
+	eyebrow="Business IT"
+	headline="Business systems without the daily workarounds."
+	intro="Servo ICT helps small businesses untangle email, accounts, devices, domains and team tools. The goal is a setup people can use confidently, with ownership and next steps made clear."
+	goodFit={[
+		'Important access lives with former staff or an outside supplier.',
+		'Email, files or team tools need to move without unnecessary disruption.',
+		'New starters and devices are set up differently every time.',
+		'No one has a clear record of the systems the business depends on.'
+	]}
+	typicalWork={[
+		{ title: 'Email and accounts', description: 'Set up or migrate business email and organise the accounts people rely on.' },
+		{ title: 'Devices and staff setup', description: 'Create a repeatable baseline for new devices, staff access and day-to-day tools.' },
+		{ title: 'Domains and ownership', description: 'Clarify who controls domains, subscriptions and administrative access, then fix gaps.' },
+		{ title: 'Documentation and handover', description: 'Leave useful records behind so the business is not dependent on memory or one supplier.' }
+	]}
+	closingTitle="Start with the workaround everyone has learned to tolerate."
+	closingCopy="Explain what people are trying to do, where it breaks down and which systems are involved. Rowan can help work out the practical next step."
+/>

@@ -1,0 +1,50 @@
+---
+import BlogLayout from '../layouts/BlogLayout.astro';
+
+export const prerender = true;
+---
+
+<BlogLayout
+	title="Privacy | Servo ICT"
+	description="How Servo ICT handles information submitted through this website."
+	canonicalPath="/privacy/"
+>
+	<article class="privacy-page">
+		<p class="eyebrow">Privacy</p>
+		<h1>A short, plain-English privacy notice.</h1>
+		<p class="lead">Servo ICT only asks for the information needed to understand and reply to your enquiry.</p>
+
+		<section>
+			<h2>Information you provide</h2>
+			<p>When you email, call or use the project enquiry form, you may provide your name, email address, organisation and information about the work you need help with.</p>
+		</section>
+
+		<section>
+			<h2>How it is used</h2>
+			<p>Servo ICT uses that information to respond, discuss the project and provide services if you decide to proceed. It is not sold or used for advertising.</p>
+		</section>
+
+		<section>
+			<h2>Website hosting</h2>
+			<p>This website is hosted using GitHub Pages. Like most hosting services, GitHub may process technical request information needed to deliver the site and keep the service secure.</p>
+		</section>
+
+		<section>
+			<h2>Questions or corrections</h2>
+			<p>To ask what information Servo ICT holds about you, request a correction or raise a privacy question, email <a href="mailto:support@servoict.com">support@servoict.com</a>.</p>
+		</section>
+		<p class="updated">Last updated: 11 September 2026</p>
+	</article>
+</BlogLayout>
+
+<style>
+	.privacy-page { width: min(100% - 3rem, 760px); margin: 0 auto; padding: clamp(5rem, 10vw, 8rem) 0; }
+	.eyebrow { margin: 0 0 1.2rem; color: #4a4ab9; font-size: .72rem; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+	h1 { max-width: 11ch; margin: 0; font-size: clamp(3rem, 7vw, 5.5rem); line-height: .98; letter-spacing: -.052em; }
+	.lead { margin: 2rem 0 4rem; color: #5b5b70; font-size: 1.15rem; line-height: 1.75; }
+	section { padding: 2rem 0; border-top: 1px solid #d5d2c8; }
+	h2 { margin: 0 0 .8rem; font-size: 1.35rem; letter-spacing: -.025em; }
+	section p { margin: 0; color: #5b5b70; line-height: 1.75; }
+	.updated { margin: 2rem 0 0; color: #777789; font-size: .75rem; }
+	@media (max-width: 700px) { .privacy-page { width: min(100% - 2rem, 760px); } }
+</style>

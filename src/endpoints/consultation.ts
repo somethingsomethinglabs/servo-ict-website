@@ -2,10 +2,7 @@ import type { APIRoute } from 'astro';
 import nodemailer from 'nodemailer';
 import { ConfigurationError, getConsultationConfig } from '../lib/server/config';
 import {
-	buildCalendarInvitation,
-	contactPreferenceLabels,
 	escapeHtml,
-	formatRequestedTime,
 	FormValidationError,
 	parseConsultationRequest,
 	serviceLabels,
@@ -57,45 +54,28 @@ async function verifyTurnstile(token: string, secret: string, remoteIp?: string)
 }
 
 function ownerEmailHtml(submission: ConsultationRequest): string {
-	const alternate = submission.alternateStart
-		? `<p><strong>Alternate time:</strong> ${escapeHtml(formatRequestedTime(submission.alternateStart))}</p>`
-		: '';
 	return `
-		<h1>New consultation request</h1>
-		<p><strong>Requested time:</strong> ${escapeHtml(formatRequestedTime(submission.preferredStart))}</p>
-		${alternate}
+		<h1>New project enquiry</h1>
 		<p><strong>Name:</strong> ${escapeHtml(submission.name)}</p>
 		<p><strong>Email:</strong> ${escapeHtml(submission.email)}</p>
-		${submission.phone ? `<p><strong>Phone:</strong> ${escapeHtml(submission.phone)}</p>` : ''}
 		${submission.organisation ? `<p><strong>Organisation:</strong> ${escapeHtml(submission.organisation)}</p>` : ''}
-		<p><strong>Service:</strong> ${escapeHtml(serviceLabels[submission.service])}</p>
-		<p><strong>Preferred contact:</strong> ${escapeHtml(contactPreferenceLabels[submission.contactPreference])}</p>
-		<h2>What they need help with</h2>
+		<p><strong>Project type:</strong> ${escapeHtml(serviceLabels[submission.service])}</p>
+		<h2>What they would like to build, change, or fix</h2>
 		<p>${escapeHtml(submission.message).replace(/\r?\n/g, '<br>')}</p>
-		<hr>
-		<p><em>The calendar invitation is tentative. Reply to the requester to confirm or arrange another time.</em></p>
 	`;
 }
 
 function ownerEmailText(submission: ConsultationRequest): string {
 	return [
-		'New consultation request',
+		'New project enquiry',
 		'',
-		`Requested time: ${formatRequestedTime(submission.preferredStart)}`,
-		submission.alternateStart
-			? `Alternate time: ${formatRequestedTime(submission.alternateStart)}`
-			: '',
 		`Name: ${submission.name}`,
 		`Email: ${submission.email}`,
-		submission.phone ? `Phone: ${submission.phone}` : '',
 		submission.organisation ? `Organisation: ${submission.organisation}` : '',
-		`Service: ${serviceLabels[submission.service]}`,
-		`Preferred contact: ${contactPreferenceLabels[submission.contactPreference]}`,
+		`Project type: ${serviceLabels[submission.service]}`,
 		'',
-		'What they need help with:',
-		submission.message,
-		'',
-		'The calendar invitation is tentative. Reply to the requester to confirm or arrange another time.'
+		'What they would like to build, change, or fix:',
+		submission.message
 	]
 		.filter(Boolean)
 		.join('\n');
@@ -120,10 +100,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
 	try {
 		const config = getConsultationConfig();
-		const submission = parseConsultationRequest(form, {
-			minimumNoticeHours: config.minimumNoticeHours,
-			fallbackTimezone: config.timezone
-		});
+		const submission = parseConsultationRequest(form);
 
 		const insecureLocalBypass = import.meta.env.DEV && config.allowInsecureLocal;
 		if (!insecureLocalBypass) {
@@ -151,13 +128,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 			}
 		}
 
-		const calendar = buildCalendarInvitation(submission, {
-			durationMinutes: config.durationMinutes,
-			organizerEmail: config.fromEmail,
-			organizerName: config.fromName,
-			attendeeEmail: config.calendarEmail,
-			siteUrl: config.siteUrl
-		});
 		const mailer = nodemailer.createTransport({
 			host: config.smtp.host,
 			port: config.smtp.port,
@@ -172,30 +142,25 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 			from,
 			to: config.toEmail,
 			replyTo: { name: submission.name, address: submission.email },
-			subject: `Consultation request from ${submission.name}`,
+			subject: `Project enquiry from ${submission.name}`,
 			text: ownerEmailText(submission),
-			html: ownerEmailHtml(submission),
-			icalEvent: {
-				filename: 'consultation-request.ics',
-				method: 'REQUEST',
-				content: calendar
-			}
+			html: ownerEmailHtml(submission)
 		});
 
 		// The owner notification is the critical delivery. A failed acknowledgement should not
-		// make the visitor resubmit and create a duplicate calendar request.
+		// make the visitor resubmit and create a duplicate enquiry.
 		try {
 			await mailer.sendMail({
 				from,
 				to: { name: submission.name, address: submission.email },
 				replyTo: config.toEmail,
-				subject: 'We received your Servo ICT consultation request',
+				subject: 'We received your Servo ICT project enquiry',
 				text: [
 					`Hi ${submission.name},`,
 					'',
-					`Thanks for getting in touch. We received your request for ${formatRequestedTime(submission.preferredStart)}.`,
+					'Thanks for getting in touch. We received your project enquiry.',
 					'',
-					'This time is not confirmed yet. Rowan will reply to confirm it or suggest another time.',
+					'Rowan will reply by email to arrange a time and confirm whether the project is a good fit.',
 					'',
 					'Servo ICT'
 				].join('\n')
