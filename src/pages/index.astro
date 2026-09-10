@@ -1,5 +1,10 @@
 ---
 import LandingPage from '../components/LandingPage.svelte';
+
+export const prerender = false;
+
+const turnstileSiteKey =
+	process.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 ---
 
 <html lang="en">
@@ -34,7 +39,17 @@ import LandingPage from '../components/LandingPage.svelte';
 		<title>Servo ICT | Cyber security for small business</title>
 	</head>
 	<body>
-		<LandingPage client:load />
+		<LandingPage client:load {turnstileSiteKey} />
+		{
+			turnstileSiteKey && (
+				<script
+					is:inline
+					src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+					async
+					defer
+				></script>
+			)
+		}
 	</body>
 </html>
 

@@ -1,9 +1,75 @@
 <script lang="ts">
+	let { turnstileSiteKey = '' }: { turnstileSiteKey?: string } = $props();
 	let menuOpen = $state(false);
+	let formState = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
+	let formMessage = $state('');
+	let fieldErrors = $state<Record<string, string>>({});
+	let visitorTimezone = $state('Australia/Melbourne');
+	let minimumDate = $state('');
+
+	interface ConsultationResponse {
+		ok: boolean;
+		message: string;
+		fieldErrors?: Record<string, string>;
+	}
 
 	const closeMenu = () => {
 		menuOpen = false;
 	};
+
+	$effect(() => {
+		visitorTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Australia/Melbourne';
+		const now = new Date();
+		const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60_000);
+		minimumDate = localDate.toISOString().slice(0, 10);
+
+		const requestState = new URLSearchParams(window.location.search).get('request');
+		if (requestState === 'sent') {
+			formState = 'success';
+			formMessage = 'Thanks — your consultation request has been sent.';
+		} else if (requestState === 'error') {
+			formState = 'error';
+			formMessage = 'Your request could not be sent. Please email support@servoict.com.';
+		}
+	});
+
+	async function submitConsultation(event: SubmitEvent) {
+		event.preventDefault();
+		const form = event.currentTarget as HTMLFormElement;
+		formState = 'submitting';
+		formMessage = 'Sending your request…';
+		fieldErrors = {};
+
+		try {
+			const request = await fetch(form.action, {
+				method: 'POST',
+				headers: { Accept: 'application/json' },
+				body: new FormData(form)
+			});
+			const result = (await request.json()) as ConsultationResponse;
+			formState = result.ok ? 'success' : 'error';
+			formMessage = result.message;
+			fieldErrors = result.fieldErrors || {};
+
+			if (result.ok) {
+				form.reset();
+				visitorTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Australia/Melbourne';
+			} else {
+				const firstInvalidField = Object.keys(fieldErrors)[0];
+				if (firstInvalidField) {
+					(form.elements.namedItem(firstInvalidField) as HTMLElement | null)?.focus();
+				}
+			}
+		} catch {
+			formState = 'error';
+			formMessage = 'Your request could not be sent. Please email support@servoict.com.';
+		} finally {
+			const turnstile = (
+				window as typeof window & { turnstile?: { reset: () => void } }
+			).turnstile;
+			turnstile?.reset();
+		}
+	}
 </script>
 
 <div class="page-shell">
@@ -34,9 +100,9 @@
 
 		<a
 			class="header-cta"
-			href="https://cloud.servoict.com/index.php/apps/appointments/pub/v3VC7MCBGac7N8vb/form?ref=servoict.com"
+			href="#consultation-form"
 		>
-			Book a free consultation
+			Request a free consultation
 		</a>
 	</header>
 
@@ -53,9 +119,9 @@
 				<div class="hero-actions">
 					<a
 						class="button button-primary"
-						href="https://cloud.servoict.com/index.php/apps/appointments/pub/v3VC7MCBGac7N8vb/form?ref=servoict.com"
+						href="#consultation-form"
 					>
-						Book a free consultation <span aria-hidden="true">→</span>
+						Request a free consultation <span aria-hidden="true">→</span>
 					</a>
 					<a class="button button-secondary" href="#services">Explore our services</a>
 				</div>
@@ -123,7 +189,7 @@
 					</ul>
 					<a
 						class="text-link"
-						href="https://cloud.servoict.com/index.php/apps/appointments/pub/v3VC7MCBGac7N8vb/form?ref=servoict.com"
+						href="#consultation-form"
 					>
 						Discuss an assessment <span aria-hidden="true">↗</span>
 					</a>
@@ -139,7 +205,7 @@
 						Get direct, tailored advice on security decisions, risk, and the protections that make
 						sense for your size and budget.
 					</p>
-					<a href="#contact" class="text-link">Talk through a problem <span aria-hidden="true">→</span></a>
+					<a href="#consultation-form" class="text-link">Talk through a problem <span aria-hidden="true">→</span></a>
 				</article>
 
 				<article class="service-card service-card-image">
@@ -160,7 +226,7 @@
 							Build on a secure base with help planning networks, websites, accounts, and business
 							devices.
 						</p>
-						<a href="#contact" class="text-link">Plan your project <span aria-hidden="true">→</span></a>
+						<a href="#consultation-form" class="text-link">Plan your project <span aria-hidden="true">→</span></a>
 					</div>
 				</article>
 			</div>
@@ -229,23 +295,217 @@
 		</section>
 
 		<section id="contact" class="contact-section section-wrap" aria-labelledby="contact-title">
-			<div>
+			<div class="contact-intro">
 				<p class="section-kicker">Start with a free consultation</p>
 				<h2 id="contact-title">What is the one security problem you keep putting off?</h2>
-			</div>
-			<div class="contact-actions">
-				<p>Bring it to a short, no-obligation conversation. We will help you work out the next sensible step.</p>
-				<a
-					class="button button-primary contact-button"
-					href="https://cloud.servoict.com/index.php/apps/appointments/pub/v3VC7MCBGac7N8vb/form?ref=servoict.com"
-				>
-					Find a time <span aria-hidden="true">→</span>
-				</a>
+				<p class="contact-copy">
+					Suggest a time for a short, no-obligation conversation. Rowan will check the diary and
+					reply to confirm it or arrange another time.
+				</p>
+				<div class="request-notes" aria-label="What happens after you submit">
+					<span>30-minute call</span>
+					<span>No obligation</span>
+					<span>Time confirmed by reply</span>
+				</div>
 				<div class="contact-details">
 					<a href="mailto:support@servoict.com">support@servoict.com</a>
 					<a href="tel:0341488665">(03) 4148 8665</a>
 				</div>
 			</div>
+
+			<form
+				id="consultation-form"
+				class="consultation-form"
+				method="post"
+				action="/api/consultation"
+				onsubmit={submitConsultation}
+			>
+				<div class="form-heading">
+					<p>Consultation request</p>
+					<span>Fields marked * are required</span>
+				</div>
+
+				<div class="form-grid">
+					<label>
+						<span>Your name *</span>
+						<input
+							type="text"
+							name="name"
+							autocomplete="name"
+							maxlength="100"
+							aria-invalid={fieldErrors.name ? 'true' : undefined}
+							required
+						/>
+						{#if fieldErrors.name}<small class="field-error">{fieldErrors.name}</small>{/if}
+					</label>
+
+					<label>
+						<span>Email *</span>
+						<input
+							type="email"
+							name="email"
+							autocomplete="email"
+							maxlength="254"
+							aria-invalid={fieldErrors.email ? 'true' : undefined}
+							required
+						/>
+						{#if fieldErrors.email}<small class="field-error">{fieldErrors.email}</small>{/if}
+					</label>
+
+					<label>
+						<span>Organisation</span>
+						<input
+							type="text"
+							name="organisation"
+							autocomplete="organization"
+							maxlength="120"
+							aria-invalid={fieldErrors.organisation ? 'true' : undefined}
+						/>
+						{#if fieldErrors.organisation}<small class="field-error">{fieldErrors.organisation}</small>{/if}
+					</label>
+
+					<label>
+						<span>Phone</span>
+						<input
+							type="tel"
+							name="phone"
+							autocomplete="tel"
+							maxlength="50"
+							aria-invalid={fieldErrors.phone ? 'true' : undefined}
+						/>
+						{#if fieldErrors.phone}<small class="field-error">{fieldErrors.phone}</small>{/if}
+					</label>
+
+					<label>
+						<span>What can we help with? *</span>
+						<select
+							name="service"
+							aria-invalid={fieldErrors.service ? 'true' : undefined}
+							required
+						>
+							<option value="">Choose a service</option>
+							<option value="assessment">Cyber security risk assessment</option>
+							<option value="consulting">Cyber security consulting</option>
+							<option value="project">Startup or project support</option>
+							<option value="other">Something else</option>
+						</select>
+						{#if fieldErrors.service}<small class="field-error">{fieldErrors.service}</small>{/if}
+					</label>
+
+					<label>
+						<span>How would you like to talk? *</span>
+						<select
+							name="contactPreference"
+							aria-invalid={fieldErrors.contactPreference ? 'true' : undefined}
+							required
+						>
+							<option value="">Choose an option</option>
+							<option value="phone">Phone call</option>
+							<option value="video">Video call</option>
+							<option value="either">Either works</option>
+						</select>
+						{#if fieldErrors.contactPreference}<small class="field-error">{fieldErrors.contactPreference}</small>{/if}
+					</label>
+
+					<fieldset class="time-fields">
+						<legend>Preferred time *</legend>
+						<label>
+							<span>Date</span>
+							<input
+								type="date"
+								name="preferredDate"
+								min={minimumDate}
+								aria-invalid={fieldErrors.preferredDate ? 'true' : undefined}
+								required
+							/>
+						</label>
+						<label>
+							<span>Time</span>
+							<input type="time" name="preferredTime" step="900" required />
+						</label>
+						{#if fieldErrors.preferredDate}<small class="field-error field-error-wide">{fieldErrors.preferredDate}</small>{/if}
+					</fieldset>
+
+					<fieldset class="time-fields">
+						<legend>Alternate time <span>(optional)</span></legend>
+						<label>
+							<span>Date</span>
+							<input
+								type="date"
+								name="alternateDate"
+								min={minimumDate}
+								aria-invalid={fieldErrors.alternateDate ? 'true' : undefined}
+							/>
+						</label>
+						<label>
+							<span>Time</span>
+							<input type="time" name="alternateTime" step="900" />
+						</label>
+						{#if fieldErrors.alternateDate}<small class="field-error field-error-wide">{fieldErrors.alternateDate}</small>{/if}
+					</fieldset>
+					<p class="timezone-note full-field">
+						Times are interpreted in {visitorTimezone.replaceAll('_', ' ')}.
+					</p>
+
+					<label class="full-field">
+						<span>What would you like help with? *</span>
+						<textarea
+							name="message"
+							rows="5"
+							minlength="20"
+							maxlength="2000"
+							aria-invalid={fieldErrors.message ? 'true' : undefined}
+							placeholder="A short description is plenty."
+							required
+						></textarea>
+						{#if fieldErrors.message}<small class="field-error">{fieldErrors.message}</small>{/if}
+					</label>
+				</div>
+
+				<input type="hidden" name="timezone" value={visitorTimezone} />
+				<label class="honeypot" aria-hidden="true">
+					Company website
+					<input type="text" name="companyWebsite" tabindex="-1" autocomplete="off" />
+				</label>
+
+				<label class="privacy-check">
+					<input type="checkbox" name="privacy" required />
+					<span>I agree that Servo ICT may use these details to respond to my request. *</span>
+				</label>
+				{#if fieldErrors.privacy}<small class="field-error">{fieldErrors.privacy}</small>{/if}
+
+				{#if turnstileSiteKey}
+					<div
+						class="cf-turnstile"
+						data-sitekey={turnstileSiteKey}
+						data-action="consultation"
+						data-theme="light"
+					></div>
+				{:else}
+					<p class="turnstile-note">Spam protection will appear here once its site key is configured.</p>
+				{/if}
+
+				<div class="form-submit-row">
+					<button
+						class="button button-primary contact-button"
+						type="submit"
+						disabled={formState === 'submitting'}
+					>
+						{formState === 'submitting' ? 'Sending…' : 'Send consultation request'}
+						<span aria-hidden="true">→</span>
+					</button>
+					<p
+						class:form-success={formState === 'success'}
+						class:form-error={formState === 'error'}
+						class="form-status"
+						role="status"
+						aria-live="polite"
+					>
+						{formMessage}
+					</p>
+				</div>
+				<p class="confirmation-note">Your requested time is not booked until Servo ICT confirms it by reply.</p>
+			</form>
 		</section>
 	</main>
 
@@ -972,10 +1232,10 @@
 
 	.contact-section {
 		display: grid;
-		grid-template-columns: minmax(0, 1.1fr) minmax(19rem, 0.9fr);
-		gap: clamp(3rem, 9vw, 8rem);
+		grid-template-columns: minmax(17rem, 0.72fr) minmax(0, 1.28fr);
+		gap: clamp(2.5rem, 6vw, 5rem);
 		margin-bottom: clamp(4rem, 8vw, 7rem);
-		padding: clamp(2rem, 6vw, 5rem);
+		padding: clamp(1.5rem, 4vw, 3.5rem);
 		border-radius: 2rem;
 		background: #f8a51b;
 	}
@@ -984,26 +1244,45 @@
 		color: #10103f;
 	}
 
-	.contact-actions {
-		display: flex;
-		align-items: flex-start;
-		flex-direction: column;
+	.contact-intro {
+		align-self: start;
+		padding: clamp(0.5rem, 2vw, 1.25rem) 0;
 	}
 
-	.contact-actions > p {
-		margin: 0 0 1.8rem;
+	.contact-copy {
+		margin: 1.8rem 0 0;
 		line-height: 1.7;
 	}
 
-	.contact-button {
-		min-width: 12rem;
+	.request-notes {
+		display: grid;
+		gap: 0.7rem;
+		margin-top: 1.8rem;
+		font-size: 0.76rem;
+		font-weight: 800;
+	}
+
+	.request-notes span {
+		position: relative;
+		padding-left: 1rem;
+	}
+
+	.request-notes span::before {
+		position: absolute;
+		top: 0.42rem;
+		left: 0;
+		width: 0.35rem;
+		height: 0.35rem;
+		border-radius: 50%;
+		background: #10105a;
+		content: "";
 	}
 
 	.contact-details {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.65rem 1.25rem;
-		margin-top: 1.5rem;
+		margin-top: 2rem;
 	}
 
 	.contact-details a {
@@ -1011,6 +1290,218 @@
 		font-weight: 750;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 0.2rem;
+	}
+
+	.consultation-form {
+		padding: clamp(1.4rem, 3vw, 2.4rem);
+		border: 1px solid rgb(16 16 63 / 10%);
+		border-radius: 1.4rem;
+		background: #fff;
+		box-shadow: 0 1.5rem 4rem rgb(45 31 4 / 14%);
+	}
+
+	.form-heading {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.7rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #dfddd5;
+	}
+
+	.form-heading p {
+		margin: 0;
+		font-size: 1.05rem;
+		font-weight: 850;
+	}
+
+	.form-heading span {
+		color: #707083;
+		font-size: 0.68rem;
+	}
+
+	.form-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.15rem 1rem;
+	}
+
+	.form-grid > label,
+	.time-fields label {
+		display: grid;
+		align-content: start;
+		gap: 0.45rem;
+	}
+
+	.form-grid label > span,
+	.time-fields legend {
+		font-size: 0.72rem;
+		font-weight: 800;
+	}
+
+	.consultation-form input,
+	.consultation-form select,
+	.consultation-form textarea {
+		width: 100%;
+		min-height: 3rem;
+		padding: 0.75rem 0.85rem;
+		border: 1px solid #c9c6bc;
+		border-radius: 0.65rem;
+		outline: none;
+		background: #fbfaf7;
+		color: #10103f;
+		font: inherit;
+		font-size: 0.86rem;
+		transition:
+			border-color 140ms ease,
+			box-shadow 140ms ease;
+	}
+
+	.consultation-form textarea {
+		min-height: 8rem;
+		resize: vertical;
+		line-height: 1.5;
+	}
+
+	.consultation-form input:focus,
+	.consultation-form select:focus,
+	.consultation-form textarea:focus {
+		border-color: #4a4ab9;
+		box-shadow: 0 0 0 3px rgb(74 74 185 / 14%);
+	}
+
+	.consultation-form [aria-invalid="true"] {
+		border-color: #a32626;
+	}
+
+	.full-field {
+		grid-column: 1 / -1;
+	}
+
+	.time-fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.45rem 0.7rem;
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	.time-fields legend {
+		grid-column: 1 / -1;
+		margin-bottom: 0.05rem;
+		padding: 0;
+	}
+
+	.time-fields legend span {
+		color: #777789;
+		font-weight: 600;
+	}
+
+	.time-fields label > span {
+		color: #777789;
+		font-size: 0.66rem;
+	}
+
+	.field-error {
+		color: #982626;
+		font-size: 0.68rem;
+		line-height: 1.4;
+	}
+
+	.field-error-wide {
+		grid-column: 1 / -1;
+	}
+
+	.timezone-note {
+		margin: -0.45rem 0 0;
+		color: #777789;
+		font-size: 0.68rem;
+	}
+
+	.honeypot {
+		position: absolute;
+		left: -10000px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+	.privacy-check {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.65rem;
+		margin-top: 1.2rem;
+		color: #555568;
+		font-size: 0.72rem;
+		line-height: 1.45;
+	}
+
+	.privacy-check input {
+		width: 1rem;
+		height: 1rem;
+		min-height: 0;
+		margin: 0.1rem 0 0;
+		padding: 0;
+		accent-color: #4a4ab9;
+	}
+
+	.cf-turnstile,
+	.turnstile-note {
+		margin-top: 1rem;
+	}
+
+	.turnstile-note {
+		padding: 0.75rem;
+		border: 1px dashed #c9c6bc;
+		border-radius: 0.65rem;
+		color: #707083;
+		font-size: 0.7rem;
+	}
+
+	.form-submit-row {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-top: 1.3rem;
+	}
+
+	.contact-button {
+		flex: 0 0 auto;
+		min-width: 14rem;
+		border: 0;
+		cursor: pointer;
+	}
+
+	.contact-button:disabled {
+		cursor: wait;
+		opacity: 0.65;
+		transform: none;
+	}
+
+	.form-status {
+		margin: 0;
+		color: #666679;
+		font-size: 0.73rem;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+
+	.form-success {
+		color: #1e6d42;
+	}
+
+	.form-error {
+		color: #982626;
+	}
+
+	.confirmation-note {
+		margin: 0.9rem 0 0;
+		color: #777789;
+		font-size: 0.68rem;
+		line-height: 1.45;
 	}
 
 	footer {
@@ -1108,6 +1599,10 @@
 		.about-section,
 		.contact-section {
 			grid-template-columns: 1fr;
+		}
+
+		.contact-intro {
+			max-width: 42rem;
 		}
 
 		.section-heading {
@@ -1268,6 +1763,23 @@
 			grid-template-columns: 1fr;
 			padding: 2rem 1.4rem;
 			border-radius: 1.3rem;
+		}
+
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.full-field {
+			grid-column: auto;
+		}
+
+		.form-submit-row {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		.contact-button {
+			width: 100%;
 		}
 
 		footer {
