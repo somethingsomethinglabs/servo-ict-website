@@ -90,7 +90,7 @@ The public key is rendered into the page. The secret is used only by the server.
 
 The workflow in `.github/workflows/deploy-pages.yml` runs the static build whenever `main` is pushed. That build switches the consultation button to **Open email draft**, removes the Turnstile widget and does not include the consultation API route.
 
-In the GitHub repository, open **Settings → Pages** and choose **GitHub Actions** as the source. The initial address is `https://somethingsomethinglabs.github.io/servo-ict-website/`. A custom domain can be added later after its public DNS records point to GitHub Pages.
+In the GitHub repository, open **Settings → Pages** and choose **GitHub Actions** as the source. The site is published at `https://somethingsomethinglabs.com/servo-ict-website/`. The `servoict.com` domain can be added later after its public DNS records point to GitHub Pages.
 
 ## Production with Docker
 
