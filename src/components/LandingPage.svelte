@@ -109,7 +109,7 @@
 	<main id="top">
 		<section class="hero" aria-labelledby="hero-title">
 			<div class="hero-copy">
-				<p class="eyebrow"><span></span> Websites and technology for small business</p>
+				<p class="eyebrow"><span aria-hidden="true"></span> Websites and technology for small business</p>
 				<h1 id="hero-title">Get the project done.<br /><em>Get it done properly.</em></h1>
 				<p class="hero-intro">
 					Servo ICT builds websites and sets up the technology small businesses rely on. You get
@@ -476,8 +476,6 @@
 						data-action="consultation"
 						data-theme="light"
 					></div>
-				{:else}
-					<p class="turnstile-note">Spam protection will appear here once its site key is configured.</p>
 				{/if}
 
 				<div class="form-submit-row">
@@ -649,11 +647,35 @@
 	}
 
 	.eyebrow span {
+		position: relative;
+		flex: 0 0 auto;
 		width: 0.6rem;
 		height: 0.6rem;
 		border-radius: 50%;
 		background: #f8a51b;
 		box-shadow: 0 0 0 0.35rem rgb(248 165 27 / 15%);
+	}
+
+	.eyebrow span::after {
+		position: absolute;
+		inset: -0.35rem;
+		border: 1px solid rgb(248 165 27 / 80%);
+		border-radius: inherit;
+		content: "";
+		animation: status-ping 2.2s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+	}
+
+	@keyframes status-ping {
+		0% {
+			opacity: 0.8;
+			transform: scale(0.45);
+		}
+
+		70%,
+		100% {
+			opacity: 0;
+			transform: scale(1.35);
+		}
 	}
 
 	h1 {
@@ -1438,17 +1460,8 @@
 		accent-color: #4a4ab9;
 	}
 
-	.cf-turnstile,
-	.turnstile-note {
+	.cf-turnstile {
 		margin-top: 1rem;
-	}
-
-	.turnstile-note {
-		padding: 0.75rem;
-		border: 1px dashed #c9c6bc;
-		border-radius: 0.65rem;
-		color: #626277;
-		font-size: 0.72rem;
 	}
 
 	.form-submit-row {
@@ -1793,6 +1806,11 @@
 		.header-cta,
 		.button {
 			transition: none;
+		}
+
+		.eyebrow span::after {
+			animation: none;
+			opacity: 0;
 		}
 	}
 </style>
