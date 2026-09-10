@@ -33,12 +33,12 @@ In Fastmail:
 2. Create an app password with mail access for this website.
 3. Put the generated password in `SMTP_PASSWORD` in `.env`. Do not use the normal Fastmail account password.
 4. Set `SMTP_USER` to the full Fastmail login address.
-5. Set `CONSULTATION_FROM_EMAIL` to that address or another sending address that Fastmail has authorised for the account.
+5. Set `CONSULTATION_FROM_EMAIL` to a sending address that Fastmail has authorised for the account. The template uses `website@servoict.com`; create it as an alias or replace it with another authorised address.
 6. Set `CONSULTATION_TO_EMAIL` to the inbox that should receive enquiries and `CONSULTATION_CALENDAR_EMAIL` to the address whose calendar should receive the invitation.
 
 The template uses Fastmail's TLS SMTP endpoint on port 465. To use STARTTLS instead, set `SMTP_PORT=587` and `SMTP_SECURE=false`.
 
-For a tidy calendar, create a separate **Consultation requests** calendar in Fastmail and review Fastmail's invitation-handling setting for the address in `CONSULTATION_CALENDAR_EMAIL`. Calendar items are intentionally marked tentative; replying to the visitor is still the confirmation step.
+For reliable invitation handling, keep `CONSULTATION_FROM_EMAIL` different from `CONSULTATION_CALENDAR_EMAIL`; otherwise Fastmail may treat it as a self-invite. For a tidy calendar, create a separate **Consultation requests** calendar in Fastmail and review Fastmail's invitation-handling setting for the calendar recipient. Calendar items are intentionally marked tentative; replying to the visitor is still the confirmation step.
 
 ## Turnstile setup
 
