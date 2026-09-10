@@ -1,0 +1,328 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../layouts/BlogLayout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post }
+	}));
+}
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+	.filter((candidate) => candidate.id !== post.id)
+	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+	.slice(0, 3);
+const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+const sitePath = (path: string) => `${baseUrl}${path.replace(/^\//, '')}`;
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-AU', {
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'Australia/Melbourne'
+	}).format(date);
+---
+
+<BlogLayout
+	title={`${post.data.title} | Servo ICT`}
+	description={post.data.description}
+	canonicalPath={`/${post.id}/`}
+	image={post.data.featuredImage}
+	type="article"
+	publishedAt={post.data.publishedAt}
+	updatedAt={post.data.updatedAt}
+>
+	<article class="post">
+		<header class="post-header">
+			<a class="back-link" href={sitePath('/blog/')}><span aria-hidden="true">←</span> All posts</a>
+			<p class="topic">{post.data.topic}</p>
+			<h1>{post.data.title}</h1>
+			<p class="description">{post.data.description}</p>
+			<div class="byline">
+				<span>By {post.data.author}</span>
+				<time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+			</div>
+		</header>
+
+		<figure class="post-hero">
+			<img
+				src={sitePath(post.data.featuredImage)}
+				alt={post.data.featuredImageAlt}
+				width="1200"
+				height="675"
+				fetchpriority="high"
+			/>
+		</figure>
+
+		<div class="post-body">
+			<Content />
+		</div>
+	</article>
+
+	<section class="more-posts" aria-labelledby="more-posts-title">
+		<div class="more-heading">
+			<p>Keep reading</p>
+			<h2 id="more-posts-title">More from Servo ICT</h2>
+		</div>
+		<div class="more-grid">
+			{posts.map((relatedPost) => (
+				<a href={sitePath(`/${relatedPost.id}/`)}>
+					<img
+						src={sitePath(relatedPost.data.featuredImage)}
+						alt=""
+						width="1200"
+						height="675"
+						loading="lazy"
+					/>
+					<span>{relatedPost.data.topic}</span>
+					<h3>{relatedPost.data.title}</h3>
+				</a>
+			))}
+		</div>
+	</section>
+</BlogLayout>
+
+<style>
+	.post,
+	.more-posts {
+		width: min(100% - 3rem, 1120px);
+		margin-inline: auto;
+	}
+
+	.post-header {
+		max-width: 52rem;
+		margin: 0 auto;
+		padding: clamp(4rem, 9vw, 7rem) 0 clamp(2.5rem, 6vw, 4.5rem);
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		margin-bottom: clamp(3rem, 7vw, 5.5rem);
+		color: #5f5f74;
+		font-size: 0.78rem;
+		font-weight: 750;
+		text-decoration: none;
+	}
+
+	.back-link:hover,
+	.back-link:focus-visible {
+		color: #4a4ab9;
+	}
+
+	.topic {
+		margin: 0 0 1.2rem;
+		color: #4a4ab9;
+		font-size: 0.72rem;
+		font-weight: 850;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(2.8rem, 7vw, 5.8rem);
+		line-height: 0.98;
+		letter-spacing: -0.05em;
+	}
+
+	.description {
+		max-width: 43rem;
+		margin: 1.7rem 0 0;
+		color: #5f5f74;
+		font-size: clamp(1.02rem, 1.7vw, 1.2rem);
+		line-height: 1.7;
+	}
+
+	.byline {
+		display: flex;
+		gap: 0.8rem 1.5rem;
+		margin-top: 2rem;
+		color: #626277;
+		font-size: 0.74rem;
+		font-weight: 700;
+	}
+
+	.post-hero {
+		margin: 0;
+		overflow: hidden;
+		border-radius: 1.25rem;
+		background: #10105a;
+	}
+
+	.post-hero img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+	}
+
+	.post-body {
+		max-width: 46rem;
+		margin: clamp(3.5rem, 7vw, 6rem) auto 0;
+		color: #34344e;
+		font-size: clamp(1rem, 1.25vw, 1.08rem);
+		line-height: 1.82;
+	}
+
+	:global(.post-body > :first-child) {
+		margin-top: 0;
+	}
+
+	:global(.post-body h2) {
+		margin: 3.2rem 0 1rem;
+		color: #10103f;
+		font-size: clamp(1.8rem, 3vw, 2.45rem);
+		line-height: 1.12;
+		letter-spacing: -0.04em;
+	}
+
+	:global(.post-body h3) {
+		margin: 2.2rem 0 0.7rem;
+		color: #10103f;
+		font-size: 1.22rem;
+		line-height: 1.3;
+		letter-spacing: -0.02em;
+	}
+
+	:global(.post-body p),
+	:global(.post-body ul),
+	:global(.post-body ol),
+	:global(.post-body blockquote) {
+		margin: 1rem 0 0;
+	}
+
+	:global(.post-body li + li) {
+		margin-top: 0.55rem;
+	}
+
+	:global(.post-body a) {
+		color: #3939a6;
+		font-weight: 700;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.18em;
+	}
+
+	:global(.post-body blockquote) {
+		padding: 1.2rem 1.4rem;
+		border-left: 4px solid #f8a51b;
+		background: #fff;
+		color: #44445c;
+	}
+
+	:global(.post-body code) {
+		padding: 0.12rem 0.3rem;
+		border-radius: 0.3rem;
+		background: #e7e4da;
+		font-size: 0.92em;
+	}
+
+	.more-posts {
+		margin-top: clamp(5rem, 10vw, 8rem);
+		padding-top: clamp(3.5rem, 7vw, 5rem);
+		border-top: 1px solid #d0cdc3;
+	}
+
+	.more-heading p {
+		margin: 0 0 0.6rem;
+		color: #4a4ab9;
+		font-size: 0.7rem;
+		font-weight: 850;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+
+	.more-heading h2 {
+		margin: 0;
+		font-size: clamp(2rem, 4vw, 3.4rem);
+		line-height: 1;
+		letter-spacing: -0.045em;
+	}
+
+	.more-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		margin-top: 2.2rem;
+	}
+
+	.more-grid a {
+		display: block;
+		padding-bottom: 1rem;
+		text-decoration: none;
+	}
+
+	.more-grid img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		border-radius: 0.85rem;
+		object-fit: cover;
+	}
+
+	.more-grid span {
+		display: block;
+		margin-top: 1rem;
+		color: #4a4ab9;
+		font-size: 0.66rem;
+		font-weight: 850;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.more-grid h3 {
+		margin: 0.55rem 0 0;
+		font-size: 1.08rem;
+		line-height: 1.25;
+		letter-spacing: -0.025em;
+	}
+
+	.more-grid a:hover h3,
+	.more-grid a:focus-visible h3 {
+		color: #4a4ab9;
+	}
+
+	@media (max-width: 720px) {
+		.post,
+		.more-posts {
+			width: min(100% - 2rem, 1120px);
+		}
+
+		.post-header {
+			padding-top: 3.5rem;
+		}
+
+		.back-link {
+			margin-bottom: 3rem;
+		}
+
+		.post-hero {
+			border-radius: 0.9rem;
+		}
+
+		.post-body {
+			padding-inline: 0.25rem;
+		}
+
+		.more-grid {
+			grid-template-columns: 1fr;
+			gap: 1.7rem;
+		}
+	}
+</style>

@@ -1,6 +1,9 @@
 # Servo ICT website
 
-The Servo ICT website for small-business websites and technology projects, built with Astro, Svelte and TypeScript. Astro runs as a standalone Node server so the site can validate consultation requests, send email through Fastmail and create a tentative calendar invitation without a separate booking SaaS.
+The Servo ICT website for small-business websites and technology projects, built with Astro, Svelte and TypeScript. It has two production targets:
+
+- The standalone Node server validates consultation requests, sends email through Fastmail and creates a tentative calendar invitation.
+- The GitHub Pages build is fully static. The consultation form packages the entered details into an email draft for the visitor to review and send.
 
 ## What the consultation form does
 
@@ -80,7 +83,14 @@ The public key is rendered into the page. The secret is used only by the server.
 | `npm run check` | Type-check Astro and Svelte files |
 | `npm test` | Run the consultation validation and calendar tests |
 | `npm run build` | Build the standalone Node service into `dist/` |
+| `npm run build:static` | Build the GitHub Pages version into `dist/` |
 | `npm start` | Run the built service, loading `.env` if present |
+
+## GitHub Pages
+
+The workflow in `.github/workflows/deploy-pages.yml` runs the static build whenever `main` is pushed. That build switches the consultation button to **Open email draft**, removes the Turnstile widget and does not include the consultation API route.
+
+In the GitHub repository, open **Settings → Pages** and choose **GitHub Actions** as the source. The initial address is `https://somethingsomethinglabs.github.io/servo-ict-website/`. A custom domain can be added later after its public DNS records point to GitHub Pages.
 
 ## Production with Docker
 

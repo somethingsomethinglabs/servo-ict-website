@@ -1,0 +1,250 @@
+---
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+export const prerender = true;
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
+);
+const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+const sitePath = (path: string) => `${baseUrl}${path.replace(/^\//, '')}`;
+
+const formatDate = (date: Date) =>
+	new Intl.DateTimeFormat('en-AU', {
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'Australia/Melbourne'
+	}).format(date);
+---
+
+<BlogLayout
+	title="Blog | Servo ICT"
+	description="Practical guidance on cyber security, business technology and reliable systems for small businesses."
+	canonicalPath="/blog/"
+>
+	<section class="blog-hero" aria-labelledby="blog-title">
+		<p class="eyebrow"><span aria-hidden="true"></span> The Servo ICT blog</p>
+		<h1 id="blog-title">Useful notes for small business.</h1>
+		<p>
+			Plain-English guidance on accounts, devices, cyber security and the systems your
+			business depends on.
+		</p>
+	</section>
+
+	<section class="post-list" aria-label="Blog posts">
+		{posts.map((post, index) => (
+			<a class:list={['post-card', { featured: index === 0 }]} href={sitePath(`/${post.id}/`)}>
+				<div class="post-image">
+					<img
+						src={sitePath(post.data.featuredImage)}
+						alt={post.data.featuredImageAlt}
+						width="1200"
+						height="675"
+						loading={index === 0 ? 'eager' : 'lazy'}
+					/>
+				</div>
+				<div class="post-copy">
+					<div class="post-meta">
+						<span>{post.data.topic}</span>
+						<time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+					</div>
+					<h2>{post.data.title}</h2>
+					<p>{post.data.description}</p>
+					<strong>Read the post <span aria-hidden="true">→</span></strong>
+				</div>
+			</a>
+		))}
+	</section>
+</BlogLayout>
+
+<style>
+	.blog-hero,
+	.post-list {
+		width: min(100% - 3rem, 1120px);
+		margin-inline: auto;
+	}
+
+	.blog-hero {
+		padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+	}
+
+	.eyebrow {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin: 0 0 1.4rem;
+		font-size: 0.72rem;
+		font-weight: 850;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.eyebrow span {
+		width: 0.6rem;
+		height: 0.6rem;
+		border-radius: 50%;
+		background: #f8a51b;
+		box-shadow: 0 0 0 0.35rem rgb(248 165 27 / 15%);
+	}
+
+	h1 {
+		max-width: 11ch;
+		margin: 0;
+		font-size: clamp(3rem, 7vw, 6.2rem);
+		line-height: 0.96;
+		letter-spacing: -0.05em;
+	}
+
+	.blog-hero > p:last-child {
+		max-width: 42rem;
+		margin: 1.7rem 0 0;
+		color: #5f5f74;
+		font-size: clamp(1rem, 1.6vw, 1.15rem);
+		line-height: 1.7;
+	}
+
+	.post-list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.post-card {
+		display: grid;
+		overflow: hidden;
+		border: 1px solid #d5d2c8;
+		border-radius: 1.15rem;
+		background: #fff;
+		text-decoration: none;
+		transition:
+			border-color 160ms ease,
+			box-shadow 160ms ease,
+			transform 160ms ease;
+	}
+
+	.post-card.featured {
+		grid-column: 1 / -1;
+		grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
+		min-height: 28rem;
+	}
+
+	.post-card:hover,
+	.post-card:focus-visible {
+		border-color: #aaa7d8;
+		box-shadow: 0 1.2rem 3rem rgb(16 16 90 / 10%);
+		transform: translateY(-3px);
+	}
+
+	.post-image {
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		background: #10105a;
+	}
+
+	.featured .post-image {
+		aspect-ratio: auto;
+	}
+
+	.post-image img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 300ms ease;
+	}
+
+	.post-card:hover .post-image img,
+	.post-card:focus-visible .post-image img {
+		transform: scale(1.025);
+	}
+
+	.post-copy {
+		display: flex;
+		min-height: 18rem;
+		align-items: flex-start;
+		flex-direction: column;
+		padding: clamp(1.4rem, 3vw, 2.5rem);
+	}
+
+	.post-meta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		width: 100%;
+		color: #626277;
+		font-size: 0.68rem;
+		font-weight: 750;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.post-meta span {
+		color: #4a4ab9;
+	}
+
+	.post-copy h2 {
+		margin: 1rem 0 0;
+		font-size: clamp(1.45rem, 2.5vw, 2.35rem);
+		line-height: 1.08;
+		letter-spacing: -0.04em;
+	}
+
+	.featured .post-copy h2 {
+		font-size: clamp(2rem, 3.7vw, 3.5rem);
+	}
+
+	.post-copy p {
+		margin: 1rem 0 0;
+		color: #626277;
+		font-size: 0.9rem;
+		line-height: 1.65;
+	}
+
+	.post-copy strong {
+		margin-top: auto;
+		padding-top: 1.6rem;
+		font-size: 0.78rem;
+	}
+
+	@media (max-width: 720px) {
+		.blog-hero,
+		.post-list {
+			width: min(100% - 2rem, 1120px);
+		}
+
+		.blog-hero {
+			padding-top: 4rem;
+		}
+
+		.post-list {
+			grid-template-columns: 1fr;
+		}
+
+		.post-card.featured {
+			grid-column: auto;
+			grid-template-columns: 1fr;
+			min-height: 0;
+		}
+
+		.featured .post-image {
+			aspect-ratio: 16 / 9;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.post-card,
+		.post-image img {
+			transition: none;
+		}
+
+		.post-card:hover,
+		.post-card:focus-visible,
+		.post-card:hover .post-image img,
+		.post-card:focus-visible .post-image img {
+			transform: none;
+		}
+	}
+</style>

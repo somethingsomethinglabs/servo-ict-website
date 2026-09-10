@@ -2,6 +2,7 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
+	readonly PUBLIC_SITE_MODE?: 'server' | 'static';
 	readonly PUBLIC_TURNSTILE_SITE_KEY?: string;
 	readonly SMTP_HOST?: string;
 	readonly SMTP_PORT?: string;

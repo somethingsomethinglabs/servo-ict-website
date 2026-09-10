@@ -1,5 +1,11 @@
 <script lang="ts">
-	let { turnstileSiteKey = '' }: { turnstileSiteKey?: string } = $props();
+	import { buildConsultationMailto } from '../lib/consultationEmail';
+
+	let {
+		turnstileSiteKey = '',
+		consultationMode = 'server',
+		baseUrl = '/'
+	}: { turnstileSiteKey?: string; consultationMode?: 'server' | 'email'; baseUrl?: string } = $props();
 	let menuOpen = $state(false);
 	let formState = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
 	let formMessage = $state('');
@@ -17,6 +23,8 @@
 		menuOpen = false;
 	};
 
+	const sitePath = (path: string) => `${baseUrl}${path.replace(/^\//, '')}`;
+
 	$effect(() => {
 		visitorTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Australia/Melbourne';
 		const now = new Date();
@@ -26,7 +34,7 @@
 		const requestState = new URLSearchParams(window.location.search).get('request');
 		if (requestState === 'sent') {
 			formState = 'success';
-			formMessage = 'Thanks — your consultation request has been sent.';
+			formMessage = 'Thanks, your consultation request has been sent.';
 		} else if (requestState === 'error') {
 			formState = 'error';
 			formMessage = 'Your request could not be sent. Please email support@servoict.com.';
@@ -36,6 +44,15 @@
 	async function submitConsultation(event: SubmitEvent) {
 		event.preventDefault();
 		const form = event.currentTarget as HTMLFormElement;
+
+		if (consultationMode === 'email') {
+			fieldErrors = {};
+			formState = 'idle';
+			formMessage = 'Opening an email draft. Review it, then press send in your email app.';
+			window.location.href = buildConsultationMailto(new FormData(form));
+			return;
+		}
+
 		formState = 'submitting';
 		formMessage = 'Sending your request…';
 		fieldErrors = {};
@@ -75,7 +92,7 @@
 <div class="page-shell">
 	<header class="site-header">
 		<a class="brand" href="#top" aria-label="Servo ICT home" onclick={closeMenu}>
-			<img src="/images/servo-ict-logo.png" alt="" width="44" height="44" />
+			<img src={sitePath('/images/servo-ict-logo.png')} alt="" width="44" height="44" />
 			<span>Servo ICT</span>
 		</a>
 
@@ -94,6 +111,7 @@
 		<nav id="site-navigation" class:open={menuOpen} aria-label="Main navigation">
 			<a href="#services" onclick={closeMenu}>Project work</a>
 			<a href="#process" onclick={closeMenu}>How it works</a>
+			<a href="#blog" onclick={closeMenu}>Blog</a>
 			<a href="#about" onclick={closeMenu}>About</a>
 			<a href="#contact" onclick={closeMenu}>Contact</a>
 		</nav>
@@ -102,18 +120,18 @@
 			class="header-cta"
 			href="#consultation-form"
 		>
-			Talk about your project
+			Start a project
 		</a>
 	</header>
 
 	<main id="top">
 		<section class="hero" aria-labelledby="hero-title">
 			<div class="hero-copy">
-				<p class="eyebrow"><span aria-hidden="true"></span> Websites and technology for small business</p>
-				<h1 id="hero-title">Get the project done.<br /><em>Get it done properly.</em></h1>
+				<p class="eyebrow">Websites and IT for small business</p>
+				<h1 id="hero-title">Technology that <em>just works.</em></h1>
 				<p class="hero-intro">
-					Servo ICT builds websites and sets up the technology small businesses rely on. You get
-					clear advice, careful implementation, and a secure setup from the start.
+					Servo ICT plans, builds and looks after the websites and systems behind small businesses
+					across Gippsland and Victoria.
 				</p>
 
 				<div class="hero-actions">
@@ -121,170 +139,199 @@
 						class="button button-primary"
 						href="#consultation-form"
 					>
-						Talk about your project <span aria-hidden="true">→</span>
+						Start a project <span aria-hidden="true">→</span>
 					</a>
-					<a class="button button-secondary" href="#services">See the work we take on</a>
-				</div>
-
-				<div class="hero-notes" aria-label="Service highlights">
-					<span>Based in Gippsland</span>
-					<span>Built for small business</span>
-					<span>Built and handed over properly</span>
+					<a class="hero-link" href="#services">See what we do</a>
 				</div>
 			</div>
 
-			<div class="hero-visual" aria-label="Servo ICT website and technology project planning">
-				<div class="visual-grid" aria-hidden="true"></div>
+			<figure class="hero-visual">
 				<img
-					src="/images/startup-support.webp"
-					alt="Planning a small business website and technology project"
-					width="1600"
-					height="900"
+					src={sitePath('/images/servo-business-technology.webp')}
+					alt="Two small-business owners reviewing their website on a laptop in their workshop"
+					width="1448"
+					height="1086"
+					fetchpriority="high"
 				/>
-				<div class="visual-card">
-					<span class="visual-card-mark">01</span>
-					<p>Useful work. Finished properly.</p>
-				</div>
-			</div>
+			</figure>
 		</section>
 
 		<section class="statement-band" aria-label="Our approach">
-			<p>Technology should earn its place in the business.</p>
-			<div>
-				<span>Useful by design</span>
-				<span>Secure by default</span>
-				<span>Support after launch</span>
-			</div>
+			<p>Useful technology. One person accountable.</p>
 		</section>
 
 		<section id="services" class="services-section section-wrap" aria-labelledby="services-title">
 			<div class="section-heading">
 				<div>
-					<p class="section-kicker">Project work</p>
-					<h2 id="services-title">Projects that leave your business in better shape.</h2>
+					<p class="section-kicker">What we do</p>
+					<h2 id="services-title">What needs to work better?</h2>
 				</div>
 				<p>
-					Bring us a new website, a technology change, or a setup that needs attention. We can
-					plan the work, do it, and make sure it is safe to run once it is yours.
+					Bring us the outcome you need. We will work out the technical details and see the project
+					through.
 				</p>
 			</div>
 
 			<div class="services-grid">
-				<article class="service-card service-card-featured">
+				<article class="service-card">
 					<div class="service-topline">
 						<span class="service-number">01</span>
-						<span class="service-label">New sites, rebuilds and improvements</span>
 					</div>
-					<h3>Websites and web development</h3>
+					<h3>Websites</h3>
 					<p>
-						Get a site that explains the business clearly, works well on every screen, and does the
-						job you need it to do. We handle the technical decisions, deployment, security, and
-						handover.
+						New sites, rebuilds and improvements that explain your business and make it easier for
+						customers to act.
 					</p>
-					<ul class="project-inclusions" aria-label="Website project services">
-						<li>New business websites</li>
-						<li>Rebuilds and upgrades</li>
-						<li>Forms and integrations</li>
-						<li>Hosting and deployment</li>
-						<li>Updates and maintenance</li>
-					</ul>
-					<a
-						class="text-link"
-						href="#consultation-form"
-					>
-						Talk about a website <span aria-hidden="true">↗</span>
-					</a>
 				</article>
 
-				<article class="service-card service-card-light">
+				<article class="service-card">
 					<div class="service-topline">
 						<span class="service-number">02</span>
-						<span class="service-label">Setup, migration and improvement</span>
 					</div>
-					<h3>Business technology projects</h3>
+					<h3>Business IT</h3>
 					<p>
-						Set up or improve the accounts, devices, email, domains, networks, and online tools your
-						team depends on. We can untangle an existing setup or build a cleaner one.
+						Clean setups and careful migrations for email, accounts, devices, domains and the tools
+						your team uses each day.
 					</p>
-					<a href="#consultation-form" class="text-link">Plan a technology project <span aria-hidden="true">→</span></a>
 				</article>
 
-				<article class="service-card service-card-secure">
+				<article class="service-card">
 					<div class="service-topline">
 						<span class="service-number">03</span>
-						<span class="service-label">Fixes you can see and use</span>
 					</div>
-					<h3>Secure setup and tidy-ups</h3>
+					<h3>Security</h3>
 					<p>
-						If a website, laptop, account, or backup setup is exposed or out of date, we can fix it.
-						That can include updates, safer access, reliable backups, and a routine your business can
-						keep up with.
+						Practical fixes for exposed accounts, neglected updates and backups you cannot trust.
 					</p>
-					<a href="#consultation-form" class="text-link">Fix a weak setup <span aria-hidden="true">→</span></a>
 				</article>
 			</div>
 
-			<div class="coming-soon">
-				<span>One project, one scope</span>
-				<p><strong>Most work crosses a few categories.</strong> A website project might also need domain, email, hosting, backup, and account security work. We can handle the pieces together.</p>
-			</div>
+			<a class="text-link services-link" href="#consultation-form">Talk about your project <span aria-hidden="true">→</span></a>
 		</section>
 
 		<section id="process" class="process-section" aria-labelledby="process-title">
 			<div class="process-inner">
 				<div class="process-heading">
-					<p class="section-kicker section-kicker-light">A project you can follow</p>
-					<h2 id="process-title">A clear scope.<br />A working result.</h2>
-					<p>You stay informed without having to manage every technical detail.</p>
+					<p class="section-kicker section-kicker-light">How it works</p>
+					<h2 id="process-title">Clear from start to finish.</h2>
 				</div>
 
 				<ol class="process-steps">
 					<li>
 						<span>01</span>
 						<div>
-							<h3>Define what needs to work</h3>
-							<p>We agree on the result, the people involved, the budget, and any deadlines.</p>
+							<h3>Agree on the result</h3>
+							<p>We set the scope, budget and timing.</p>
 						</div>
 					</li>
 					<li>
 						<span>02</span>
 						<div>
-							<h3>Build it and secure it</h3>
-							<p>We do the work, test it as we go, and include updates, backups, and access controls where they matter.</p>
+							<h3>Do the work</h3>
+							<p>We build, test and keep you informed.</p>
 						</div>
 					</li>
 					<li>
 						<span>03</span>
 						<div>
-							<h3>Launch and hand it over</h3>
-							<p>You get a working result, useful documentation, and a clear path for maintenance or follow-up support.</p>
+							<h3>Hand it over</h3>
+							<p>You get a working result and a clear support plan.</p>
 						</div>
 					</li>
 				</ol>
 			</div>
 		</section>
 
+		<section id="blog" class="guides-section section-wrap" aria-labelledby="blog-title">
+			<div class="guides-heading">
+				<div>
+					<p class="section-kicker">From the blog</p>
+					<h2 id="blog-title">Straight answers for common technology problems.</h2>
+				</div>
+				<div class="guides-intro">
+					<p>
+						Practical notes on accounts, devices and the systems your business relies on.
+					</p>
+					<a class="text-link" href={sitePath('/blog/')}>Browse all posts <span aria-hidden="true">→</span></a>
+				</div>
+			</div>
+
+			<div class="guides-grid">
+				<a
+					class="guide-card guide-card-featured"
+					href={sitePath('/simplifying-cyber-security-for-small-businesses/')}
+				>
+					<div class="guide-image">
+						<img
+							src={sitePath('/images/blog/cyber-security-basics.webp')}
+							alt="Simplify your cyber security"
+							width="1200"
+							height="675"
+							loading="lazy"
+						/>
+					</div>
+					<div class="guide-copy">
+						<span>Cyber security basics</span>
+						<h3>Simplifying cyber security for small businesses</h3>
+						<p>A plain-English way to decide what to protect first and which steps matter.</p>
+						<strong>Read the post <span aria-hidden="true">→</span></strong>
+					</div>
+				</a>
+
+				<a
+					class="guide-card"
+					href={sitePath('/3-key-steps-to-protect-your-business-accounts/')}
+				>
+					<div class="guide-image">
+						<img
+							src={sitePath('/images/blog/protect-business-accounts.webp')}
+							alt="Business account security shown on a laptop"
+							width="1200"
+							height="675"
+							loading="lazy"
+						/>
+					</div>
+					<div class="guide-copy">
+						<span>Account security</span>
+						<h3>Three steps to protect your business accounts</h3>
+						<strong>Read the post <span aria-hidden="true">→</span></strong>
+					</div>
+				</a>
+
+				<a
+					class="guide-card"
+					href={sitePath('/use-cyber-security-to-grow-your-business/')}
+				>
+					<div class="guide-image">
+						<img
+							src={sitePath('/images/blog/business-resilience.webp')}
+							alt="A laptop recovering from a system problem"
+							width="1200"
+							height="675"
+							loading="lazy"
+						/>
+					</div>
+					<div class="guide-copy">
+						<span>Business resilience</span>
+						<h3>Use cyber security practices to grow your business</h3>
+						<strong>Read the post <span aria-hidden="true">→</span></strong>
+					</div>
+				</a>
+			</div>
+		</section>
+
 		<section id="about" class="about-section section-wrap" aria-labelledby="about-title">
-			<div class="about-mark" aria-hidden="true">
-				<img src="/images/servo-ict-logo.png" alt="" width="500" height="500" loading="lazy" />
+			<div class="about-statement">
+				<span>You deal with the person doing the work.</span>
 			</div>
 			<div class="about-copy">
-				<p class="section-kicker">Practical help from start to finish</p>
-				<h2 id="about-title">One person who can see the whole project through.</h2>
+				<p class="section-kicker">About Servo ICT</p>
+				<h2 id="about-title">One person. The whole project.</h2>
 				<p>
-					Rowan Paterson founded Servo ICT to help small businesses plan, build, and look after
-					their technology without juggling several suppliers. We are based in Gippsland and work
-					with businesses across Victoria.
+					Rowan Paterson founded Servo ICT so small businesses could plan, build and look after
+					their technology without juggling suppliers. Servo ICT is based in Gippsland and works
+					across Victoria.
 				</p>
-				<p>
-					Security is part of the build, not a report added at the end. The aim is a useful result
-					that your business can operate, update, and understand.
-				</p>
-				<div class="about-facts" aria-label="About Servo ICT">
-					<div><strong>Gippsland</strong><span>Based locally</span></div>
-					<div><strong>Web + IT</strong><span>One project partner</span></div>
-					<div><strong>Free</strong><span>Initial consultation</span></div>
-				</div>
 			</div>
 		</section>
 
@@ -293,14 +340,8 @@
 				<p class="section-kicker">Start with a free consultation</p>
 				<h2 id="contact-title">What are you trying to build, fix, or move?</h2>
 				<p class="contact-copy">
-					Share the rough idea, even if the scope is not clear yet. Suggest a time for a short call
-					and Rowan will reply to confirm it or arrange another time.
+					Send the rough idea and suggest a time for a 30-minute call. Rowan will reply to confirm.
 				</p>
-				<div class="request-notes" aria-label="What happens after you submit">
-					<span>30-minute first call</span>
-					<span>No finished brief required</span>
-					<span>Time confirmed by reply</span>
-				</div>
 				<div class="contact-details">
 					<a href="mailto:support@servoict.com">support@servoict.com</a>
 					<a href="tel:0341488665">(03) 4148 8665</a>
@@ -311,7 +352,7 @@
 				id="consultation-form"
 				class="consultation-form"
 				method="post"
-				action="/api/consultation"
+				action={consultationMode === 'email' ? 'mailto:support@servoict.com' : sitePath('/api/consultation')}
 				onsubmit={submitConsultation}
 			>
 				<div class="form-heading">
@@ -469,7 +510,7 @@
 				</label>
 				{#if fieldErrors.privacy}<small class="field-error">{fieldErrors.privacy}</small>{/if}
 
-				{#if turnstileSiteKey}
+				{#if consultationMode === 'server' && turnstileSiteKey}
 					<div
 						class="cf-turnstile"
 						data-sitekey={turnstileSiteKey}
@@ -484,7 +525,11 @@
 						type="submit"
 						disabled={formState === 'submitting'}
 					>
-						{formState === 'submitting' ? 'Sending…' : 'Send consultation request'}
+						{formState === 'submitting'
+							? 'Sending…'
+							: consultationMode === 'email'
+								? 'Open email draft'
+								: 'Send consultation request'}
 						<span aria-hidden="true">→</span>
 					</button>
 					<p
@@ -497,14 +542,18 @@
 						{formMessage}
 					</p>
 				</div>
-				<p class="confirmation-note">Your requested time is not booked until Servo ICT confirms it by reply.</p>
+				<p class="confirmation-note">
+					{consultationMode === 'email'
+						? 'The form opens a draft in your email app. Your request is not sent until you send that email.'
+						: 'Your requested time is not booked until Servo ICT confirms it by reply.'}
+				</p>
 			</form>
 		</section>
 	</main>
 
 	<footer>
 		<a class="brand footer-brand" href="#top" aria-label="Servo ICT home">
-			<img src="/images/servo-ict-logo.png" alt="" width="44" height="44" />
+			<img src={sitePath('/images/servo-ict-logo.png')} alt="" width="44" height="44" />
 			<span>Servo ICT</span>
 		</a>
 		<p>Websites and technology projects for small business.</p>
@@ -626,62 +675,28 @@
 
 	.hero {
 		display: grid;
-		grid-template-columns: minmax(0, 1.04fr) minmax(24rem, 0.96fr);
+		grid-template-columns: minmax(0, 0.88fr) minmax(25rem, 1.12fr);
 		min-height: min(760px, calc(100vh - 88px));
 		width: min(100% - 3rem, 1220px);
 		margin: 0 auto;
-		padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(4rem, 8vw, 7rem);
-		gap: clamp(3rem, 7vw, 6.5rem);
+		padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(4rem, 7vw, 6rem);
+		gap: clamp(3rem, 6vw, 5.5rem);
 		align-items: center;
 	}
 
 	.eyebrow {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
 		margin: 0 0 1.5rem;
+		color: #4a4ab9;
 		font-size: 0.75rem;
 		font-weight: 800;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
 	}
 
-	.eyebrow span {
-		position: relative;
-		flex: 0 0 auto;
-		width: 0.6rem;
-		height: 0.6rem;
-		border-radius: 50%;
-		background: #f8a51b;
-		box-shadow: 0 0 0 0.35rem rgb(248 165 27 / 15%);
-	}
-
-	.eyebrow span::after {
-		position: absolute;
-		inset: -0.35rem;
-		border: 1px solid rgb(248 165 27 / 80%);
-		border-radius: inherit;
-		content: "";
-		animation: status-ping 2.2s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
-	}
-
-	@keyframes status-ping {
-		0% {
-			opacity: 0.8;
-			transform: scale(0.45);
-		}
-
-		70%,
-		100% {
-			opacity: 0;
-			transform: scale(1.35);
-		}
-	}
-
 	h1 {
-		max-width: 12ch;
+		max-width: 9ch;
 		margin: 0;
-		font-size: clamp(3.15rem, 6vw, 5.8rem);
+		font-size: clamp(3.4rem, 6vw, 5.8rem);
 		line-height: 0.98;
 		letter-spacing: -0.045em;
 	}
@@ -705,6 +720,7 @@
 	.hero-actions {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: center;
 		gap: 0.8rem;
 		margin-top: 2.25rem;
 	}
@@ -725,119 +741,30 @@
 		background: #282887;
 	}
 
-	.button-secondary {
-		border: 1px solid #c9c6bc;
-		background: rgb(255 255 255 / 55%);
-	}
-
-	.button-secondary:hover {
-		border-color: #10105a;
-		background: white;
-	}
-
-	.hero-notes {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.65rem 1.5rem;
-		margin-top: 2.4rem;
-		color: #626277;
-		font-size: 0.76rem;
-		font-weight: 650;
-	}
-
-	.hero-notes span {
-		position: relative;
-		padding-left: 0.85rem;
-	}
-
-	.hero-notes span::before {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		width: 0.3rem;
-		height: 0.3rem;
-		border-radius: 50%;
-		background: #4a4ab9;
-		content: "";
-		transform: translateY(-50%);
+	.hero-link {
+		padding: 0.7rem 0.35rem;
+		font-size: 0.86rem;
+		font-weight: 750;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.3rem;
 	}
 
 	.hero-visual {
 		position: relative;
-		isolation: isolate;
-		min-height: 35rem;
-		border-radius: 1.5rem;
-		background: #10105a;
-		box-shadow: 0 2rem 5rem rgb(16 16 90 / 16%);
-	}
-
-	.hero-visual::before {
-		position: absolute;
-		z-index: -1;
-		top: -2rem;
-		right: -2rem;
-		width: 8rem;
-		height: 8rem;
-		border: 1px solid #d0cdc3;
-		border-radius: 50%;
-		content: "";
-	}
-
-	.visual-grid {
-		position: absolute;
-		inset: 0;
-		opacity: 0.13;
-		background-image:
-			linear-gradient(rgb(255 255 255 / 60%) 1px, transparent 1px),
-			linear-gradient(90deg, rgb(255 255 255 / 60%) 1px, transparent 1px);
-		background-size: 3rem 3rem;
-		mask-image: linear-gradient(to bottom right, black, transparent 75%);
+		margin: 0;
+		overflow: hidden;
+		border: 1px solid rgb(16 16 63 / 12%);
+		border-radius: 1.25rem;
+		background: #d7d1c7;
+		box-shadow: 0 1.75rem 4rem rgb(16 16 90 / 15%);
 	}
 
 	.hero-visual img {
-		position: absolute;
-		inset: 3.25rem 2rem auto;
-		width: calc(100% - 4rem);
-		height: calc(100% - 6.5rem);
-		border-radius: 1rem;
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 4 / 3;
 		object-fit: cover;
-		object-position: 58% center;
-	}
-
-	.visual-card {
-		position: absolute;
-		right: -1.5rem;
-		bottom: 2.5rem;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		max-width: 15rem;
-		padding: 1rem 1.25rem;
-		border: 1px solid rgb(255 255 255 / 65%);
-		border-radius: 1rem;
-		background: rgb(255 255 255 / 92%);
-		box-shadow: 0 1rem 2.5rem rgb(2 2 39 / 24%);
-		backdrop-filter: blur(12px);
-	}
-
-	.visual-card-mark {
-		display: grid;
-		flex: 0 0 auto;
-		width: 2.5rem;
-		height: 2.5rem;
-		place-items: center;
-		border-radius: 50%;
-		background: #f8a51b;
-		color: #10103f;
-		font-size: 0.72rem;
-		font-weight: 850;
-	}
-
-	.visual-card p {
-		margin: 0;
-		font-size: 0.9rem;
-		font-weight: 800;
-		line-height: 1.35;
 	}
 
 	.section-wrap {
@@ -846,50 +773,18 @@
 	}
 
 	.statement-band {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 2rem;
-		padding: 1.5rem max(1.5rem, calc((100vw - 1220px) / 2));
+		padding: clamp(2rem, 4vw, 3rem) max(1.5rem, calc((100vw - 1220px) / 2));
 		background: #f8a51b;
 		color: #10103f;
 	}
 
 	.statement-band p {
-		max-width: 30rem;
+		max-width: none;
 		margin: 0;
-		font-size: clamp(1.25rem, 2vw, 1.65rem);
-		font-weight: 700;
-		line-height: 1.2;
+		font-size: clamp(1.65rem, 3.5vw, 3.25rem);
+		font-weight: 760;
+		line-height: 1.05;
 		letter-spacing: -0.025em;
-	}
-
-	.statement-band div {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-end;
-		gap: 0.75rem 1.5rem;
-		font-size: 0.72rem;
-		font-weight: 850;
-		letter-spacing: 0.07em;
-		text-transform: uppercase;
-	}
-
-	.statement-band span {
-		position: relative;
-		padding-left: 0.8rem;
-	}
-
-	.statement-band span::before {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		width: 0.28rem;
-		height: 0.28rem;
-		border-radius: 50%;
-		background: #10103f;
-		content: "";
-		transform: translateY(-50%);
 	}
 
 	.services-section {
@@ -931,119 +826,58 @@
 
 	.services-grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 1rem;
 	}
 
 	.service-card {
-		position: relative;
 		display: flex;
-		min-height: 27rem;
+		min-height: 22rem;
 		flex-direction: column;
 		padding: clamp(1.7rem, 4vw, 2.7rem);
-		border-radius: 1.25rem;
-	}
-
-	.service-card-featured {
-		grid-row: span 2;
-		min-height: 55rem;
-		background: #10105a;
-		color: white;
-	}
-
-	.service-card-featured::after {
-		position: absolute;
-		right: 3rem;
-		bottom: 3rem;
-		width: 9rem;
-		height: 9rem;
-		border: 1px solid rgb(255 255 255 / 18%);
-		border-radius: 50%;
-		box-shadow:
-			0 0 0 2.5rem rgb(255 255 255 / 4%),
-			0 0 0 5rem rgb(255 255 255 / 3%);
-		content: "";
-	}
-
-	.service-card-light {
 		border: 1px solid #d5d2c8;
+		border-radius: 1.25rem;
 		background: #fff;
 	}
 
-	.service-card-secure {
-		border: 1px solid #cfcaee;
+	.service-card:nth-child(2) {
 		background: #dedcf6;
+	}
+
+	.service-card:nth-child(3) {
+		background: #f8a51b;
 	}
 
 	.service-topline {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 2rem;
+		margin-bottom: auto;
+		padding-bottom: 3rem;
 	}
 
 	.service-number {
-		display: grid;
-		width: 2.55rem;
-		height: 2.55rem;
-		place-items: center;
-		border: 1px solid currentColor;
-		border-radius: 50%;
+		color: #4a4ab9;
 		font-size: 0.7rem;
 		font-weight: 850;
+		letter-spacing: 0.08em;
 	}
 
-	.service-label {
-		font-size: 0.72rem;
-		font-weight: 800;
-		letter-spacing: 0.08em;
-		text-align: right;
-		text-transform: uppercase;
+	.service-card:nth-child(3) .service-number {
+		color: #10103f;
 	}
 
 	.service-card h3 {
-		max-width: 13ch;
 		margin: 0;
-		font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+		font-size: clamp(1.8rem, 3vw, 2.8rem);
 		line-height: 1.03;
 		letter-spacing: -0.045em;
 	}
 
 	.service-card > p {
-		max-width: 32rem;
 		margin: 1.5rem 0 0;
+		color: #55556c;
 		font-size: 0.96rem;
 		line-height: 1.7;
-	}
-
-	.service-card-featured > p {
-		color: rgb(255 255 255 / 72%);
-	}
-
-	.service-card-light > p,
-	.service-card-secure > p {
-		color: #626277;
-	}
-
-	.project-inclusions {
-		display: grid;
-		margin: auto 0 2rem;
-		padding: 0;
-		list-style: none;
-	}
-
-	.project-inclusions li {
-		padding: 0.9rem 0;
-		border-bottom: 1px solid rgb(255 255 255 / 17%);
-		font-size: 0.85rem;
-		font-weight: 700;
-	}
-
-	.project-inclusions li::before {
-		margin-right: 0.75rem;
-		color: #f8a51b;
-		content: "+";
 	}
 
 	.text-link {
@@ -1064,41 +898,8 @@
 		color: #5a5ac8;
 	}
 
-	.service-card-featured .text-link:hover,
-	.service-card-featured .text-link:focus-visible {
-		color: #f8a51b;
-	}
-
-	.coming-soon {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		align-items: center;
-		gap: 1.5rem;
-		margin-top: 1rem;
-		padding: 1.4rem 1.7rem;
-		border: 1px dashed #b8b4a9;
-		border-radius: 1.1rem;
-	}
-
-	.coming-soon > span {
-		padding: 0.45rem 0.65rem;
-		border-radius: 999px;
-		background: #e5e2d8;
-		font-size: 0.7rem;
-		font-weight: 850;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
-
-	.coming-soon p {
-		margin: 0;
-		color: #666678;
-		font-size: 0.86rem;
-		line-height: 1.55;
-	}
-
-	.coming-soon strong {
-		color: #10103f;
+	.services-link {
+		margin-top: 2rem;
 	}
 
 	.process-section {
@@ -1123,13 +924,6 @@
 		font-weight: 700;
 		line-height: 1.02;
 		letter-spacing: -0.045em;
-	}
-
-	.process-heading > p:last-child {
-		max-width: 27rem;
-		margin: 2rem 0 0;
-		color: rgb(255 255 255 / 62%);
-		line-height: 1.7;
 	}
 
 	.process-steps {
@@ -1169,44 +963,154 @@
 		line-height: 1.65;
 	}
 
+	.guides-section {
+		padding-block: clamp(5rem, 10vw, 9rem);
+	}
+
+	.guides-heading {
+		display: grid;
+		grid-template-columns: minmax(0, 1.15fr) minmax(17rem, 0.85fr);
+		align-items: end;
+		gap: clamp(2rem, 8vw, 7rem);
+		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.guides-heading h2 {
+		max-width: 13ch;
+		margin: 0;
+		font-size: clamp(2.3rem, 4.8vw, 4.4rem);
+		line-height: 1.02;
+		letter-spacing: -0.045em;
+	}
+
+	.guides-intro > p {
+		margin: 0;
+		color: #616176;
+		font-size: 1rem;
+		line-height: 1.75;
+	}
+
+	.guides-intro .text-link {
+		margin-top: 1.2rem;
+	}
+
+	.guides-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.guide-card {
+		display: grid;
+		grid-template-columns: minmax(10rem, 0.92fr) minmax(0, 1.08fr);
+		min-height: 15rem;
+		overflow: hidden;
+		border: 1px solid #d5d2c8;
+		border-radius: 1.15rem;
+		background: #fff;
+		text-decoration: none;
+		transition:
+			border-color 160ms ease,
+			box-shadow 160ms ease,
+			transform 160ms ease;
+	}
+
+	.guide-card-featured {
+		grid-column: 1 / -1;
+		grid-template-columns: minmax(0, 1.2fr) minmax(19rem, 0.8fr);
+		min-height: 25rem;
+	}
+
+	.guide-card:hover,
+	.guide-card:focus-visible {
+		border-color: #aaa7d8;
+		box-shadow: 0 1.2rem 3rem rgb(16 16 90 / 10%);
+		transform: translateY(-3px);
+	}
+
+	.guide-image {
+		overflow: hidden;
+		background: #10105a;
+	}
+
+	.guide-image img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 300ms ease;
+	}
+
+	.guide-card:hover .guide-image img,
+	.guide-card:focus-visible .guide-image img {
+		transform: scale(1.025);
+	}
+
+	.guide-copy {
+		display: flex;
+		align-items: flex-start;
+		flex-direction: column;
+		padding: clamp(1.35rem, 3vw, 2.5rem);
+	}
+
+	.guide-copy > span {
+		color: #4a4ab9;
+		font-size: 0.68rem;
+		font-weight: 850;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.guide-copy h3 {
+		margin: 0.85rem 0 0;
+		font-size: clamp(1.35rem, 2.5vw, 2.15rem);
+		line-height: 1.08;
+		letter-spacing: -0.035em;
+	}
+
+	.guide-card:not(.guide-card-featured) .guide-copy h3 {
+		font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+	}
+
+	.guide-copy p {
+		max-width: 31rem;
+		margin: 1rem 0 0;
+		color: #626277;
+		font-size: 0.9rem;
+		line-height: 1.65;
+	}
+
+	.guide-copy strong {
+		margin-top: auto;
+		padding-top: 1.5rem;
+		font-size: 0.76rem;
+		font-weight: 800;
+	}
+
 	.about-section {
 		display: grid;
-		grid-template-columns: minmax(20rem, 0.78fr) minmax(0, 1.22fr);
+		grid-template-columns: minmax(20rem, 0.9fr) minmax(0, 1.1fr);
 		align-items: center;
-		gap: clamp(3rem, 10vw, 9rem);
-		padding-block: clamp(5rem, 11vw, 10rem);
+		gap: clamp(3rem, 8vw, 7rem);
+		padding-block: clamp(5rem, 10vw, 8rem);
 	}
 
-	.about-mark {
-		position: relative;
-		display: grid;
-		aspect-ratio: 1;
-		place-items: center;
-		border: 1px solid #d3d0c6;
-		border-radius: 50%;
+	.about-statement {
+		display: flex;
+		min-height: 24rem;
+		align-items: flex-end;
+		padding: clamp(2rem, 5vw, 4rem);
+		border-radius: 1.25rem;
+		background: #10105a;
+		color: white;
 	}
 
-	.about-mark::before,
-	.about-mark::after {
-		position: absolute;
-		border: 1px solid #d3d0c6;
-		border-radius: 50%;
-		content: "";
-	}
-
-	.about-mark::before {
-		inset: 12%;
-	}
-
-	.about-mark::after {
-		inset: 24%;
-	}
-
-	.about-mark img {
-		z-index: 1;
-		width: 42%;
-		height: 42%;
-		object-fit: contain;
+	.about-statement span {
+		max-width: 10ch;
+		font-size: clamp(2rem, 4vw, 3.6rem);
+		font-weight: 750;
+		line-height: 1.02;
+		letter-spacing: -0.04em;
 	}
 
 	.about-copy > p:not(.section-kicker) {
@@ -1215,29 +1119,6 @@
 		color: #616176;
 		font-size: 0.98rem;
 		line-height: 1.75;
-	}
-
-	.about-facts {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 0.75rem;
-		margin-top: 2.4rem;
-	}
-
-	.about-facts div {
-		display: grid;
-		gap: 0.35rem;
-		padding: 1rem;
-		border-top: 1px solid #c9c6bc;
-	}
-
-	.about-facts strong {
-		font-size: 1rem;
-	}
-
-	.about-facts span {
-		color: #626277;
-		font-size: 0.72rem;
 	}
 
 	.contact-section {
@@ -1262,30 +1143,6 @@
 	.contact-copy {
 		margin: 1.8rem 0 0;
 		line-height: 1.7;
-	}
-
-	.request-notes {
-		display: grid;
-		gap: 0.7rem;
-		margin-top: 1.8rem;
-		font-size: 0.76rem;
-		font-weight: 800;
-	}
-
-	.request-notes span {
-		position: relative;
-		padding-left: 1rem;
-	}
-
-	.request-notes span::before {
-		position: absolute;
-		top: 0.42rem;
-		left: 0;
-		width: 0.35rem;
-		height: 0.35rem;
-		border-radius: 50%;
-		background: #10105a;
-		content: "";
 	}
 
 	.contact-details {
@@ -1613,11 +1470,8 @@
 			max-width: 44rem;
 		}
 
-		.hero-visual {
-			min-height: 31rem;
-		}
-
 		.section-heading,
+		.guides-heading,
 		.process-inner,
 		.about-section,
 		.contact-section {
@@ -1632,8 +1486,12 @@
 			align-items: start;
 		}
 
-		.about-mark {
-			width: min(25rem, 70vw);
+		.services-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.service-card:last-child {
+			grid-column: 1 / -1;
 		}
 
 		footer {
@@ -1686,38 +1544,12 @@
 			width: 100%;
 		}
 
-		.hero-notes {
-			display: grid;
-		}
-
-		.hero-visual {
-			min-height: 24rem;
-			border-radius: 1.4rem;
-		}
-
-		.hero-visual img {
-			inset: 1rem;
-			width: calc(100% - 2rem);
-			height: calc(100% - 2rem);
-		}
-
-		.visual-card {
-			right: 0.8rem;
-			bottom: 0.8rem;
-		}
-
 		.section-wrap {
 			width: min(100% - 2rem, 1220px);
 		}
 
 		.statement-band {
-			align-items: flex-start;
-			flex-direction: column;
-			padding: 1.5rem 1rem;
-		}
-
-		.statement-band div {
-			justify-content: flex-start;
+			padding-inline: 1rem;
 		}
 
 		.section-heading {
@@ -1728,17 +1560,31 @@
 			grid-template-columns: 1fr;
 		}
 
-		.service-card,
-		.service-card-featured {
-			min-height: 32rem;
+		.service-card:last-child {
+			grid-column: auto;
 		}
 
-		.service-card-featured {
-			grid-row: auto;
-		}
-
-		.coming-soon {
+		.guides-grid {
 			grid-template-columns: 1fr;
+		}
+
+		.guide-card,
+		.guide-card-featured {
+			grid-column: auto;
+			grid-template-columns: 1fr;
+			min-height: 0;
+		}
+
+		.guide-image {
+			aspect-ratio: 16 / 9;
+		}
+
+		.guide-copy {
+			min-height: 13rem;
+		}
+
+		.service-card {
+			min-height: 20rem;
 		}
 
 		.process-section {
@@ -1757,12 +1603,8 @@
 			grid-template-columns: 1fr;
 		}
 
-		.about-mark {
-			width: min(22rem, 88vw);
-		}
-
-		.about-facts {
-			grid-template-columns: 1fr;
+		.about-statement {
+			min-height: 18rem;
 		}
 
 		.contact-section {
@@ -1806,11 +1648,6 @@
 		.header-cta,
 		.button {
 			transition: none;
-		}
-
-		.eyebrow span::after {
-			animation: none;
-			opacity: 0;
 		}
 	}
 </style>

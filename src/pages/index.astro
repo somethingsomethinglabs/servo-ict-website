@@ -2,32 +2,39 @@
 import '@fontsource-variable/inter/wght.css';
 import LandingPage from '../components/LandingPage.svelte';
 
-export const prerender = false;
+export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
 
-const turnstileSiteKey =
-	process.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const consultationMode = import.meta.env.PUBLIC_SITE_MODE === 'static' ? 'email' : 'server';
+const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+const siteOrigin = Astro.site ?? new URL('https://servoict.com');
+const canonicalUrl = new URL(baseUrl, siteOrigin);
+const socialImageUrl = new URL(`${baseUrl}og.png`, siteOrigin);
+
+const turnstileSiteKey = consultationMode === 'server'
+	? process.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''
+	: '';
 ---
 
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/png" href="/images/servo-ict-logo.png" />
+		<link rel="icon" type="image/png" href={`${baseUrl}images/servo-ict-logo.png`} />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<meta
 			name="description"
 			content="Websites and technology projects for small businesses in Gippsland and across Victoria, planned carefully and built with security in mind."
 		/>
-		<link rel="canonical" href="https://servoict.com/" />
+		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Servo ICT" />
-		<meta property="og:url" content="https://servoict.com/" />
+		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:title" content="Websites and technology, built properly." />
 		<meta
 			property="og:description"
 			content="Servo ICT builds websites and completes practical technology projects for small businesses in Gippsland and across Victoria."
 		/>
-		<meta property="og:image" content="https://servoict.com/og.png" />
+		<meta property="og:image" content={socialImageUrl} />
 		<meta property="og:image:alt" content="Servo ICT: Websites and technology, built properly." />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
@@ -37,12 +44,12 @@ const turnstileSiteKey =
 			name="twitter:description"
 			content="Servo ICT builds websites and completes practical technology projects for small businesses in Gippsland and across Victoria."
 		/>
-		<meta name="twitter:image" content="https://servoict.com/og.png" />
+		<meta name="twitter:image" content={socialImageUrl} />
 		<meta name="twitter:image:alt" content="Servo ICT: Websites and technology, built properly." />
 		<title>Servo ICT | Websites and technology for small business</title>
 	</head>
 	<body>
-		<LandingPage client:load {turnstileSiteKey} />
+		<LandingPage client:load {turnstileSiteKey} {consultationMode} {baseUrl} />
 		{
 			turnstileSiteKey && (
 				<script

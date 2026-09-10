@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import nodemailer from 'nodemailer';
-import { ConfigurationError, getConsultationConfig } from '../../lib/server/config';
+import { ConfigurationError, getConsultationConfig } from '../lib/server/config';
 import {
 	buildCalendarInvitation,
 	contactPreferenceLabels,
@@ -10,9 +10,7 @@ import {
 	parseConsultationRequest,
 	serviceLabels,
 	type ConsultationRequest
-} from '../../lib/server/consultation';
-
-export const prerender = false;
+} from '../lib/server/consultation';
 
 interface TurnstileResult {
 	success: boolean;
