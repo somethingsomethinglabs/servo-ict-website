@@ -1281,6 +1281,7 @@
 	}
 
 	.consultation-form {
+		container: consultation-form / inline-size;
 		padding: clamp(1.4rem, 3vw, 2.4rem);
 		border: 1px solid rgb(16 16 63 / 10%);
 		border-radius: 1.25rem;
@@ -1332,6 +1333,7 @@
 	.consultation-form select,
 	.consultation-form textarea {
 		width: 100%;
+		min-width: 0;
 		min-height: 3rem;
 		padding: 0.75rem 0.85rem;
 		border: 1px solid #c9c6bc;
@@ -1490,6 +1492,26 @@
 		color: #626277;
 		font-size: 0.72rem;
 		line-height: 1.45;
+	}
+
+	@container consultation-form (max-width: 36rem) {
+		.form-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.full-field {
+			grid-column: auto;
+		}
+	}
+
+	@container consultation-form (max-width: 24rem) {
+		.time-fields {
+			grid-template-columns: 1fr;
+		}
+
+		.field-error-wide {
+			grid-column: auto;
+		}
 	}
 
 	footer {
