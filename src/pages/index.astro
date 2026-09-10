@@ -1,19 +1,40 @@
 ---
-import Starter from '../components/Starter.svelte';
+import LandingPage from '../components/LandingPage.svelte';
 ---
 
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/png" href="/images/servo-ict-logo.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="Servo ICT website" />
-		<title>Servo ICT</title>
+		<meta
+			name="description"
+			content="Practical cyber security advice, risk assessments and project support for small businesses in Gippsland and across Victoria."
+		/>
+		<link rel="canonical" href="https://servoict.com/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Servo ICT" />
+		<meta property="og:url" content="https://servoict.com/" />
+		<meta property="og:title" content="Practical cyber security for small business" />
+		<meta
+			property="og:description"
+			content="Clear advice, risk assessments and project support for small businesses in Gippsland and across Victoria."
+		/>
+		<meta property="og:image" content="https://servoict.com/og.png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Practical cyber security for small business" />
+		<meta
+			name="twitter:description"
+			content="Clear advice, risk assessments and project support for small businesses in Gippsland and across Victoria."
+		/>
+		<meta name="twitter:image" content="https://servoict.com/og.png" />
+		<title>Servo ICT | Cyber security for small business</title>
 	</head>
 	<body>
-		<Starter />
+		<LandingPage client:load />
 	</body>
 </html>
 
