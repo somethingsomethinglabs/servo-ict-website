@@ -119,17 +119,23 @@
 				</div>
 			</div>
 
-			<figure class="hero-visual">
-				<img
-					src={sitePath('/images/servo-business-technology-960.webp')}
-					srcset={`${sitePath('/images/servo-business-technology-480.webp')} 480w, ${sitePath('/images/servo-business-technology-960.webp')} 960w, ${sitePath('/images/servo-business-technology.webp')} 1448w`}
-					sizes="(max-width: 920px) calc(100vw - 2rem), 52vw"
-					alt="Two small-business owners reviewing their website on a laptop in their workshop"
-					width="1448"
-					height="1086"
-					fetchpriority="high"
-				/>
-			</figure>
+			<nav class="hero-services" aria-label="Explore services">
+				<a class="hero-service hero-service-websites" href={sitePath('/websites/')}>
+					<span>01</span>
+					<strong>Websites</strong>
+					<img src={sitePath('/images/hero-service-websites.webp')} alt="" width="92" height="139" />
+				</a>
+				<a class="hero-service hero-service-it" href={sitePath('/business-it/')}>
+					<span>02</span>
+					<strong>Business IT</strong>
+					<img src={sitePath('/images/hero-service-business-it.webp')} alt="" width="92" height="140" />
+				</a>
+				<a class="hero-service hero-service-security" href={sitePath('/security/')}>
+					<span>03</span>
+					<strong>Security</strong>
+					<img src={sitePath('/images/hero-service-security.webp')} alt="" width="92" height="140" />
+				</a>
+			</nav>
 		</section>
 
 		<section class="trust-strip" aria-label="Servo ICT at a glance">
@@ -283,7 +289,7 @@
 	.page-shell { min-height: 100vh; overflow: hidden; }
 	.skip-link { position: fixed; z-index: 100; top: 0.75rem; left: 0.75rem; padding: 0.75rem 1rem; transform: translateY(-200%); border-radius: 0.5rem; background: #fff; font-weight: 800; }
 	.skip-link:focus { transform: translateY(0); }
-	.site-header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem; width: min(100% - 3rem, 1220px); margin: 0 auto; padding: 1.25rem 0; }
+	.site-header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem; width: min(100% - 5rem, 1450px); margin: 0 auto; padding: 1.25rem 0; }
 	.brand { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 1.02rem; font-weight: 760; letter-spacing: -0.02em; text-decoration: none; }
 	.brand img { width: 2.4rem; height: 2.4rem; }
 	.site-header nav { display: flex; justify-content: center; gap: clamp(1.25rem, 3vw, 2.5rem); }
@@ -293,22 +299,30 @@
 	.header-cta { min-height: 2.75rem; padding: 0.75rem 1.15rem; background: #10105a; color: white; font-size: 0.8rem; }
 	.header-cta:hover, .button:hover { transform: translateY(-2px); }
 	.menu-button { display: none; }
-	.hero { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(25rem, 1.08fr); min-height: min(760px, calc(100vh - 88px)); width: min(100% - 3rem, 1220px); margin: 0 auto; padding: clamp(3.5rem, 7vw, 6rem) 0 clamp(4rem, 7vw, 6rem); gap: clamp(3rem, 6vw, 5.5rem); align-items: center; }
+	.hero { display: grid; grid-template-columns: minmax(0, 0.93fr) minmax(39rem, 1.07fr); min-height: min(780px, calc(100vh - 88px)); width: min(100% - 5rem, 1450px); margin: 0 auto; padding: 6rem 0 3.5rem; gap: clamp(4.5rem, 7vw, 7.5rem); align-items: start; }
 	.eyebrow, .section-kicker { margin: 0 0 1.25rem; color: #4a4ab9; font-size: 0.74rem; font-weight: 850; letter-spacing: 0.14em; text-transform: uppercase; }
-	h1 { max-width: 10ch; margin: 0; font-size: clamp(3.35rem, 5.8vw, 5.7rem); line-height: 0.98; letter-spacing: -0.052em; }
+	h1 { max-width: 12ch; margin: 0; font-size: clamp(3.35rem, 5.7vw, 5.75rem); line-height: 0.98; letter-spacing: -0.052em; }
 	h1 em { color: #4a4ab9; font: inherit; }
-	.hero-intro { max-width: 38rem; margin: 2rem 0 0; color: #57576f; font-size: clamp(1.02rem, 1.5vw, 1.18rem); line-height: 1.7; }
+	.hero-intro { max-width: 38rem; margin: 2rem 0 0; color: #57576f; font-size: clamp(1.02rem, 1.5vw, 1.26rem); line-height: 1.55; }
 	.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.1rem; margin-top: 2.25rem; }
 	.button { min-height: 3.45rem; padding: 0.9rem 1.4rem; font-size: 0.86rem; }
 	.button-primary { gap: 1.2rem; border: 0; background: #10105a; color: white; }
 	.button-primary:hover { background: #282887; }
 	.text-link { display: inline-flex; align-items: center; gap: 0.7rem; min-height: 2.75rem; border-bottom: 1px solid currentColor; font-size: 0.8rem; font-weight: 800; text-decoration: none; }
 	.text-link:hover { color: #4d4dc4; }
-	.hero-visual { position: relative; margin: 0; overflow: hidden; border: 1px solid rgb(16 16 63 / 12%); border-radius: 1.25rem; background: #d7d1c7; box-shadow: 0 1.75rem 4rem rgb(16 16 90 / 14%); }
-	.hero-visual img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+	.hero-services { display: grid; align-self: start; width: 100%; margin-top: 3rem; }
+	.hero-service { display: grid; grid-template-columns: 4.75rem minmax(0, 1fr) 5.75rem; align-items: center; gap: 1rem; min-height: 10.5rem; padding: 1.25rem 0; border-bottom: 1px solid #cfccc3; color: #10103f; text-decoration: none; transition: color 160ms ease, padding 160ms ease; }
+	.hero-service:first-child { border-top: 1px solid #cfccc3; }
+	.hero-service span { color: #7775c8; font-size: clamp(2rem, 3.4vw, 3.5rem); font-weight: 650; letter-spacing: -0.05em; }
+	.hero-service strong { font-size: clamp(3rem, 5.9vw, 5.9rem); line-height: 0.95; letter-spacing: -0.055em; }
+	.hero-service img { width: 5.75rem; height: 7rem; object-fit: cover; }
+	.hero-service-it span { color: #936817; }
+	.hero-service-security span { color: #9b5700; }
+	.hero-service:hover { padding-left: 0.6rem; color: #4a4ab9; }
+	.hero-service:focus-visible { position: relative; z-index: 1; }
 	.section-wrap { width: min(100% - 3rem, 1220px); margin-inline: auto; }
 	.trust-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-inline: max(1.5rem, calc((100vw - 1220px) / 2)); background: #f8a51b; color: #10103f; }
-	.trust-strip div { display: grid; align-content: center; min-height: 8.5rem; padding: 1.5rem clamp(1rem, 2vw, 2rem); border-right: 1px solid rgb(16 16 63 / 18%); }
+	.trust-strip div { display: grid; align-content: center; min-height: 8rem; padding: 1.5rem clamp(1rem, 2vw, 2rem); border-right: 1px solid rgb(16 16 63 / 18%); }
 	.trust-strip div:first-child { padding-left: 0; }
 	.trust-strip div:last-child { border-right: 0; }
 	.trust-strip span { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -416,7 +430,7 @@
 	.footer-nav a:hover, .footer-contact a:hover { color: #4a4ab9; }
 	.footer-contact { display: grid; justify-items: end; gap: 0.5rem; }
 	.footer-contact span { margin-top: 0.5rem; }
-	@media (max-width: 920px) {
+	@media (max-width: 1100px) {
 		.site-header { grid-template-columns: auto auto 1fr; }
 		.site-header nav { position: absolute; z-index: 10; top: 4.6rem; left: 1.5rem; display: none; width: calc(100% - 3rem); flex-direction: column; gap: 0; padding: 0.8rem; border: 1px solid #d8d5cb; border-radius: 1rem; background: #fff; box-shadow: 0 1rem 2.5rem rgb(16 16 63 / 15%); }
 		.site-header nav.open { display: flex; }
@@ -426,6 +440,10 @@
 		.header-cta { justify-self: end; }
 		.hero, .section-heading, .fit-section, .process-inner, .about-section, .guides-heading, .contact-section { grid-template-columns: 1fr; }
 		.hero { padding-top: 4rem; }
+		.hero-services { align-content: stretch; margin-top: 0; }
+		.hero-service { grid-template-columns: 4.25rem minmax(0, 1fr) 4.5rem; min-height: 8.5rem; }
+		.hero-service img { width: 4.5rem; height: 5.75rem; }
+		.hero-service strong { font-size: clamp(2.7rem, 8vw, 4.5rem); }
 		.trust-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 		.trust-strip div:nth-child(2) { border-right: 0; }
 		.trust-strip div:nth-child(-n + 2) { border-bottom: 1px solid rgb(16 16 63 / 18%); }
@@ -450,6 +468,12 @@
 		.hero-actions { align-items: stretch; flex-direction: column; }
 		.button { width: 100%; }
 		.hero-link { align-self: flex-start; }
+		.hero-services { margin-top: 0.5rem; }
+		.hero-service { grid-template-columns: 2.75rem minmax(0, 1fr) 1.5rem; gap: 0.65rem; min-height: 5.75rem; padding: 1rem 0; }
+		.hero-service img { width: 1.5rem; height: 3.75rem; }
+		.hero-service span { font-size: 1.3rem; }
+		.hero-service strong { font-size: clamp(2rem, 10vw, 2.8rem); }
+		.hero-service:hover { padding-left: 0; }
 		.trust-strip { padding-inline: 1rem; }
 		.trust-strip div { min-height: 7rem; padding: 1.1rem; }
 		.trust-strip strong { font-size: 1.05rem; }
@@ -480,7 +504,8 @@
 	}
 	@media (prefers-reduced-motion: reduce) {
 		:global(html) { scroll-behavior: auto; }
-		.header-cta, .button, .service-card, .guide-featured, .guide-list a, .guide-image img { transition: none; }
+		.header-cta, .button, .hero-service, .service-card, .guide-featured, .guide-list a, .guide-image img { transition: none; }
 		.header-cta:hover, .button:hover, .service-card:hover, .guide-featured:hover, .guide-list a:hover, .guide-featured:hover .guide-image img { transform: none; }
+		.hero-service:hover { padding-left: 0; }
 	}
 </style>
