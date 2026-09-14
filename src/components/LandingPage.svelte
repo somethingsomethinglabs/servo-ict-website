@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { buildConsultationMailto } from '../lib/consultationEmail';
+	import { buildConsultationEmailDraft, consultationRecipient } from '../lib/consultationEmail';
+	import WorkExample from './WorkExample.svelte';
 
 	let {
 		turnstileSiteKey = '',
@@ -7,9 +8,16 @@
 		baseUrl = '/'
 	}: { turnstileSiteKey?: string; consultationMode?: 'server' | 'email'; baseUrl?: string } = $props();
 	let menuOpen = $state(false);
+	let menuButton: HTMLButtonElement;
 	let formState = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
 	let formMessage = $state('');
 	let fieldErrors = $state<Record<string, string>>({});
+	let copyState = $state<'idle' | 'success' | 'error'>('idle');
+	let copyMessage = $state('');
+	let manualCopyText = $state('');
+	let activeCopyRequest: symbol | null = null;
+	let serviceSelect: HTMLSelectElement | undefined;
+	const knownServiceQueries = new Set(['website', 'technology', 'security']);
 
 	interface ConsultationResponse {
 		ok: boolean;
@@ -21,13 +29,38 @@
 		menuOpen = false;
 	};
 
+	function handleWindowKeydown(event: KeyboardEvent) {
+		if (event.key !== 'Escape' || !menuOpen) return;
+		event.preventDefault();
+		closeMenu();
+		menuButton.focus();
+	}
+
+	function clearCopyFeedback() {
+		activeCopyRequest = null;
+		copyState = 'idle';
+		copyMessage = '';
+		manualCopyText = '';
+	}
+
+	function serverFailureMessage(message: string) {
+		return `${message} Your details are still in the form. You can copy the enquiry and send it from your email app.`;
+	}
+
 	const sitePath = (path: string) => `${baseUrl}${path.replace(/^\//, '')}`;
 
 	$effect(() => {
-		const requestState = new URLSearchParams(window.location.search).get('request');
+		const searchParams = new URLSearchParams(window.location.search);
+		const requestedService = searchParams.get('service');
+		if (requestedService && knownServiceQueries.has(requestedService) && serviceSelect) {
+			// Set only the current value so a successful submission still resets the form to blank.
+			serviceSelect.value = requestedService;
+		}
+
+		const requestState = searchParams.get('request');
 		if (requestState === 'sent') {
 			formState = 'success';
-			formMessage = 'Thanks, your enquiry has been sent. Rowan will reply by email.';
+			formMessage = 'Thanks, your enquiry has been sent. We\'ll reply by email.';
 		} else if (requestState === 'error') {
 			formState = 'error';
 			formMessage = 'Your enquiry could not be sent. Please email support@servoict.com.';
@@ -37,12 +70,13 @@
 	async function submitConsultation(event: SubmitEvent) {
 		event.preventDefault();
 		const form = event.currentTarget as HTMLFormElement;
+		clearCopyFeedback();
 
 		if (consultationMode === 'email') {
 			fieldErrors = {};
 			formState = 'idle';
 			formMessage = 'Your email app is opening. Review the draft, then press send.';
-			window.location.href = buildConsultationMailto(new FormData(form));
+			window.location.href = buildConsultationEmailDraft(new FormData(form)).mailto;
 			return;
 		}
 
@@ -63,21 +97,50 @@
 
 			if (result.ok) {
 				form.reset();
+				clearCopyFeedback();
 			} else {
 				const firstInvalidField = Object.keys(fieldErrors)[0];
 				if (firstInvalidField) {
 					(form.elements.namedItem(firstInvalidField) as HTMLElement | null)?.focus();
+				} else {
+					formMessage = serverFailureMessage(formMessage);
 				}
 			}
 		} catch {
 			formState = 'error';
-			formMessage = 'Your enquiry could not be sent. Please email support@servoict.com.';
+			formMessage = serverFailureMessage('Your enquiry could not be sent.');
 		} finally {
 			const turnstile = (window as typeof window & { turnstile?: { reset: () => void } }).turnstile;
 			turnstile?.reset();
 		}
 	}
+
+	async function copyConsultation(event: MouseEvent) {
+		const form = (event.currentTarget as HTMLButtonElement).form;
+		clearCopyFeedback();
+		if (!form || !form.reportValidity()) return;
+
+		fieldErrors = {};
+		const draft = buildConsultationEmailDraft(new FormData(form));
+		const request = Symbol('copy request');
+		activeCopyRequest = request;
+		manualCopyText = draft.plainText;
+
+		try {
+			if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+			await navigator.clipboard.writeText(draft.plainText);
+			if (activeCopyRequest !== request) return;
+			copyState = 'success';
+			copyMessage = `Enquiry copied. Paste it into an email to ${draft.recipient} and press send there.`;
+		} catch {
+			if (activeCopyRequest !== request) return;
+			copyState = 'error';
+			copyMessage = 'Automatic copying was unavailable. Select and copy the prepared enquiry below.';
+		}
+	}
 </script>
+
+<svelte:window onkeydown={handleWindowKeydown} />
 
 <div class="page-shell">
 	<a class="skip-link" href="#main-content">Skip to content</a>
@@ -88,7 +151,7 @@
 			<span>Servo ICT</span>
 		</a>
 
-		<button class="menu-button" type="button" aria-label="Toggle navigation" aria-controls="site-navigation" aria-expanded={menuOpen} onclick={() => (menuOpen = !menuOpen)}>
+		<button bind:this={menuButton} class="menu-button" type="button" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-controls="site-navigation" aria-expanded={menuOpen} onclick={() => (menuOpen = !menuOpen)}>
 			<span></span><span></span>
 		</button>
 
@@ -100,21 +163,21 @@
 			<a href="#contact" onclick={closeMenu}>Contact</a>
 		</nav>
 
-		<a class="header-cta" href="#consultation-form">Talk to Rowan</a>
+		<a class="header-cta" href="#consultation-form" onclick={closeMenu}>Request a call</a>
 	</header>
 
 	<main id="main-content">
 		<section id="top" class="hero" aria-labelledby="hero-title">
 			<div class="hero-copy">
 				<p class="eyebrow">Gippsland websites and business IT</p>
-				<h1 id="hero-title">One person to make your technology <em>work.</em></h1>
+				<h1 id="hero-title">Websites and technology that <em>work</em> for your business.</h1>
 				<p class="hero-intro">
 					Servo ICT plans and delivers websites, business systems and practical security projects
-					for small businesses. You deal directly with Rowan from the first call to handover.
+					for small businesses across Gippsland and Victoria. One point of contact from the initial brief through to handover.
 				</p>
 
 				<div class="hero-actions">
-					<a class="button button-primary" href="#consultation-form">Start with a 30-minute call <span aria-hidden="true">→</span></a>
+					<a class="button button-primary" href="#consultation-form">Request a 30-minute call <span aria-hidden="true">→</span></a>
 					<a class="text-link hero-link" href="#services">See project types</a>
 				</div>
 			</div>
@@ -140,9 +203,9 @@
 
 		<section class="trust-strip" aria-label="Servo ICT at a glance">
 			<div><span>Based in</span><strong>Gippsland</strong></div>
-			<div><span>Working across</span><strong>Victoria</strong></div>
-			<div><span>You deal with</span><strong>Rowan</strong></div>
-			<div><span>Start with</span><strong>A 30-minute call</strong></div>
+			<div><span>How we work</span><strong>Remote, with local visits</strong></div>
+			<div><span>Project delivery</span><strong>Scope agreed upfront</strong></div>
+			<div><span>Next step</span><strong>Request a 30-minute call</strong></div>
 		</section>
 
 		<section id="services" class="services-section section-wrap" aria-labelledby="services-title">
@@ -151,7 +214,7 @@
 					<p class="section-kicker">Project work</p>
 					<h2 id="services-title">What needs to work better?</h2>
 				</div>
-				<p>Bring the outcome you need, even if the technical path is unclear. Rowan will scope the work, explain the trade-offs and see the project through.</p>
+				<p>Bring the outcome you need, even if the technical path is unclear. Get practical advice on the options and an agreed scope before work starts.</p>
 			</div>
 
 			<div class="services-grid">
@@ -159,8 +222,8 @@
 					<div class="service-topline"><span>01</span><small>Defined project</small></div>
 					<div>
 						<h3>Websites</h3>
-						<p>New sites, rebuilds and focused improvements that make the business easier to understand.</p>
-						<ul aria-label="Typical website work"><li>New websites</li><li>Rebuilds</li><li>Care and improvements</li></ul>
+						<p>Websites that help customers understand your services, estimate a cost and take the next step.</p>
+						<ul aria-label="Typical website work"><li>Custom websites</li><li>Calculators and enquiry tools</li><li>Care and improvements</li></ul>
 					</div>
 					<strong>Explore website work <span aria-hidden="true">→</span></strong>
 				</a>
@@ -169,8 +232,8 @@
 					<div class="service-topline"><span>02</span><small>Defined project</small></div>
 					<div>
 						<h3>Business IT</h3>
-						<p>Clean setups and careful migrations for the systems your team uses every day.</p>
-						<ul aria-label="Typical business IT work"><li>Email and accounts</li><li>Devices and tools</li><li>Domains and migrations</li></ul>
+						<p>Windows devices, UniFi networks and everyday systems set up for your business to manage.</p>
+						<ul aria-label="Typical business IT work"><li>Email and accounts</li><li>Windows devices</li><li>UniFi networks</li></ul>
 					</div>
 					<strong>Explore business IT <span aria-hidden="true">→</span></strong>
 				</a>
@@ -179,7 +242,7 @@
 					<div class="service-topline"><span>03</span><small>Practical fixes</small></div>
 					<div>
 						<h3>Security</h3>
-						<p>Focused work on exposed accounts, neglected updates and backups you cannot trust.</p>
+						<p>Account protection, automatic updates and recovery checks, with clear steps to keep things in order.</p>
 						<ul aria-label="Typical security work"><li>Account protection</li><li>Updates and access</li><li>Backups and recovery</li></ul>
 					</div>
 					<strong>Explore security work <span aria-hidden="true">→</span></strong>
@@ -187,10 +250,12 @@
 			</div>
 		</section>
 
+		<WorkExample {baseUrl} compact />
+
 		<section class="fit-section section-wrap" aria-labelledby="fit-title">
 			<div class="fit-heading">
 				<p class="section-kicker">A good fit</p>
-				<h2 id="fit-title">Defined work, owned from start to finish.</h2>
+				<h2 id="fit-title">Projects with a clear scope and handover</h2>
 			</div>
 			<div class="fit-copy">
 				<p>Servo ICT is best suited to small businesses that need a website or technology project completed properly, without coordinating several suppliers.</p>
@@ -203,10 +268,10 @@
 
 		<section id="process" class="process-section" aria-labelledby="process-title">
 			<div class="process-inner">
-				<div class="process-heading"><p class="section-kicker section-kicker-light">How it works</p><h2 id="process-title">No mystery in the middle.</h2></div>
+				<div class="process-heading"><p class="section-kicker section-kicker-light">How it works</p><h2 id="process-title">How your project works</h2></div>
 				<ol class="process-steps">
 					<li><span>01</span><div><h3>Scope the result</h3><p>Agree on the outcome, boundaries, budget and timing before work starts.</p></div></li>
-					<li><span>02</span><div><h3>Build and review</h3><p>Rowan does the work, tests it and keeps you informed as decisions come up.</p></div></li>
+					<li><span>02</span><div><h3>Build and review</h3><p>Your project is built and tested against the agreed scope, with progress updates and opportunities to review the work.</p></div></li>
 					<li><span>03</span><div><h3>Handover and next steps</h3><p>You receive the working result, clear notes and an agreed support plan.</p></div></li>
 				</ol>
 			</div>
@@ -215,12 +280,13 @@
 		<section id="about" class="about-section section-wrap" aria-labelledby="about-title">
 			<div class="about-card">
 				<div class="about-mark"><img src={sitePath('/images/servo-ict-logo.png')} alt="" width="82" height="82" /></div>
-				<div><span>Rowan Paterson</span><strong>Founder and consultant</strong></div>
+				<div><span>Rowan Paterson</span><strong>Owner and operator</strong></div>
 			</div>
 			<div class="about-copy">
 				<p class="section-kicker">About Servo ICT</p>
-				<h2 id="about-title">The person you meet is the person doing the work.</h2>
-				<p>Rowan founded Servo ICT so small businesses could plan, build and look after their technology without juggling suppliers. Servo ICT is based in Gippsland and works across Victoria.</p>
+				<h2 id="about-title">Clear advice. Accountable delivery.</h2>
+				<p>Servo ICT is a Gippsland business owned and operated by Rowan Paterson, delivering websites and practical technology projects for small businesses across Victoria.</p>
+				<p>Rowan brings cybersecurity experience, Microsoft Fundamentals training and Microsoft Azure consulting experience. That background informs practical setups for small businesses, with documentation and optional check-ins after handover.</p>
 				<ul class="about-points"><li>One point of contact</li><li>Scope agreed before work starts</li><li>Clear handover and next steps</li></ul>
 			</div>
 		</section>
@@ -245,29 +311,41 @@
 
 		<section id="contact" class="contact-section section-wrap" aria-labelledby="contact-title">
 			<div class="contact-intro">
-				<p class="section-kicker">Start with a 30-minute conversation</p>
-				<h2 id="contact-title">Tell Rowan what needs to work better.</h2>
-				<p class="contact-copy">A rough description is enough. Rowan will reply to arrange a time and confirm whether the project is a good fit.</p>
+				<p class="section-kicker">Project enquiries</p>
+				<h2 id="contact-title">Start with a project enquiry.</h2>
+				<p class="contact-copy">Share a rough description of what needs to work better. We'll reply by email to confirm whether the project is a good fit and arrange a 30-minute conversation.</p>
 				<div class="contact-details"><a href="mailto:support@servoict.com">support@servoict.com</a><a href="tel:0341488665">(03) 4148 8665</a></div>
+				<p class="response-note">We aim to acknowledge enquiries within two business days. Work is usually remote, with local visits by arrangement.</p>
 				<p class="response-note">Phone hours: Monday, Tuesday and Friday, 9am to 4pm.</p>
 			</div>
 
-			<form id="consultation-form" class="consultation-form" method="post" action={consultationMode === 'email' ? 'mailto:support@servoict.com' : sitePath('/api/consultation')} onsubmit={submitConsultation}>
+			<form id="consultation-form" class="consultation-form" method="post" action={consultationMode === 'email' ? `mailto:${consultationRecipient}?subject=Project%20enquiry` : sitePath('/api/consultation')} onsubmit={submitConsultation} oninput={clearCopyFeedback}>
 				<div class="form-heading"><div><p>Project enquiry</p><span>Four short fields and one optional field</span></div><span>Fields marked * are required</span></div>
+				<p class="form-delivery-note">{consultationMode === 'email' ? 'This form prepares a draft in your email app. Review it and press Send there. Nothing is sent automatically.' : 'Send your project details here. We\'ll reply by email to confirm fit and arrange a time.'}</p>
+				<noscript><p class="no-js-note">If this form cannot prepare your enquiry, email <a href="mailto:support@servoict.com">support@servoict.com</a> or call <a href="tel:0341488665">(03) 4148 8665</a>.</p></noscript>
 				<div class="form-grid">
 					<label><span>Your name *</span><input type="text" name="name" autocomplete="name" maxlength="100" aria-invalid={fieldErrors.name ? 'true' : undefined} required />{#if fieldErrors.name}<small class="field-error">{fieldErrors.name}</small>{/if}</label>
 					<label><span>Email *</span><input type="email" name="email" autocomplete="email" maxlength="254" aria-invalid={fieldErrors.email ? 'true' : undefined} required />{#if fieldErrors.email}<small class="field-error">{fieldErrors.email}</small>{/if}</label>
 					<label><span>Organisation <small>Optional</small></span><input type="text" name="organisation" autocomplete="organization" maxlength="120" aria-invalid={fieldErrors.organisation ? 'true' : undefined} />{#if fieldErrors.organisation}<small class="field-error">{fieldErrors.organisation}</small>{/if}</label>
-					<label><span>What can we help with? *</span><select name="service" aria-invalid={fieldErrors.service ? 'true' : undefined} required><option value="">Choose a project type</option><option value="website">Website design or development</option><option value="technology">Business technology project</option><option value="security">Secure setup or tidy-up</option><option value="consulting">Technology consulting</option><option value="other">Something else</option></select>{#if fieldErrors.service}<small class="field-error">{fieldErrors.service}</small>{/if}</label>
+					<label><span>What can we help with? *</span><select bind:this={serviceSelect} name="service" aria-invalid={fieldErrors.service ? 'true' : undefined} required><option value="">Choose a project type</option><option value="website">Website design or development</option><option value="technology">Business technology project</option><option value="security">Secure setup or tidy-up</option><option value="consulting">Technology consulting</option><option value="other">Something else</option></select>{#if fieldErrors.service}<small class="field-error">{fieldErrors.service}</small>{/if}</label>
 					<label class="full-field"><span>What would you like to build, change, or fix? *</span><textarea name="message" rows="5" minlength="20" maxlength="2000" aria-invalid={fieldErrors.message ? 'true' : undefined} placeholder="A rough description is plenty. Tell us what needs to work and what is getting in the way." required></textarea>{#if fieldErrors.message}<small class="field-error">{fieldErrors.message}</small>{/if}</label>
 				</div>
 				<label class="honeypot" aria-hidden="true">Company website<input type="text" name="companyWebsite" tabindex="-1" autocomplete="off" /></label>
 				{#if consultationMode === 'server' && turnstileSiteKey}<div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="consultation" data-theme="light"></div>{/if}
 				<div class="form-submit-row">
-					<button class="button button-primary contact-button" type="submit" disabled={formState === 'submitting'}>{formState === 'submitting' ? 'Sending…' : consultationMode === 'email' ? 'Open email to send' : 'Send project enquiry'}<span aria-hidden="true">→</span></button>
+					<div class="form-buttons">
+						<button class="button button-primary contact-button" type="submit" disabled={formState === 'submitting'}>{formState === 'submitting' ? 'Sending…' : consultationMode === 'email' ? 'Open email draft' : 'Send project enquiry'}<span aria-hidden="true">→</span></button>
+						<button class="button button-secondary copy-button" type="button" disabled={formState === 'submitting'} onclick={copyConsultation}>Copy enquiry</button>
+					</div>
+					<p class="copy-help">{consultationMode === 'email' ? 'No email app? Copy your enquiry and paste it into your email service.' : 'If sending fails, copy your enquiry and paste it into your email service.'}</p>
 					<p class:form-success={formState === 'success'} class:form-error={formState === 'error'} class="form-status" role="status" aria-live="polite">{formMessage}</p>
 				</div>
-				<p class="confirmation-note">{consultationMode === 'email' ? 'This opens a prepared draft in your email app. Nothing is sent until you press send.' : 'Servo ICT uses these details only to respond to your enquiry.'}<a href={sitePath('/privacy/')}>Privacy</a></p>
+				<p class:form-success={copyState === 'success'} class:form-error={copyState === 'error'} class="copy-status" role="status" aria-live="polite">{copyMessage}</p>
+				{#if copyState === 'error'}
+					<label class="manual-copy"><span>Prepared enquiry</span><textarea rows="10" readonly value={manualCopyText} aria-describedby="manual-copy-help" onfocus={(event) => event.currentTarget.select()}></textarea></label>
+					<p id="manual-copy-help" class="manual-copy-help">Select all, copy, and paste this into an email. The recipient and subject are included.</p>
+				{/if}
+				<p class="confirmation-note"><span>{consultationMode === 'email' ? 'Your entries stay in the form if you return from your email app.' : 'Servo ICT uses these details only to respond to your enquiry.'}</span><a href={sitePath('/privacy/')}>Read the privacy notice</a></p>
 			</form>
 		</section>
 	</main>
@@ -402,6 +480,9 @@
 	.form-heading > div { display: grid; gap: 0.25rem; }
 	.form-heading p { margin: 0; font-size: 1.05rem; font-weight: 850; }
 	.form-heading span { color: #626277; font-size: 0.7rem; }
+	.form-delivery-note, .no-js-note { margin: -0.35rem 0 1.5rem; padding: 0.8rem 0.9rem; border-left: 3px solid #4a4ab9; background: #f4f2fb; color: #4d4d66; font-size: 0.76rem; line-height: 1.55; }
+	.no-js-note { margin-top: 0; border-left-color: #f8a51b; background: #fff7e8; }
+	.no-js-note a { font-weight: 760; text-underline-offset: 0.18rem; }
 	.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem 1rem; }
 	.form-grid > label { display: grid; align-content: start; gap: 0.45rem; }
 	.form-grid label > span { font-size: 0.72rem; font-weight: 800; }
@@ -414,14 +495,24 @@
 	.field-error { color: #982626; font-size: 0.72rem; line-height: 1.4; }
 	.honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 	.cf-turnstile { margin-top: 1rem; }
-	.form-submit-row { display: flex; align-items: center; gap: 1rem; margin-top: 1.3rem; }
+	.form-submit-row { display: grid; gap: 0.75rem; margin-top: 1.3rem; }
+	.form-buttons { display: flex; flex-wrap: wrap; gap: 0.7rem; }
 	.contact-button { flex: 0 0 auto; min-width: 14rem; cursor: pointer; }
-	.contact-button:disabled { cursor: wait; opacity: 0.65; transform: none; }
+	.button-secondary { border: 1px solid #b9b6cf; background: transparent; color: #10105a; cursor: pointer; }
+	.button-secondary:hover { border-color: #4a4ab9; background: #f1f0fa; }
+	.form-buttons button:disabled { cursor: wait; opacity: 0.65; transform: none; }
+	.copy-help { margin: 0; color: #626277; font-size: 0.72rem; line-height: 1.45; }
 	.form-status { margin: 0; color: #666679; font-size: 0.73rem; font-weight: 700; line-height: 1.4; }
 	.form-success { color: #1e6d42; }
 	.form-error { color: #982626; }
-	.confirmation-note { margin: 0.9rem 0 0; color: #626277; font-size: 0.72rem; line-height: 1.45; }
-	.confirmation-note a { margin-left: 0.5rem; font-weight: 800; }
+	.copy-status { margin: 0.75rem 0 0; font-size: 0.73rem; font-weight: 700; line-height: 1.45; }
+	.form-status:empty, .copy-status:empty { display: none; }
+	.manual-copy { display: grid; gap: 0.45rem; margin-top: 1rem; }
+	.manual-copy > span { font-size: 0.72rem; font-weight: 800; }
+	.manual-copy textarea { min-height: 12rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.75rem; }
+	.manual-copy-help { margin: 0.5rem 0 0; color: #626277; font-size: 0.7rem; line-height: 1.45; }
+	.confirmation-note { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; margin: 1rem 0 0; padding-top: 0.9rem; border-top: 1px solid #dfddd5; color: #626277; font-size: 0.72rem; line-height: 1.45; }
+	.confirmation-note a { font-weight: 800; text-underline-offset: 0.18rem; }
 	footer { display: grid; grid-template-columns: minmax(15rem, 1fr) auto minmax(15rem, 1fr); align-items: start; gap: clamp(2rem, 5vw, 5rem); width: min(100% - 3rem, 1220px); margin: 0 auto; padding: 2.5rem 0 3rem; border-top: 1px solid #d0cdc3; color: #626277; font-size: 0.75rem; }
 	.footer-brand { color: #10103f; }
 	.footer-brand-block p { max-width: 20rem; margin: 1rem 0 0; }
@@ -478,7 +569,8 @@
 		.trust-strip div { min-height: 7rem; padding: 1.1rem; }
 		.trust-strip strong { font-size: 1.05rem; }
 		.services-section, .guides-section { padding-block: 5rem; }
-		.services-grid, .engagement-grid, .about-points, .guide-list, .form-grid { grid-template-columns: 1fr; }
+		.services-grid, .engagement-grid, .about-points, .guide-list { grid-template-columns: 1fr; }
+		.form-grid { grid-template-columns: minmax(0, 1fr); }
 		.service-card, .service-card:last-child { grid-column: auto; min-height: 0; padding: 1.5rem; }
 		.service-card > div:nth-child(2) { margin-top: 2.5rem; padding-top: 0; }
 		.fit-section { padding-bottom: 5rem; }
@@ -495,9 +587,11 @@
 		.guide-list { grid-template-rows: none; }
 		.guide-list a { min-height: 12rem; }
 		.contact-section { padding: 2rem 1.25rem; border-radius: 1.25rem; }
-		.form-heading, .form-submit-row { align-items: stretch; flex-direction: column; }
+		.consultation-form, .form-grid > label { min-width: 0; }
+		.form-heading { align-items: stretch; flex-direction: column; }
+		.form-buttons { flex-direction: column; }
+		.form-buttons button { min-width: 0; max-width: 100%; white-space: normal; }
 		.full-field { grid-column: auto; }
-		.confirmation-note a { display: inline-block; margin: 0.35rem 0 0; }
 		footer { grid-template-columns: 1fr; }
 		.footer-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 		.footer-contact { grid-column: auto; justify-items: start; }

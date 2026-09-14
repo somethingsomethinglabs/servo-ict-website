@@ -3,14 +3,14 @@
 The Servo ICT website for small-business websites and technology projects, built with Astro, Svelte and TypeScript. It has two production targets:
 
 - The standalone Node server validates project enquiries and sends them through Fastmail.
-- The GitHub Pages build is fully static. The consultation form packages the entered details into an email draft for the visitor to review and send.
+- The GitHub Pages build is fully static. The consultation form packages the entered details into an email draft for the visitor to review and send. Visitors can also copy the prepared enquiry into their preferred email service.
 
 ## What the consultation form does
 
 1. A visitor provides their contact details, project type and a short description.
 2. Cloudflare Turnstile checks the submission for spam.
 3. The server emails Servo ICT through Fastmail SMTP and uses the visitor's address as `Reply-To`.
-4. The visitor receives an acknowledgement that Rowan will reply by email.
+4. The visitor receives an acknowledgement that Servo ICT will reply by email.
 
 No form submissions are stored in a database. The email inbox is the record of the enquiry.
 
@@ -21,7 +21,7 @@ This project requires Node.js 22.12 or newer.
 ```sh
 npm install
 cp .env.example .env
-npm run dev
+npm run astro -- dev --background
 ```
 
 Open `http://localhost:4321`. The form will render without credentials, but it will not deliver a request until `.env` has been configured.
@@ -72,7 +72,8 @@ The public key is rendered into the page. The secret is used only by the server.
 
 | Command | Action |
 | --- | --- |
-| `npm run dev` | Start the local development server |
+| `npm run astro -- dev --background` | Start the local development server in the background |
+| `npm run astro -- dev status` | Check the background development server |
 | `npm run check` | Type-check Astro and Svelte files |
 | `npm test` | Run the project enquiry validation tests |
 | `npm run build` | Build the standalone Node service into `dist/` |
@@ -81,7 +82,15 @@ The public key is rendered into the page. The secret is used only by the server.
 
 ## GitHub Pages
 
-The workflow in `.github/workflows/deploy-pages.yml` runs the static build whenever `main` is pushed. That build switches the consultation button to **Open email draft**, removes the Turnstile widget and does not include the consultation API route.
+The workflow in `.github/workflows/deploy-pages.yml` runs the static build whenever `main` is pushed. That build switches the consultation button to **Open email draft**, removes the Turnstile widget and does not include the consultation API route. The email-app requirement is explained before the fields. **Copy enquiry** validates the same fields and copies the recipient, subject and message without opening an email app. If clipboard access fails, a selectable text field provides the same enquiry for manual copying. Neither action reports an enquiry as sent; the visitor sends it from their email service. Entered values stay in the form during these actions. The copy option is also available in server mode as a fallback.
+
+Service-page enquiry links carry an allow-listed `service` query value into the form: `website`, `technology` or `security`. The selection is applied on initial page load, can be changed by the visitor and clears after a successful server submission.
+
+### Activating direct submission
+
+The default Node build already supports sending from the page through `/api/consultation`. GitHub Pages cannot run that endpoint. To use direct submission publicly, configure the SMTP and Turnstile values above and deploy the Node build on an HTTPS host using the existing Docker or standalone setup below. Check the privacy notice against the chosen host before publishing, then verify delivery and acknowledgement with a controlled test.
+
+Changing the button label or the static build's form mode does not activate delivery. Keep the email-draft and copy flow until the server and its credentials are configured.
 
 In the GitHub repository, open **Settings → Pages** and choose **GitHub Actions** as the source. The site is published at `https://somethingsomethinglabs.com/servo-ict-website/`. The `servoict.com` domain can be added later after its public DNS records point to GitHub Pages.
 

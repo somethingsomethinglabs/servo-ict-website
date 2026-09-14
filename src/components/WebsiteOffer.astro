@@ -1,0 +1,86 @@
+---
+const enquiryUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/?service=website#consultation-form`;
+---
+
+<section class="website-offer" aria-labelledby="website-offer-title">
+	<div class="offer-heading">
+		<div><p class="eyebrow">A defined website project</p>
+		<h2 id="website-offer-title">A useful website, worked out with you.</h2></div>
+		<p>The project starts with a workshop to understand what customers need to decide or do. From there, Servo ICT writes and designs the site and builds one focused interactive feature, such as a calculator, guided choice or structured enquiry.</p>
+	</div>
+
+	<p class="offer-currency">All prices are in AUD. GST is not currently charged.</p>
+	<div class="offer-details">
+		<div class="included">
+			<h3>What the starting scope includes</h3>
+			<ul>
+				<li>One planning workshop and a written project scope</li>
+				<li>Custom structure, design and writing for up to five core pages</li>
+				<li>One focused interactive feature with agreed inputs and outputs</li>
+				<li>Two consolidated review rounds</li>
+				<li>Search and analytics setup, enquiry testing, launch and handover</li>
+			</ul>
+			<p class="timing"><strong>Planning allowance:</strong> six to eight weeks once the agreed content, access and feedback arrive on schedule.</p>
+		</div>
+
+		<div class="price-card primary">
+			<p class="price-label">Project price</p>
+			<p class="price">From <span>A$6,500</span></p>
+			<p>GST is not currently charged. The final price and payment schedule are set out in a written proposal after the fit conversation.</p>
+			<a href={enquiryUrl}>Discuss a website project <span aria-hidden="true">→</span></a>
+		</div>
+
+		<div class="price-card managed">
+			<p class="price-label">Managed payment option</p>
+			<p class="price"><span>A$1,490</span> upfront</p>
+			<p class="monthly">then A$299 a month for 24 months from launch</p>
+			<p class="total"><span>A$8,666</span> minimum total including the upfront payment</p>
+			<p>Available where included in the project proposal. It covers the scoped build plus hosting, backups, monitoring, scheduled form checks, up to 30 minutes of small edits each month and a quarterly review.</p>
+			<p>After the 24-month term, choose handover to your own hosting or ask for a separately quoted care arrangement.</p>
+		</div>
+
+		<div class="ownership">
+			<h3>Clear ownership and responsibilities</h3>
+			<p>Your domain and business accounts stay in your name. Before work starts, the proposal sets out hosting costs, care limits, the payment schedule, how launch delays affect billing, and the ownership, cancellation and early-handover terms. Monitoring does not include a staffed 24-hour response.</p>
+		</div>
+		<div class="boundaries">
+			<h3>When the scope needs a separate quote</h3>
+			<p>Online shops, customer accounts, complex booking systems, external integrations and larger data-backed tools sit outside the starting scope. Large content migrations, photography, logo work, legal writing and third-party fees are also quoted separately when needed.</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.website-offer { padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
+	.offer-heading { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(2rem, 8vw, 7rem); align-items: end; margin-bottom: 3.5rem; }
+	.offer-heading h2 { max-width: 12ch; }
+	.offer-heading > p:last-child { margin: 0; color: #595970; font-size: 1.05rem; line-height: 1.75; }
+	.offer-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+	.offer-details > div { padding: clamp(1.5rem, 3.5vw, 2.6rem); border: 1px solid #d5d2c8; border-radius: 1.15rem; background: rgb(255 255 255 / 55%); }
+	.offer-details h3 { margin: 0 0 1.25rem; font-size: clamp(1.35rem, 2.5vw, 1.9rem); line-height: 1.1; letter-spacing: -.03em; }
+	.included { grid-column: 1 / -1; }
+	.offer-currency { color: #595970; font-size: .85rem; }
+	.ownership { grid-column: 1 / -1; }
+	.ownership p { color: #595970; font-size: .9rem; line-height: 1.7; }
+	.included ul { margin: 0; padding-left: 1.2rem; color: #393951; }
+	.included li { margin-block: .65rem; padding-left: .25rem; }
+	.timing, .boundaries p, .price-card > p { color: #595970; font-size: .9rem; line-height: 1.7; }
+	.timing { margin: 1.5rem 0 0; padding-top: 1.25rem; border-top: 1px solid #d5d2c8; }
+	.price-card.primary { background: #10103f; color: #fff; }
+	.price-card.primary > p { color: rgb(255 255 255 / 72%); }
+	.price-label { margin: 0 0 .8rem !important; color: #4a4ab9 !important; font-size: .7rem !important; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+	.primary .price-label { color: #f8a51b !important; }
+	.price { margin: 0 !important; font-weight: 720; }
+	.price span { color: inherit; font-size: clamp(2.3rem, 5vw, 4rem); font-weight: 800; line-height: 1; letter-spacing: -.05em; }
+	.total span { display: block; font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -.05em; }
+	.monthly { margin-block: .4rem 0 !important; }
+	.total { margin: 1.2rem 0 !important; padding-block: .9rem; border-block: 1px solid #d5d2c8; color: #10103f !important; font-weight: 780; }
+	.price-card a { display: inline-flex; gap: 1.5rem; margin-top: 1rem; color: #fff; font-size: .86rem; font-weight: 760; text-underline-offset: .25em; }
+	.boundaries { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, .8fr) minmax(22rem, 1.2fr); gap: clamp(2rem, 8vw, 7rem); }
+	.boundaries p { margin: 0; }
+	@media (max-width: 760px) {
+		.offer-heading, .offer-details, .boundaries { grid-template-columns: 1fr; }
+		.offer-heading { align-items: start; }
+		.boundaries { grid-column: auto; }
+	}
+</style>

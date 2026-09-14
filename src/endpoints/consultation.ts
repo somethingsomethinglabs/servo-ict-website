@@ -160,7 +160,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 					'',
 					'Thanks for getting in touch. We received your project enquiry.',
 					'',
-					'Rowan will reply by email to arrange a time and confirm whether the project is a good fit.',
+					'We\'ll reply by email to confirm whether the project is a good fit and arrange a time.',
 					'',
 					'Servo ICT'
 				].join('\n')

@@ -1,6 +1,11 @@
 ---
 import '@fontsource-variable/inter/wght.css';
 
+interface EnquiryAnswer {
+	question: string;
+	answer: string;
+}
+
 interface Props {
 	title: string;
 	description: string;
@@ -10,6 +15,15 @@ interface Props {
 	intro: string;
 	goodFit: string[];
 	typicalWork: Array<{ title: string; description: string }>;
+	enquiryService: 'website' | 'technology' | 'security';
+	beforeEnquiring: EnquiryAnswer[];
+	exampleScope: {
+		scenario: string;
+		work: string;
+		inputs: string;
+		timing: string;
+		handover: string;
+	};
 	closingTitle: string;
 	closingCopy: string;
 }
@@ -23,6 +37,9 @@ const {
 	intro,
 	goodFit,
 	typicalWork,
+	enquiryService,
+	beforeEnquiring,
+	exampleScope,
 	closingTitle,
 	closingCopy
 } = Astro.props;
@@ -31,6 +48,12 @@ const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
 const siteOrigin = Astro.site ?? new URL('https://servoict.com');
 const sitePath = (path: string) => `${baseUrl}${path.replace(/^\//, '')}`;
 const canonicalUrl = new URL(sitePath(canonicalPath), siteOrigin);
+const enquiryUrl = `${baseUrl}?service=${enquiryService}#consultation-form`;
+const serviceLinks = [
+	{ label: 'Websites', path: '/websites/' },
+	{ label: 'Business IT', path: '/business-it/' },
+	{ label: 'Security', path: '/security/' }
+];
 const schema = {
 	'@context': 'https://schema.org',
 	'@type': 'Service',
@@ -75,7 +98,7 @@ const schema = {
 			<nav aria-label="Main navigation">
 				<a href={`${baseUrl}#services`}>Project work</a>
 				<a href={`${baseUrl}#about`}>About</a>
-				<a class="nav-cta" href={`${baseUrl}#consultation-form`}>Talk to Rowan</a>
+				<a class="nav-cta" href={enquiryUrl}>Project enquiry</a>
 			</nav>
 		</header>
 
@@ -87,17 +110,27 @@ const schema = {
 				</div>
 				<div class="hero-intro">
 					<p>{intro}</p>
-					<a class="button" href={`${baseUrl}#consultation-form`}>Talk through the project <span aria-hidden="true">→</span></a>
+					<p class="hero-qualifier"><strong>A good fit when</strong><span>{goodFit[0]}</span></p>
+					<a class="button" href={enquiryUrl}>Discuss your project <span aria-hidden="true">→</span></a>
 				</div>
 			</section>
 
+			<nav class="service-switcher" aria-label="Compare services">
+				<span>Compare services</span>
+				<div>
+					{serviceLinks.map((service) => (
+						<a href={sitePath(service.path)} aria-current={service.path === canonicalPath ? 'page' : undefined}>{service.label}</a>
+					))}
+				</div>
+			</nav>
+
 			<section class="fit" aria-labelledby="fit-title">
-				<div><p class="eyebrow">A good fit when</p><h2 id="fit-title">The outcome is clear, but the path is not.</h2></div>
-				<ul>{goodFit.map((item) => <li>{item}</li>)}</ul>
+				<div><p class="eyebrow">A good fit when</p><h2 id="fit-title">Is this service right for you?</h2></div>
+				<ul>{goodFit.slice(1).map((item) => <li>{item}</li>)}</ul>
 			</section>
 
 			<section class="work" aria-labelledby="work-title">
-				<div class="section-heading"><p class="eyebrow">Typical project work</p><h2 id="work-title">Practical help, scoped around the result.</h2></div>
+				<div class="section-heading"><p class="eyebrow">Typical project work</p><h2 id="work-title">What we can help with</h2></div>
 				<div class="work-grid">
 					{typicalWork.map((item, index) => (
 						<article><span>{String(index + 1).padStart(2, '0')}</span><h3>{item.title}</h3><p>{item.description}</p></article>
@@ -105,18 +138,51 @@ const schema = {
 				</div>
 			</section>
 
+			{Astro.slots.has('offer') && <slot name="offer" />}
+
+			<section class="before-enquiring" aria-labelledby="before-enquiring-title">
+				<div class="section-heading">
+					<p class="eyebrow">Useful details</p>
+					<h2 id="before-enquiring-title">Before you enquire</h2>
+				</div>
+				<dl>
+					{beforeEnquiring.map((item) => (
+						<div><dt>{item.question}</dt><dd>{item.answer}</dd></div>
+					))}
+				</dl>
+			</section>
+
+			<section class="example-scope" id="example-scope" aria-labelledby="example-scope-title">
+				<div class="section-heading">
+					<p class="eyebrow">Possible engagement</p>
+					<h2 id="example-scope-title">Example scope</h2>
+					<p>{exampleScope.scenario}</p>
+					<small>This is an example, not a completed client project.</small>
+				</div>
+				<div class="scope-grid">
+					<article><span>01</span><h3>Likely work</h3><p>{exampleScope.work}</p></article>
+					<article><span>02</span><h3>What you provide</h3><p>{exampleScope.inputs}</p></article>
+					<article><span>03</span><h3>Quote and timing</h3><p>{exampleScope.timing}</p></article>
+					<article><span>04</span><h3>Handover</h3><p>{exampleScope.handover}</p></article>
+				</div>
+			</section>
+
+			{Astro.slots.has('technology') && <slot name="technology" />}
+
+			{Astro.slots.has('proof') && <slot name="proof" />}
+
 			<section class="process" aria-labelledby="process-title">
-				<div><p class="eyebrow eyebrow-light">How it works</p><h2 id="process-title">A defined start, a visible middle and a clean handover.</h2></div>
+				<div><p class="eyebrow eyebrow-light">Project steps</p><h2 id="process-title">How the project works</h2></div>
 				<ol>
-					<li><span>01</span><div><strong>Scope</strong><p>Agree on the outcome, boundaries, budget and timing.</p></div></li>
-					<li><span>02</span><div><strong>Deliver</strong><p>Rowan completes the work and keeps decisions visible.</p></div></li>
-					<li><span>03</span><div><strong>Handover</strong><p>Receive the working result, clear notes and agreed next steps.</p></div></li>
+					<li><span>01</span><div><strong>Scope</strong><p>Agree on the outcome, boundaries, quote and schedule.</p></div></li>
+					<li><span>02</span><div><strong>Deliver</strong><p>Complete the agreed work with progress updates and review points.</p></div></li>
+					<li><span>03</span><div><strong>Handover</strong><p>Receive the working result, notes and agreed next steps.</p></div></li>
 				</ol>
 			</section>
 
 			<section class="closing">
 				<div><p class="eyebrow">Next step</p><h2>{closingTitle}</h2></div>
-				<div><p>{closingCopy}</p><a class="button" href={`${baseUrl}#consultation-form`}>Start with a 30-minute call <span aria-hidden="true">→</span></a></div>
+				<div><p>{closingCopy}</p><a class="button" href={enquiryUrl}>Send a project enquiry <span aria-hidden="true">→</span></a></div>
 			</section>
 		</main>
 
@@ -136,7 +202,7 @@ const schema = {
 	:focus-visible { outline: 3px solid #5c5ce0; outline-offset: 4px; }
 	.skip-link { position: fixed; z-index: 100; top: .75rem; left: .75rem; padding: .75rem 1rem; transform: translateY(-200%); border-radius: .5rem; background: #fff; font-weight: 800; }
 	.skip-link:focus { transform: translateY(0); }
-	.site-header, main > section, footer { width: min(100% - 3rem, 1120px); margin-inline: auto; }
+	.site-header, main > section, .service-switcher, footer { width: min(100% - 3rem, 1120px); margin-inline: auto; }
 	.site-header { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem 0; }
 	.brand { display: inline-flex; align-items: center; gap: .75rem; font-size: 1.02rem; font-weight: 760; text-decoration: none; }
 	.brand img { width: 2.4rem; height: 2.4rem; }
@@ -145,11 +211,20 @@ const schema = {
 	.nav-cta, .button { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: .75rem 1.15rem; border-radius: 999px; background: #10105a; color: #fff; font-weight: 760; text-decoration: none; }
 	.button { min-height: 3.4rem; gap: 1.5rem; padding-inline: 1.5rem; font-size: .84rem; }
 	.nav-cta:hover, .button:hover { background: #282887; }
-	.hero { display: grid; min-height: 39rem; grid-template-columns: minmax(0, 1.18fr) minmax(20rem, .82fr); align-items: center; gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(5rem, 10vw, 8rem); border-top: 1px solid #d5d2c8; }
+	.hero { display: grid; min-height: 30rem; grid-template-columns: minmax(0, 1.18fr) minmax(20rem, .82fr); align-items: center; gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(3.5rem, 7vw, 5.5rem); border-top: 1px solid #d5d2c8; }
 	.eyebrow { margin: 0 0 1.2rem; color: #4a4ab9; font-size: .72rem; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
 	h1 { max-width: 12ch; margin: 0; font-size: clamp(3.2rem, 6.8vw, 6.2rem); line-height: .96; letter-spacing: -.055em; }
-	.hero-intro > p, .closing > div:last-child > p { margin: 0 0 2rem; color: #5b5b70; font-size: 1.08rem; line-height: 1.75; }
-	.fit { display: grid; grid-template-columns: minmax(0, .85fr) minmax(22rem, 1.15fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(4rem, 8vw, 7rem); border-top: 1px solid #d5d2c8; }
+	.hero-intro > p:not(.hero-qualifier), .closing > div:last-child > p { margin: 0 0 1.5rem; color: #5b5b70; font-size: 1.08rem; line-height: 1.75; }
+	.hero-qualifier { display: grid; gap: .35rem; margin: 0 0 1.6rem; padding: .9rem 1rem; border-left: 3px solid #f8a51b; background: rgb(255 255 255 / 55%); color: #393951; font-size: .88rem; line-height: 1.55; }
+	.hero-qualifier strong { color: #4a4ab9; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
+	.hero-qualifier span { font-weight: 680; }
+	.service-switcher { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1rem; border-top: 1px solid #d5d2c8; border-bottom: 1px solid #d5d2c8; }
+	.service-switcher > span { color: #626277; font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.service-switcher > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
+	.service-switcher a { display: inline-flex; min-height: 2.5rem; align-items: center; padding: .55rem 1rem; border: 1px solid #c7c4bb; border-radius: 999px; font-size: .78rem; font-weight: 760; text-decoration: none; }
+	.service-switcher a:hover { border-color: #4a4ab9; color: #282887; }
+	.service-switcher a[aria-current='page'] { border-color: #10105a; background: #10105a; color: #fff; }
+	.fit { display: grid; grid-template-columns: minmax(0, .85fr) minmax(22rem, 1.15fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(4rem, 8vw, 7rem); }
 	h2 { margin: 0; font-size: clamp(2.25rem, 4.8vw, 4.2rem); line-height: 1.02; letter-spacing: -.048em; }
 	.fit h2 { max-width: 11ch; }
 	.fit ul { margin: 0; padding: 0; list-style: none; }
@@ -163,6 +238,22 @@ const schema = {
 	.work article > span { color: #4a4ab9; font-size: .68rem; font-weight: 850; }
 	.work h3 { margin: 3.3rem 0 0; font-size: clamp(1.55rem, 3vw, 2.4rem); line-height: 1.05; letter-spacing: -.04em; }
 	.work article p { margin: 1rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
+	.before-enquiring { display: grid; grid-template-columns: minmax(0, .72fr) minmax(24rem, 1.28fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
+	.before-enquiring .section-heading { margin-bottom: 0; }
+	.before-enquiring h2 { max-width: 8ch; }
+	.before-enquiring dl { margin: 0; border-top: 1px solid #c9c6bd; }
+	.before-enquiring dl > div { padding: 1.5rem 0; border-bottom: 1px solid #c9c6bd; }
+	.before-enquiring dt { font-size: 1.05rem; font-weight: 760; }
+	.before-enquiring dd { margin: .6rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
+	.example-scope { padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
+	.example-scope .section-heading { max-width: 48rem; }
+	.example-scope .section-heading > p:last-of-type { margin: 1.4rem 0 .65rem; color: #4f4f67; font-size: 1.05rem; line-height: 1.7; }
+	.example-scope small { color: #6b6b7d; font-size: .78rem; }
+	.scope-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #c9c6bd; border-left: 1px solid #c9c6bd; }
+	.scope-grid article { min-height: 13rem; padding: clamp(1.4rem, 3vw, 2.2rem); border-right: 1px solid #c9c6bd; border-bottom: 1px solid #c9c6bd; background: rgb(255 255 255 / 38%); }
+	.scope-grid article > span { color: #4a4ab9; font-size: .68rem; font-weight: 850; }
+	.scope-grid h3 { margin: 2rem 0 .75rem; font-size: clamp(1.25rem, 2.3vw, 1.7rem); line-height: 1.1; letter-spacing: -.03em; }
+	.scope-grid p { margin: 0; color: #595970; font-size: .9rem; line-height: 1.7; }
 	.process { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(3rem, 9vw, 8rem); padding: clamp(4rem, 7vw, 6rem); border-radius: 1.5rem; background: #10103f; color: #fff; }
 	.process h2 { max-width: 11ch; }
 	.eyebrow-light { color: #f8a51b; }
@@ -180,13 +271,18 @@ const schema = {
 	.footer-contact a { font-weight: 720; text-decoration: none; }
 	.footer-contact span { margin-top: .4rem; }
 	@media (max-width: 760px) {
-		.site-header, main > section, footer { width: min(100% - 2rem, 1120px); }
+		.site-header, main > section, .service-switcher, footer { width: min(100% - 2rem, 1120px); }
 		.site-header nav a:not(.nav-cta) { display: none; }
-		.hero, .fit, .process, .closing { grid-template-columns: 1fr; }
-		.hero { min-height: auto; padding-block: 4.5rem 5rem; }
+		.hero, .fit, .before-enquiring, .process, .closing { grid-template-columns: 1fr; }
+		.hero { min-height: auto; gap: 2rem; padding-block: 3.5rem 4rem; }
 		h1 { font-size: clamp(3rem, 14vw, 4.4rem); }
+		.service-switcher { align-items: flex-start; flex-direction: column; gap: .75rem; }
+		.service-switcher > div { justify-content: flex-start; }
+		.service-switcher a { min-height: 2.75rem; }
 		.work-grid { grid-template-columns: 1fr; }
 		.work article { min-height: 14rem; }
+		.scope-grid { grid-template-columns: 1fr; }
+		.scope-grid article { min-height: auto; }
 		.process { padding: 2rem 1.35rem; border-radius: 1.15rem; }
 		footer { grid-template-columns: 1fr; }
 		.footer-contact { justify-items: start; }

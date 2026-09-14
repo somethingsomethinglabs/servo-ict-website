@@ -1,0 +1,29 @@
+<section class="website-technology" aria-labelledby="website-technology-title">
+	<div>
+		<p class="eyebrow">Built with Astro</p>
+		<h2 id="website-technology-title">A considered choice for your website.</h2>
+		<p class="technology-intro">Astro is the web framework we use, including for this Servo ICT site. It suits service pages, articles and useful tools such as calculators and guided enquiries.</p>
+		<a href="https://docs.astro.build/en/concepts/why-astro/">Read about Astro <span aria-hidden="true">↗</span></a>
+	</div>
+	<div class="technology-details">
+		<dl>
+			<div><dt>Less work for the visitor's device</dt><dd>Astro delivers page content as HTML and lets us add interactive code where it is needed. That gives us a useful starting point for pages that load efficiently.</dd></div>
+			<div><dt>Room for useful interactions</dt><dd>We can build an estimator or guided choice alongside your service information, with the behaviour tailored to the agreed scope.</dd></div>
+			<div><dt>A site you can hand over</dt><dd>Astro is open source. We provide the agreed source and deployment notes, so another developer can maintain the site. Content editing and hosting are chosen as part of the project.</dd></div>
+		</dl>
+		<p class="technology-examples">Astro's official showcase lists IKEA's global site, Unilever's global site and The Guardian Engineering site. <a href="https://astro.build/showcase/">Explore the Astro showcase <span aria-hidden="true">↗</span></a></p>
+	</div>
+</section>
+
+<style>
+	.website-technology { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2rem, 6vw, 5rem); padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid #d5d2c8; }
+	h2 { max-width: 15ch; font-size: clamp(2rem, 3.8vw, 3.4rem); }
+	.technology-intro { margin-block: 1.5rem; color: #595970; line-height: 1.7; }
+	a { display: inline-block; padding-block: .6rem; font-size: .9rem; font-weight: 750; text-underline-offset: .25em; }
+	dl { margin: 0; }
+	dl > div { padding-block: 1.1rem; border-top: 1px solid #d5d2c8; }
+	dt { font-weight: 760; font-size: 1.05rem; }
+	dd { margin: .6rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
+	.technology-examples { margin: 1.25rem 0 0; color: #595970; font-size: .85rem; line-height: 1.7; }
+	@media (max-width: 760px) { .website-technology { grid-template-columns: 1fr; } }
+</style>

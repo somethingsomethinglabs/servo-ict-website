@@ -6,15 +6,25 @@ const serviceLabels: Record<string, string> = {
 	other: 'Something else'
 };
 
+export const consultationRecipient = 'support@servoict.com';
+
+export interface ConsultationEmailDraft {
+	recipient: string;
+	subject: string;
+	body: string;
+	mailto: string;
+	plainText: string;
+}
+
 function value(form: FormData, name: string): string {
 	const raw = form.get(name);
 	return typeof raw === 'string' ? raw.trim() : '';
 }
 
-export function buildConsultationMailto(
+export function buildConsultationEmailDraft(
 	form: FormData,
-	recipient = 'support@servoict.com'
-): string {
+	recipient = consultationRecipient
+): ConsultationEmailDraft {
 	const name = value(form, 'name');
 	const service = value(form, 'service');
 	const body = [
@@ -32,5 +42,8 @@ export function buildConsultationMailto(
 		.join('\n');
 
 	const subject = `Project enquiry from ${name}`;
-	return `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+	const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+	const plainText = [`To: ${recipient}`, `Subject: ${subject}`, '', body].join('\n');
+
+	return { recipient, subject, body, mailto, plainText };
 }
