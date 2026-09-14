@@ -124,12 +124,27 @@ const schema = {
 				</div>
 			</nav>
 
+			<nav class="page-jumps" aria-label="On this page">
+				<span>On this page</span>
+				{Astro.slots.has('offer') && <a href="#website-offer">Website offer</a>}
+				{Astro.slots.has('proof') && <a href="#service-proof">{enquiryService === 'website' ? 'Client work' : 'Experience'}</a>}
+				{Astro.slots.has('technology') && <a href="#website-technology">Built with Astro</a>}
+				<a href="#typical-work">Typical work</a>
+				<a href="#before-enquiring">FAQs</a>
+				<a href="#example-scope">Example scope</a>
+				<a href="#process">Process</a>
+			</nav>
+
+			{Astro.slots.has('offer') && <slot name="offer" />}
+
+			{Astro.slots.has('proof') && <div id="service-proof"><slot name="proof" /></div>}
+
 			<section class="fit" aria-labelledby="fit-title">
 				<div><p class="eyebrow">A good fit when</p><h2 id="fit-title">Is this service right for you?</h2></div>
 				<ul>{goodFit.slice(1).map((item) => <li>{item}</li>)}</ul>
 			</section>
 
-			<section class="work" aria-labelledby="work-title">
+			<section class="work" id="typical-work" aria-labelledby="work-title">
 				<div class="section-heading"><p class="eyebrow">Typical project work</p><h2 id="work-title">What we can help with</h2></div>
 				<div class="work-grid">
 					{typicalWork.map((item, index) => (
@@ -138,18 +153,16 @@ const schema = {
 				</div>
 			</section>
 
-			{Astro.slots.has('offer') && <slot name="offer" />}
-
-			<section class="before-enquiring" aria-labelledby="before-enquiring-title">
+			<section class="before-enquiring" id="before-enquiring" aria-labelledby="before-enquiring-title">
 				<div class="section-heading">
 					<p class="eyebrow">Useful details</p>
 					<h2 id="before-enquiring-title">Before you enquire</h2>
 				</div>
-				<dl>
-					{beforeEnquiring.map((item) => (
-						<div><dt>{item.question}</dt><dd>{item.answer}</dd></div>
+				<div class="faq-list">
+					{beforeEnquiring.map((item, index) => (
+						<details open={index === 0}><summary>{item.question}</summary><p>{item.answer}</p></details>
 					))}
-				</dl>
+				</div>
 			</section>
 
 			<section class="example-scope" id="example-scope" aria-labelledby="example-scope-title">
@@ -159,19 +172,20 @@ const schema = {
 					<p>{exampleScope.scenario}</p>
 					<small>This is an example, not a completed client project.</small>
 				</div>
-				<div class="scope-grid">
-					<article><span>01</span><h3>Likely work</h3><p>{exampleScope.work}</p></article>
-					<article><span>02</span><h3>What you provide</h3><p>{exampleScope.inputs}</p></article>
-					<article><span>03</span><h3>Quote and timing</h3><p>{exampleScope.timing}</p></article>
-					<article><span>04</span><h3>Handover</h3><p>{exampleScope.handover}</p></article>
-				</div>
+				<details class="scope-details">
+					<summary>See the project scope</summary>
+					<dl>
+						<div><dt>Likely work</dt><dd>{exampleScope.work}</dd></div>
+						<div><dt>What you provide</dt><dd>{exampleScope.inputs}</dd></div>
+						<div><dt>Quote and timing</dt><dd>{exampleScope.timing}</dd></div>
+						<div><dt>Handover</dt><dd>{exampleScope.handover}</dd></div>
+					</dl>
+				</details>
 			</section>
 
 			{Astro.slots.has('technology') && <slot name="technology" />}
 
-			{Astro.slots.has('proof') && <slot name="proof" />}
-
-			<section class="process" aria-labelledby="process-title">
+			<section class="process" id="process" aria-labelledby="process-title">
 				<div><p class="eyebrow eyebrow-light">Project steps</p><h2 id="process-title">How the project works</h2></div>
 				<ol>
 					<li><span>01</span><div><strong>Scope</strong><p>Agree on the outcome, boundaries, quote and schedule.</p></div></li>
@@ -202,7 +216,7 @@ const schema = {
 	:focus-visible { outline: 3px solid #5c5ce0; outline-offset: 4px; }
 	.skip-link { position: fixed; z-index: 100; top: .75rem; left: .75rem; padding: .75rem 1rem; transform: translateY(-200%); border-radius: .5rem; background: #fff; font-weight: 800; }
 	.skip-link:focus { transform: translateY(0); }
-	.site-header, main > section, .service-switcher, footer { width: min(100% - 3rem, 1120px); margin-inline: auto; }
+	.site-header, main > section, main > div, .service-switcher, .page-jumps, footer { width: min(100% - 3rem, 1120px); margin-inline: auto; }
 	.site-header { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem 0; }
 	.brand { display: inline-flex; align-items: center; gap: .75rem; font-size: 1.02rem; font-weight: 760; text-decoration: none; }
 	.brand img { width: 2.4rem; height: 2.4rem; }
@@ -224,6 +238,10 @@ const schema = {
 	.service-switcher a { display: inline-flex; min-height: 2.5rem; align-items: center; padding: .55rem 1rem; border: 1px solid #c7c4bb; border-radius: 999px; font-size: .78rem; font-weight: 760; text-decoration: none; }
 	.service-switcher a:hover { border-color: #4a4ab9; color: #282887; }
 	.service-switcher a[aria-current='page'] { border-color: #10105a; background: #10105a; color: #fff; }
+	.page-jumps { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; padding-block: 1rem; border-bottom: 1px solid #d5d2c8; }
+	.page-jumps span { margin-right: auto; color: #626277; font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+	.page-jumps a { display: inline-flex; min-height: 2.75rem; align-items: center; padding-block: .35rem; color: #393951; font-size: .78rem; font-weight: 720; text-decoration-color: #aaa7bf; text-underline-offset: .3rem; }
+	.page-jumps a:hover { color: #4a4ab9; text-decoration-color: #4a4ab9; }
 	.fit { display: grid; grid-template-columns: minmax(0, .85fr) minmax(22rem, 1.15fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(4rem, 8vw, 7rem); }
 	h2 { margin: 0; font-size: clamp(2.25rem, 4.8vw, 4.2rem); line-height: 1.02; letter-spacing: -.048em; }
 	.fit h2 { max-width: 11ch; }
@@ -233,7 +251,7 @@ const schema = {
 	.work { padding-block: clamp(5rem, 9vw, 8rem); }
 	.section-heading { max-width: 44rem; margin-bottom: 3.5rem; }
 	.work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-	.work article { min-height: 17rem; padding: clamp(1.5rem, 3vw, 2.4rem); border: 1px solid #d5d2c8; border-radius: 1.15rem; background: #fff; }
+	.work article { min-height: 15rem; padding: clamp(1.5rem, 3vw, 2.4rem); border-top: 1px solid #aaa7bf; background: transparent; }
 	.work article:nth-child(2), .work article:nth-child(3) { background: #dedcf6; }
 	.work article > span { color: #4a4ab9; font-size: .68rem; font-weight: 850; }
 	.work h3 { margin: 3.3rem 0 0; font-size: clamp(1.55rem, 3vw, 2.4rem); line-height: 1.05; letter-spacing: -.04em; }
@@ -241,20 +259,21 @@ const schema = {
 	.before-enquiring { display: grid; grid-template-columns: minmax(0, .72fr) minmax(24rem, 1.28fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
 	.before-enquiring .section-heading { margin-bottom: 0; }
 	.before-enquiring h2 { max-width: 8ch; }
-	.before-enquiring dl { margin: 0; border-top: 1px solid #c9c6bd; }
-	.before-enquiring dl > div { padding: 1.5rem 0; border-bottom: 1px solid #c9c6bd; }
-	.before-enquiring dt { font-size: 1.05rem; font-weight: 760; }
-	.before-enquiring dd { margin: .6rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
+	.faq-list { border-top: 1px solid #c9c6bd; }
+	.faq-list details { border-bottom: 1px solid #c9c6bd; }
+	.faq-list summary, .scope-details summary { padding: 1.35rem 2.5rem 1.35rem 0; cursor: pointer; font-size: 1.05rem; font-weight: 760; }
+	.faq-list p { max-width: 60ch; margin: -.2rem 0 1.5rem; color: #595970; font-size: .9rem; line-height: 1.7; }
 	.example-scope { padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
 	.example-scope .section-heading { max-width: 48rem; }
 	.example-scope .section-heading > p:last-of-type { margin: 1.4rem 0 .65rem; color: #4f4f67; font-size: 1.05rem; line-height: 1.7; }
 	.example-scope small { color: #6b6b7d; font-size: .78rem; }
-	.scope-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #c9c6bd; border-left: 1px solid #c9c6bd; }
-	.scope-grid article { min-height: 13rem; padding: clamp(1.4rem, 3vw, 2.2rem); border-right: 1px solid #c9c6bd; border-bottom: 1px solid #c9c6bd; background: rgb(255 255 255 / 38%); }
-	.scope-grid article > span { color: #4a4ab9; font-size: .68rem; font-weight: 850; }
-	.scope-grid h3 { margin: 2rem 0 .75rem; font-size: clamp(1.25rem, 2.3vw, 1.7rem); line-height: 1.1; letter-spacing: -.03em; }
-	.scope-grid p { margin: 0; color: #595970; font-size: .9rem; line-height: 1.7; }
-	.process { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(3rem, 9vw, 8rem); padding: clamp(4rem, 7vw, 6rem); border-radius: 1.5rem; background: #10103f; color: #fff; }
+	.scope-details { border-block: 1px solid #c9c6bd; }
+	.scope-details dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 1.5rem; border-top: 1px solid #dedbd2; }
+	.scope-details dl > div { padding: 1.25rem clamp(1rem, 4vw, 3rem) 0 0; }
+	.scope-details dl > div:nth-child(even) { padding-right: 0; padding-left: clamp(1rem, 4vw, 3rem); border-left: 1px solid #dedbd2; }
+	.scope-details dt { color: #4a4ab9; font-size: .72rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+	.scope-details dd { margin: .55rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
+	.process { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(3rem, 9vw, 8rem); padding: clamp(4rem, 7vw, 6rem); background: #10103f; color: #fff; }
 	.process h2 { max-width: 11ch; }
 	.eyebrow-light { color: #f8a51b; }
 	.process ol { margin: 0; padding: 0; list-style: none; }
@@ -271,7 +290,7 @@ const schema = {
 	.footer-contact a { font-weight: 720; text-decoration: none; }
 	.footer-contact span { margin-top: .4rem; }
 	@media (max-width: 760px) {
-		.site-header, main > section, .service-switcher, footer { width: min(100% - 2rem, 1120px); }
+		.site-header, main > section, main > div, .service-switcher, .page-jumps, footer { width: min(100% - 2rem, 1120px); }
 		.site-header nav a:not(.nav-cta) { display: none; }
 		.hero, .fit, .before-enquiring, .process, .closing { grid-template-columns: 1fr; }
 		.hero { min-height: auto; gap: 2rem; padding-block: 3.5rem 4rem; }
@@ -279,11 +298,13 @@ const schema = {
 		.service-switcher { align-items: flex-start; flex-direction: column; gap: .75rem; }
 		.service-switcher > div { justify-content: flex-start; }
 		.service-switcher a { min-height: 2.75rem; }
+		.page-jumps { align-items: flex-start; }
+		.page-jumps span { width: 100%; }
 		.work-grid { grid-template-columns: 1fr; }
 		.work article { min-height: 14rem; }
-		.scope-grid { grid-template-columns: 1fr; }
-		.scope-grid article { min-height: auto; }
-		.process { padding: 2rem 1.35rem; border-radius: 1.15rem; }
+		.scope-details dl { grid-template-columns: 1fr; }
+		.scope-details dl > div:nth-child(even) { padding-left: 0; border-left: 0; }
+		.process { padding: 2rem 1.35rem; }
 		footer { grid-template-columns: 1fr; }
 		.footer-contact { justify-items: start; }
 	}

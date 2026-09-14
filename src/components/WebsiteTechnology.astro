@@ -1,29 +1,148 @@
-<section class="website-technology" aria-labelledby="website-technology-title">
-	<div>
+---
+const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+const examples = [
+	{ name: 'Porsche', type: 'Automotive', image: 'porsche.webp', url: 'https://www.porsche.com/' },
+	{ name: 'IKEA', type: 'Retail', image: 'ikea.webp', url: 'https://www.ikea.com/' },
+	{ name: 'Unilever', type: 'Consumer goods', image: 'unilever.webp', url: 'https://www.unilever.com/' },
+	{ name: 'Netlify', type: 'Web technology', image: 'netlify.webp', url: 'https://www.netlify.com/' }
+];
+---
+
+<section id="website-technology" class="website-technology" aria-labelledby="website-technology-title">
+	<div class="technology-intro">
 		<p class="eyebrow">Built with Astro</p>
-		<h2 id="website-technology-title">A considered choice for your website.</h2>
-		<p class="technology-intro">Astro is the web framework we use, including for this Servo ICT site. It suits service pages, articles and useful tools such as calculators and guided enquiries.</p>
-		<a href="https://docs.astro.build/en/concepts/why-astro/">Read about Astro <span aria-hidden="true">↗</span></a>
+		<h2 id="website-technology-title">A fast foundation, with room for useful ideas.</h2>
+		<p>Astro keeps service pages light, then adds interactive features only where they earn their place. It is a good fit for clear business websites, calculators and guided enquiries.</p>
+		<details>
+			<summary>Why Servo ICT chose Astro</summary>
+			<div class="details-copy">
+				<p><strong>Less work for each visitor.</strong> Astro sends page content as HTML and loads interactive code only for the parts that need it.</p>
+				<p><strong>Flexible where it matters.</strong> A focused estimator or guided enquiry can sit alongside straightforward service information.</p>
+				<p><strong>Practical to hand over.</strong> Astro is open source. We supply the agreed source and deployment notes so another developer can maintain the site.</p>
+			</div>
+		</details>
 	</div>
-	<div class="technology-details">
-		<dl>
-			<div><dt>Less work for the visitor's device</dt><dd>Astro delivers page content as HTML and lets us add interactive code where it is needed. That gives us a useful starting point for pages that load efficiently.</dd></div>
-			<div><dt>Room for useful interactions</dt><dd>We can build an estimator or guided choice alongside your service information, with the behaviour tailored to the agreed scope.</dd></div>
-			<div><dt>A site you can hand over</dt><dd>Astro is open source. We provide the agreed source and deployment notes, so another developer can maintain the site. Content editing and hosting are chosen as part of the project.</dd></div>
-		</dl>
-		<p class="technology-examples">Astro's official showcase lists IKEA's global site, Unilever's global site and The Guardian Engineering site. <a href="https://astro.build/showcase/">Explore the Astro showcase <span aria-hidden="true">↗</span></a></p>
+
+	<div class="showcase" data-astro-showcase>
+		<div class="showcase-heading">
+			<div>
+				<p class="showcase-kicker">Examples from Astro's showcase</p>
+				<p class="disclaimer">Independent examples, not Servo ICT client work.</p>
+			</div>
+			<div class="showcase-controls" aria-label="Browse website examples">
+				<button type="button" data-showcase-previous aria-label="Previous website" disabled><span aria-hidden="true">←</span></button>
+				<button type="button" data-showcase-next aria-label="Next website"><span aria-hidden="true">→</span></button>
+			</div>
+		</div>
+
+		<ul class="showcase-track" data-showcase-track tabindex="0" aria-label="Websites featured by Astro">
+			{examples.map((example, index) => (
+				<li class="showcase-card">
+					<a href={example.url} target="_blank" rel="noreferrer" aria-label={`Visit ${example.name} website (opens in a new tab)`}>
+						<div class="image-frame">
+							<img src={`${baseUrl}images/astro-showcase/${example.image}`} alt={`${example.name} website homepage`} width="1600" height="900" loading="lazy" decoding="async" />
+						</div>
+						<div class="card-meta">
+							<p><span>{String(index + 1).padStart(2, '0')}</span> {example.name}</p>
+							<p>{example.type} <span aria-hidden="true">↗</span></p>
+						</div>
+					</a>
+				</li>
+			))}
+		</ul>
+		<p class="source-link"><a href="https://astro.build/showcase/" target="_blank" rel="noreferrer">View the source on Astro <span aria-hidden="true">↗</span></a></p>
 	</div>
 </section>
 
+<script>
+	const setupShowcase = (showcase: HTMLElement) => {
+		const track = showcase.querySelector<HTMLElement>('[data-showcase-track]');
+		const previous = showcase.querySelector<HTMLButtonElement>('[data-showcase-previous]');
+		const next = showcase.querySelector<HTMLButtonElement>('[data-showcase-next]');
+		if (!track || !previous || !next) return;
+
+		const updateControls = () => {
+			const end = track.scrollWidth - track.clientWidth;
+			previous.disabled = track.scrollLeft <= 2;
+			next.disabled = track.scrollLeft >= end - 2;
+		};
+		const move = (direction: number) => {
+			const card = track.querySelector<HTMLElement>('.showcase-card');
+			const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 16;
+			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			track.scrollBy({ left: direction * ((card?.offsetWidth ?? track.clientWidth) + gap), behavior: reduceMotion ? 'auto' : 'smooth' });
+		};
+
+		previous.addEventListener('click', () => move(-1));
+		next.addEventListener('click', () => move(1));
+		track.addEventListener('scroll', updateControls, { passive: true });
+		new ResizeObserver(updateControls).observe(track);
+		updateControls();
+		showcase.dataset.ready = 'true';
+	};
+	document.querySelectorAll<HTMLElement>('[data-astro-showcase]').forEach(setupShowcase);
+</script>
+
 <style>
-	.website-technology { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2rem, 6vw, 5rem); padding-block: clamp(3rem, 6vw, 5rem); border-top: 1px solid #d5d2c8; }
-	h2 { max-width: 15ch; font-size: clamp(2rem, 3.8vw, 3.4rem); }
-	.technology-intro { margin-block: 1.5rem; color: #595970; line-height: 1.7; }
-	a { display: inline-block; padding-block: .6rem; font-size: .9rem; font-weight: 750; text-underline-offset: .25em; }
-	dl { margin: 0; }
-	dl > div { padding-block: 1.1rem; border-top: 1px solid #d5d2c8; }
-	dt { font-weight: 760; font-size: 1.05rem; }
-	dd { margin: .6rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
-	.technology-examples { margin: 1.25rem 0 0; color: #595970; font-size: .85rem; line-height: 1.7; }
-	@media (max-width: 760px) { .website-technology { grid-template-columns: 1fr; } }
+	.website-technology { padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
+	.technology-intro { display: grid; grid-template-columns: minmax(0, .86fr) minmax(20rem, 1.14fr); column-gap: clamp(2rem, 9vw, 8rem); align-items: start; margin-bottom: clamp(3.5rem, 7vw, 6rem); }
+	.technology-intro .eyebrow, h2 { grid-column: 1; }
+	h2 { max-width: 13ch; margin-bottom: 0; font-size: clamp(2.25rem, 4.6vw, 4.5rem); line-height: .98; letter-spacing: -.055em; }
+	.technology-intro > p:not(.eyebrow) { grid-column: 2; grid-row: 1 / span 2; max-width: 39rem; margin: 1.9rem 0 0; color: #393951; font-size: clamp(1.05rem, 1.7vw, 1.3rem); line-height: 1.65; }
+	details { grid-column: 2; margin-top: 2rem; border-block: 1px solid #d5d2c8; }
+	summary { position: relative; padding: 1.2rem 2.5rem 1.2rem 0; font-size: .82rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; list-style: none; }
+	summary::-webkit-details-marker { display: none; }
+	summary::after { content: '+'; position: absolute; right: .35rem; font-size: 1.25rem; font-weight: 500; line-height: .8; }
+	details[open] summary::after { content: '−'; }
+	summary:focus-visible { outline: 3px solid #f8a51b; outline-offset: 4px; }
+	.details-copy { padding: .15rem 0 1.35rem; }
+	.details-copy p { margin: 0 0 .8rem; color: #595970; font-size: .88rem; line-height: 1.65; }
+	.details-copy p:last-child { margin-bottom: 0; }
+	.details-copy strong { color: #10103f; }
+
+	.showcase { padding: clamp(1.25rem, 2.6vw, 2rem); border-radius: .35rem; background: #10103f; color: #fff; overflow: hidden; }
+	.showcase-heading { display: flex; justify-content: space-between; gap: 2rem; align-items: end; margin-bottom: 1.25rem; }
+	.showcase-kicker { margin: 0; color: #fff; font-size: clamp(1.15rem, 2vw, 1.55rem); font-weight: 760; letter-spacing: -.025em; }
+	.disclaimer { margin: .3rem 0 0; color: rgb(255 255 255 / 62%); font-size: .76rem; }
+	.showcase-controls { display: none; flex: none; gap: .45rem; }
+	.showcase[data-ready] .showcase-controls { display: flex; }
+	.showcase-track:focus-visible { outline: 3px solid #f8a51b; outline-offset: -3px; }
+	.showcase-controls button { display: grid; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid rgb(255 255 255 / 42%); border-radius: .2rem; background: transparent; color: #fff; font: inherit; font-size: 1.2rem; place-items: center; cursor: pointer; }
+	.showcase-controls button:hover:not(:disabled) { border-color: #f8a51b; background: #f8a51b; color: #10103f; }
+	.showcase-controls button:focus-visible { outline: 3px solid #f8a51b; outline-offset: 3px; }
+	.showcase-controls button:disabled { opacity: .28; cursor: default; }
+
+	.showcase-track { display: flex; gap: clamp(.8rem, 1.8vw, 1.25rem); margin: 0; padding: 0 0 1.35rem; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: inline mandatory; scrollbar-color: #f8a51b rgb(255 255 255 / 16%); scrollbar-width: thin; list-style: none; }
+	.showcase-track::-webkit-scrollbar { height: .5rem; }
+	.showcase-track::-webkit-scrollbar-track { background: rgb(255 255 255 / 16%); }
+	.showcase-track::-webkit-scrollbar-thumb { background: #f8a51b; }
+	.showcase-card { flex: 0 0 clamp(17rem, 74vw, 51rem); scroll-snap-align: start; }
+	.showcase-card a { display: block; color: inherit; text-decoration: none; }
+	.showcase-card a:focus-visible { outline: 3px solid #f8a51b; outline-offset: -3px; }
+	.image-frame { overflow: hidden; border-radius: .2rem; background: #252551; aspect-ratio: 16 / 9; }
+	.image-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 450ms ease; }
+	.showcase-card a:hover img { transform: scale(1.018); }
+	.card-meta { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem .1rem 0; }
+	.card-meta p { margin: 0; font-size: .79rem; }
+	.card-meta p:first-child { font-weight: 750; }
+	.card-meta p:first-child span { margin-right: .6rem; color: #f8a51b; font-size: .67rem; font-variant-numeric: tabular-nums; }
+	.card-meta p:last-child { color: rgb(255 255 255 / 58%); }
+	.source-link { margin: 1rem 0 0; font-size: .74rem; }
+	.source-link a { color: rgb(255 255 255 / 72%); text-underline-offset: .25em; }
+	.source-link a:hover { color: #fff; }
+	.source-link a:focus-visible { outline: 3px solid #f8a51b; outline-offset: 4px; }
+
+	@media (max-width: 760px) {
+		.technology-intro { grid-template-columns: 1fr; }
+		.technology-intro > p:not(.eyebrow), details { grid-column: 1; grid-row: auto; }
+		.technology-intro > p:not(.eyebrow) { margin-top: 1.5rem; }
+		.showcase { margin-inline: -.75rem; padding-inline: .75rem; }
+		.showcase-card { flex-basis: min(82vw, 34rem); }
+		.card-meta { display: block; }
+		.card-meta p:last-child { margin-top: .25rem; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.showcase-track { scroll-behavior: auto; }
+		.image-frame img { transition: none; }
+	}
 </style>

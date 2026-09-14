@@ -170,10 +170,10 @@
 		<section id="top" class="hero" aria-labelledby="hero-title">
 			<div class="hero-copy">
 				<p class="eyebrow">Gippsland websites and business IT</p>
-				<h1 id="hero-title">Websites and technology that <em>work</em> for your business.</h1>
+				<h1 id="hero-title">Technology that <em>works</em> for your business.</h1>
 				<p class="hero-intro">
-					Servo ICT plans and delivers websites, business systems and practical security projects
-					for small businesses across Gippsland and Victoria. One point of contact from the initial brief through to handover.
+					Websites, business IT and practical security for small businesses.
+					One point of contact, from the brief to handover.
 				</p>
 
 				<div class="hero-actions">
@@ -182,30 +182,14 @@
 				</div>
 			</div>
 
-			<nav class="hero-services" aria-label="Explore services">
-				<a class="hero-service hero-service-websites" href={sitePath('/websites/')}>
-					<span>01</span>
-					<strong>Websites</strong>
-					<img src={sitePath('/images/hero-service-websites.webp')} alt="" width="92" height="139" />
-				</a>
-				<a class="hero-service hero-service-it" href={sitePath('/business-it/')}>
-					<span>02</span>
-					<strong>Business IT</strong>
-					<img src={sitePath('/images/hero-service-business-it.webp')} alt="" width="92" height="140" />
-				</a>
-				<a class="hero-service hero-service-security" href={sitePath('/security/')}>
-					<span>03</span>
-					<strong>Security</strong>
-					<img src={sitePath('/images/hero-service-security.webp')} alt="" width="92" height="140" />
-				</a>
-			</nav>
+			<WorkExample {baseUrl} compact />
 		</section>
 
 		<section class="trust-strip" aria-label="Servo ICT at a glance">
 			<div><span>Based in</span><strong>Gippsland</strong></div>
 			<div><span>How we work</span><strong>Remote, with local visits</strong></div>
 			<div><span>Project delivery</span><strong>Scope agreed upfront</strong></div>
-			<div><span>Next step</span><strong>Request a 30-minute call</strong></div>
+			<div><span>Your contact</span><strong>From brief to handover</strong></div>
 		</section>
 
 		<section id="services" class="services-section section-wrap" aria-labelledby="services-title">
@@ -214,7 +198,7 @@
 					<p class="section-kicker">Project work</p>
 					<h2 id="services-title">What needs to work better?</h2>
 				</div>
-				<p>Bring the outcome you need, even if the technical path is unclear. Get practical advice on the options and an agreed scope before work starts.</p>
+				<p>Choose a starting point. We’ll agree on the scope, cost and handover before work begins.</p>
 			</div>
 
 			<div class="services-grid">
@@ -223,7 +207,6 @@
 					<div>
 						<h3>Websites</h3>
 						<p>Websites that help customers understand your services, estimate a cost and take the next step.</p>
-						<ul aria-label="Typical website work"><li>Custom websites</li><li>Calculators and enquiry tools</li><li>Care and improvements</li></ul>
 					</div>
 					<strong>Explore website work <span aria-hidden="true">→</span></strong>
 				</a>
@@ -233,7 +216,6 @@
 					<div>
 						<h3>Business IT</h3>
 						<p>Windows devices, UniFi networks and everyday systems set up for your business to manage.</p>
-						<ul aria-label="Typical business IT work"><li>Email and accounts</li><li>Windows devices</li><li>UniFi networks</li></ul>
 					</div>
 					<strong>Explore business IT <span aria-hidden="true">→</span></strong>
 				</a>
@@ -243,36 +225,19 @@
 					<div>
 						<h3>Security</h3>
 						<p>Account protection, automatic updates and recovery checks, with clear steps to keep things in order.</p>
-						<ul aria-label="Typical security work"><li>Account protection</li><li>Updates and access</li><li>Backups and recovery</li></ul>
 					</div>
 					<strong>Explore security work <span aria-hidden="true">→</span></strong>
 				</a>
 			</div>
 		</section>
 
-		<WorkExample {baseUrl} compact />
-
-		<section class="fit-section section-wrap" aria-labelledby="fit-title">
-			<div class="fit-heading">
-				<p class="section-kicker">A good fit</p>
-				<h2 id="fit-title">Projects with a clear scope and handover</h2>
-			</div>
-			<div class="fit-copy">
-				<p>Servo ICT is best suited to small businesses that need a website or technology project completed properly, without coordinating several suppliers.</p>
-				<div class="engagement-grid">
-					<div><span>Project work</span><strong>A clear outcome, scope and handover.</strong></div>
-					<div><span>After the project</span><strong>Ongoing care can be agreed where it helps.</strong></div>
-				</div>
-			</div>
-		</section>
-
 		<section id="process" class="process-section" aria-labelledby="process-title">
 			<div class="process-inner">
-				<div class="process-heading"><p class="section-kicker section-kicker-light">How it works</p><h2 id="process-title">How your project works</h2></div>
+				<div class="process-heading"><p class="section-kicker section-kicker-light">How it works</p><h2 id="process-title">A clear path from brief to handover.</h2></div>
 				<ol class="process-steps">
 					<li><span>01</span><div><h3>Scope the result</h3><p>Agree on the outcome, boundaries, budget and timing before work starts.</p></div></li>
-					<li><span>02</span><div><h3>Build and review</h3><p>Your project is built and tested against the agreed scope, with progress updates and opportunities to review the work.</p></div></li>
-					<li><span>03</span><div><h3>Handover and next steps</h3><p>You receive the working result, clear notes and an agreed support plan.</p></div></li>
+					<li><span>02</span><div><h3>Build and review</h3><p>Review the work as it takes shape, with testing against the agreed scope.</p></div></li>
+					<li><span>03</span><div><h3>Handover and next steps</h3><p>Receive the working result and clear notes. Ongoing care can be agreed where it helps.</p></div></li>
 				</ol>
 			</div>
 		</section>
@@ -286,14 +251,14 @@
 				<p class="section-kicker">About Servo ICT</p>
 				<h2 id="about-title">Clear advice. Accountable delivery.</h2>
 				<p>Servo ICT is a Gippsland business owned and operated by Rowan Paterson, delivering websites and practical technology projects for small businesses across Victoria.</p>
-				<p>Rowan brings cybersecurity experience, Microsoft Fundamentals training and Microsoft Azure consulting experience. That background informs practical setups for small businesses, with documentation and optional check-ins after handover.</p>
+				<details class="about-experience"><summary>Experience behind the work</summary><p>Rowan brings cybersecurity experience, Microsoft Fundamentals training and Microsoft Azure consulting experience. That background informs practical setups, with documentation and optional check-ins after handover.</p></details>
 				<ul class="about-points"><li>One point of contact</li><li>Scope agreed before work starts</li><li>Clear handover and next steps</li></ul>
 			</div>
 		</section>
 
 		<section id="blog" class="guides-section section-wrap" aria-labelledby="blog-title">
 			<div class="guides-heading">
-				<div><p class="section-kicker">From the blog</p><h2 id="blog-title">Straight answers for common technology problems.</h2></div>
+				<div><p class="section-kicker">From the blog</p><h2 id="blog-title">Practical advice. Plain English.</h2></div>
 				<div class="guides-intro"><p>Practical notes on accounts, devices and the systems your business relies on.</p><a class="text-link" href={sitePath('/blog/')}>Browse all posts <span aria-hidden="true">→</span></a></div>
 			</div>
 
@@ -377,9 +342,9 @@
 	.header-cta { min-height: 2.75rem; padding: 0.75rem 1.15rem; background: #10105a; color: white; font-size: 0.8rem; }
 	.header-cta:hover, .button:hover { transform: translateY(-2px); }
 	.menu-button { display: none; }
-	.hero { display: grid; grid-template-columns: minmax(0, 0.93fr) minmax(39rem, 1.07fr); min-height: min(780px, calc(100vh - 88px)); width: min(100% - 5rem, 1450px); margin: 0 auto; padding: 6rem 0 3.5rem; gap: clamp(4.5rem, 7vw, 7.5rem); align-items: start; }
+	.hero { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); min-height: 0; width: min(100% - 5rem, 1450px); margin: 0 auto; padding: clamp(3rem, 6vw, 6rem) 0; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
 	.eyebrow, .section-kicker { margin: 0 0 1.25rem; color: #4a4ab9; font-size: 0.74rem; font-weight: 850; letter-spacing: 0.14em; text-transform: uppercase; }
-	h1 { max-width: 12ch; margin: 0; font-size: clamp(3.35rem, 5.7vw, 5.75rem); line-height: 0.98; letter-spacing: -0.052em; }
+	h1 { max-width: 12ch; margin: 0; font-size: clamp(3.35rem, 5.6vw, 5.6rem); line-height: 0.98; letter-spacing: -0.052em; }
 	h1 em { color: #4a4ab9; font: inherit; }
 	.hero-intro { max-width: 38rem; margin: 2rem 0 0; color: #57576f; font-size: clamp(1.02rem, 1.5vw, 1.26rem); line-height: 1.55; }
 	.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.1rem; margin-top: 2.25rem; }
@@ -388,29 +353,21 @@
 	.button-primary:hover { background: #282887; }
 	.text-link { display: inline-flex; align-items: center; gap: 0.7rem; min-height: 2.75rem; border-bottom: 1px solid currentColor; font-size: 0.8rem; font-weight: 800; text-decoration: none; }
 	.text-link:hover { color: #4d4dc4; }
-	.hero-services { display: grid; align-self: start; width: 100%; margin-top: 3rem; }
-	.hero-service { display: grid; grid-template-columns: 4.75rem minmax(0, 1fr) 5.75rem; align-items: center; gap: 1rem; min-height: 10.5rem; padding: 1.25rem 0; border-bottom: 1px solid #cfccc3; color: #10103f; text-decoration: none; transition: color 160ms ease, padding 160ms ease; }
-	.hero-service:first-child { border-top: 1px solid #cfccc3; }
-	.hero-service span { color: #7775c8; font-size: clamp(2rem, 3.4vw, 3.5rem); font-weight: 650; letter-spacing: -0.05em; }
-	.hero-service strong { font-size: clamp(3rem, 5.9vw, 5.9rem); line-height: 0.95; letter-spacing: -0.055em; }
-	.hero-service img { width: 5.75rem; height: 7rem; object-fit: cover; }
 	.hero-service-it span { color: #936817; }
 	.hero-service-security span { color: #9b5700; }
-	.hero-service:hover { padding-left: 0.6rem; color: #4a4ab9; }
-	.hero-service:focus-visible { position: relative; z-index: 1; }
 	.section-wrap { width: min(100% - 3rem, 1220px); margin-inline: auto; }
 	.trust-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-inline: max(1.5rem, calc((100vw - 1220px) / 2)); background: #f8a51b; color: #10103f; }
-	.trust-strip div { display: grid; align-content: center; min-height: 8rem; padding: 1.5rem clamp(1rem, 2vw, 2rem); border-right: 1px solid rgb(16 16 63 / 18%); }
+	.trust-strip div { display: grid; align-content: center; min-height: 6rem; padding: 1.25rem clamp(1rem, 2vw, 2rem); border-right: 1px solid rgb(16 16 63 / 18%); }
 	.trust-strip div:first-child { padding-left: 0; }
 	.trust-strip div:last-child { border-right: 0; }
 	.trust-strip span { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 	.trust-strip strong { margin-top: 0.25rem; font-size: clamp(1.1rem, 2vw, 1.6rem); line-height: 1.12; letter-spacing: -0.025em; }
 	.services-section, .guides-section { padding-block: clamp(5.5rem, 9vw, 8rem); }
 	.section-heading, .guides-heading { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr); align-items: end; gap: clamp(2rem, 8vw, 7rem); margin-bottom: clamp(3rem, 6vw, 4.5rem); }
-	.section-heading h2, .fit-heading h2, .about-copy h2, .guides-heading h2, .contact-section h2 { margin: 0; font-size: clamp(2.3rem, 4.6vw, 4.25rem); line-height: 1.02; letter-spacing: -0.048em; }
+	.section-heading h2, .about-copy h2, .guides-heading h2, .contact-section h2 { margin: 0; font-size: clamp(2.3rem, 4.6vw, 4.25rem); line-height: 1.02; letter-spacing: -0.048em; }
 	.section-heading > p, .guides-intro > p { margin: 0; color: #616176; font-size: 1rem; line-height: 1.75; }
 	.services-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-	.service-card { display: flex; min-height: 26rem; flex-direction: column; padding: clamp(1.7rem, 3vw, 2.5rem); border: 1px solid #d5d2c8; border-radius: 1.25rem; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease; }
+	.service-card { display: flex; min-height: 20rem; flex-direction: column; padding: clamp(1.7rem, 3vw, 2.5rem); border: 1px solid #d5d2c8; border-radius: .35rem; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease; }
 	.service-card:nth-child(2) { background: #dedcf6; }
 	.service-card:nth-child(3) { background: #f8a51b; }
 	.service-card:hover { transform: translateY(-4px); border-color: #aaa7d8; box-shadow: 0 1.25rem 3rem rgb(16 16 90 / 10%); }
@@ -421,16 +378,7 @@
 	.service-card h3 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.7rem); line-height: 1.03; letter-spacing: -0.045em; }
 	.service-card p { margin: 1.25rem 0 0; color: #55556c; font-size: 0.92rem; line-height: 1.65; }
 	.service-card:nth-child(3) p { color: #2d2940; }
-	.service-card ul { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.4rem 0 0; padding: 0; list-style: none; }
-	.service-card li { padding: 0.35rem 0.55rem; border: 1px solid rgb(16 16 63 / 14%); border-radius: 999px; font-size: 0.67rem; font-weight: 720; }
 	.service-card > strong { margin-top: 1.5rem; font-size: 0.76rem; }
-	.fit-section { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(24rem, 1.15fr); gap: clamp(3rem, 8vw, 7rem); padding-block: clamp(1rem, 2vw, 2rem) clamp(5.5rem, 9vw, 8rem); }
-	.fit-heading h2 { max-width: 10ch; }
-	.fit-copy > p { max-width: 43rem; margin: 0; color: #57576f; font-size: 1.05rem; line-height: 1.75; }
-	.engagement-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
-	.engagement-grid div { display: grid; min-height: 10rem; align-content: space-between; padding: 1.4rem; border: 1px solid #d5d2c8; border-radius: 1rem; background: #fff; }
-	.engagement-grid span { color: #4a4ab9; font-size: 0.68rem; font-weight: 850; letter-spacing: 0.09em; text-transform: uppercase; }
-	.engagement-grid strong { font-size: 1.08rem; line-height: 1.35; }
 	.process-section { padding: clamp(5.5rem, 9vw, 8rem) max(1.5rem, calc((100vw - 1220px) / 2)); background: #10103f; color: white; }
 	.process-inner { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(24rem, 1.18fr); gap: clamp(3rem, 9vw, 8rem); }
 	.section-kicker-light { color: #f8a51b; }
@@ -442,20 +390,23 @@
 	.process-steps h3 { margin: 0; font-size: 1.15rem; letter-spacing: -0.02em; }
 	.process-steps p { max-width: 34rem; margin: 0.65rem 0 0; color: rgb(255 255 255 / 68%); font-size: 0.9rem; line-height: 1.65; }
 	.about-section { display: grid; grid-template-columns: minmax(19rem, 0.8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(3rem, 8vw, 7rem); padding-block: clamp(5.5rem, 9vw, 8rem); }
-	.about-card { display: flex; min-height: 25rem; flex-direction: column; justify-content: space-between; padding: clamp(2rem, 4vw, 3.25rem); border-radius: 1.25rem; background: #10105a; color: white; }
+	.about-card { display: flex; min-height: 19rem; flex-direction: column; justify-content: space-between; padding: clamp(2rem, 4vw, 3.25rem); border-radius: .35rem; background: #10105a; color: white; }
 	.about-mark { display: grid; width: 5.5rem; height: 5.5rem; place-items: center; border-radius: 50%; background: #fff; }
 	.about-mark img { width: 3.8rem; height: 3.8rem; }
 	.about-card > div:last-child { display: grid; gap: 0.3rem; }
 	.about-card span { color: #f8a51b; font-size: 0.7rem; font-weight: 850; letter-spacing: 0.12em; text-transform: uppercase; }
 	.about-card strong { max-width: 8ch; font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.02; letter-spacing: -0.045em; }
 	.about-copy > p:not(.section-kicker) { max-width: 43rem; margin: 1.4rem 0 0; color: #616176; font-size: 0.98rem; line-height: 1.75; }
+	.about-experience { margin-top: 1.5rem; border-block: 1px solid #d5d2c8; }
+	.about-experience summary { padding: 1rem 0; cursor: pointer; font-weight: 750; }
+	.about-experience p { margin: 0 0 1rem; color: #616176; line-height: 1.7; }
 	.about-points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 2rem 0 0; padding: 1.2rem 0 0; border-top: 1px solid #d5d2c8; list-style: none; }
 	.about-points li { padding-right: 1rem; font-size: 0.74rem; font-weight: 760; line-height: 1.45; }
 	.guides-section { border-top: 1px solid #d5d2c8; }
 	.guides-heading h2 { max-width: 13ch; }
 	.guides-intro .text-link { margin-top: 1rem; }
 	.guides-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.55fr); gap: 1rem; }
-	.guide-featured { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(17rem, 0.85fr); min-height: 25rem; overflow: hidden; border: 1px solid #d5d2c8; border-radius: 1.15rem; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
+	.guide-featured { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(17rem, 0.85fr); min-height: 25rem; overflow: hidden; border: 1px solid #d5d2c8; border-radius: .35rem; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
 	.guide-featured:hover, .guide-list a:hover { transform: translateY(-3px); box-shadow: 0 1.2rem 3rem rgb(16 16 90 / 10%); }
 	.guide-image { overflow: hidden; background: #10105a; }
 	.guide-image img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 300ms ease; }
@@ -466,16 +417,16 @@
 	.guide-copy p { margin: 1rem 0 0; color: #626277; font-size: 0.9rem; line-height: 1.65; }
 	.guide-copy strong, .guide-list strong { margin-top: auto; padding-top: 1.5rem; font-size: 0.76rem; }
 	.guide-list { display: grid; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-	.guide-list a { display: flex; align-items: flex-start; flex-direction: column; padding: 1.5rem; border: 1px solid #d5d2c8; border-radius: 1.15rem; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
+	.guide-list a { display: flex; align-items: flex-start; flex-direction: column; padding: 1.5rem; border: 1px solid #d5d2c8; border-radius: .35rem; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
 	.guide-list h3 { margin: 0.75rem 0 0; font-size: 1.25rem; line-height: 1.12; letter-spacing: -0.03em; }
-	.contact-section { display: grid; grid-template-columns: minmax(17rem, 0.72fr) minmax(0, 1.28fr); gap: clamp(2.5rem, 6vw, 5rem); margin-bottom: clamp(4rem, 8vw, 7rem); padding: clamp(1.5rem, 4vw, 3.5rem); border-radius: 1.5rem; background: #f8a51b; }
+	.contact-section { display: grid; grid-template-columns: minmax(17rem, 0.72fr) minmax(0, 1.28fr); gap: clamp(2.5rem, 6vw, 5rem); margin-bottom: clamp(4rem, 8vw, 7rem); padding: clamp(1.5rem, 4vw, 3.5rem); border-radius: .35rem; background: #f8a51b; }
 	.contact-section .section-kicker { color: #10103f; }
 	.contact-intro { align-self: start; padding: clamp(0.5rem, 2vw, 1.25rem) 0; }
 	.contact-copy { margin: 1.8rem 0 0; line-height: 1.7; }
 	.contact-details { display: flex; flex-wrap: wrap; gap: 0.65rem 1.25rem; margin-top: 2rem; }
 	.contact-details a { min-height: 2.5rem; display: inline-flex; align-items: center; font-size: 0.78rem; font-weight: 760; text-underline-offset: 0.2rem; }
 	.response-note { margin: 1.5rem 0 0; font-size: 0.74rem; font-weight: 700; }
-	.consultation-form { padding: clamp(1.4rem, 3vw, 2.4rem); border: 1px solid rgb(16 16 63 / 10%); border-radius: 1.25rem; background: #fff; box-shadow: 0 1.5rem 4rem rgb(45 31 4 / 14%); }
+	.consultation-form { padding: clamp(1.4rem, 3vw, 2.4rem); border: 1px solid rgb(16 16 63 / 10%); border-radius: .35rem; background: #fff; box-shadow: 0 1.5rem 4rem rgb(45 31 4 / 14%); }
 	.form-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.7rem; padding-bottom: 1rem; border-bottom: 1px solid #dfddd5; }
 	.form-heading > div { display: grid; gap: 0.25rem; }
 	.form-heading p { margin: 0; font-size: 1.05rem; font-weight: 850; }
@@ -529,19 +480,14 @@
 		.menu-button { display: grid; width: 2.75rem; height: 2.75rem; place-content: center; gap: 0.35rem; border: 1px solid #cbc8be; border-radius: 50%; background: transparent; cursor: pointer; }
 		.menu-button span { display: block; width: 1rem; height: 1.5px; background: #10103f; }
 		.header-cta { justify-self: end; }
-		.hero, .section-heading, .fit-section, .process-inner, .about-section, .guides-heading, .contact-section { grid-template-columns: 1fr; }
+		.hero, .section-heading, .process-inner, .about-section, .guides-heading, .contact-section { grid-template-columns: 1fr; }
 		.hero { padding-top: 4rem; }
-		.hero-services { align-content: stretch; margin-top: 0; }
-		.hero-service { grid-template-columns: 4.25rem minmax(0, 1fr) 4.5rem; min-height: 8.5rem; }
-		.hero-service img { width: 4.5rem; height: 5.75rem; }
-		.hero-service strong { font-size: clamp(2.7rem, 8vw, 4.5rem); }
 		.trust-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 		.trust-strip div:nth-child(2) { border-right: 0; }
 		.trust-strip div:nth-child(-n + 2) { border-bottom: 1px solid rgb(16 16 63 / 18%); }
 		.trust-strip div:first-child, .trust-strip div:nth-child(3) { padding-left: 0; }
 		.services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 		.service-card:last-child { grid-column: 1 / -1; }
-		.fit-heading h2 { max-width: 14ch; }
 		.guides-grid { grid-template-columns: 1fr; }
 		.guide-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; }
 		.contact-intro { max-width: 42rem; }
@@ -559,22 +505,14 @@
 		.hero-actions { align-items: stretch; flex-direction: column; }
 		.button { width: 100%; }
 		.hero-link { align-self: flex-start; }
-		.hero-services { margin-top: 0.5rem; }
-		.hero-service { grid-template-columns: 2.75rem minmax(0, 1fr) 1.5rem; gap: 0.65rem; min-height: 5.75rem; padding: 1rem 0; }
-		.hero-service img { width: 1.5rem; height: 3.75rem; }
-		.hero-service span { font-size: 1.3rem; }
-		.hero-service strong { font-size: clamp(2rem, 10vw, 2.8rem); }
-		.hero-service:hover { padding-left: 0; }
 		.trust-strip { padding-inline: 1rem; }
 		.trust-strip div { min-height: 7rem; padding: 1.1rem; }
 		.trust-strip strong { font-size: 1.05rem; }
 		.services-section, .guides-section { padding-block: 5rem; }
-		.services-grid, .engagement-grid, .about-points, .guide-list { grid-template-columns: 1fr; }
+		.services-grid, .about-points, .guide-list { grid-template-columns: 1fr; }
 		.form-grid { grid-template-columns: minmax(0, 1fr); }
 		.service-card, .service-card:last-child { grid-column: auto; min-height: 0; padding: 1.5rem; }
 		.service-card > div:nth-child(2) { margin-top: 2.5rem; padding-top: 0; }
-		.fit-section { padding-bottom: 5rem; }
-		.engagement-grid div { min-height: 8rem; }
 		.process-section { padding: 5rem 1rem; }
 		.process-steps li { gap: 1rem; }
 		.about-section { padding-block: 5rem; }
@@ -586,7 +524,7 @@
 		.guide-copy { min-height: 17rem; }
 		.guide-list { grid-template-rows: none; }
 		.guide-list a { min-height: 12rem; }
-		.contact-section { padding: 2rem 1.25rem; border-radius: 1.25rem; }
+		.contact-section { padding: 2rem 1.25rem; border-radius: .35rem; }
 		.consultation-form, .form-grid > label { min-width: 0; }
 		.form-heading { align-items: stretch; flex-direction: column; }
 		.form-buttons { flex-direction: column; }
@@ -598,8 +536,7 @@
 	}
 	@media (prefers-reduced-motion: reduce) {
 		:global(html) { scroll-behavior: auto; }
-		.header-cta, .button, .hero-service, .service-card, .guide-featured, .guide-list a, .guide-image img { transition: none; }
+		.header-cta, .button, .service-card, .guide-featured, .guide-list a, .guide-image img { transition: none; }
 		.header-cta:hover, .button:hover, .service-card:hover, .guide-featured:hover, .guide-list a:hover, .guide-featured:hover .guide-image img { transform: none; }
-		.hero-service:hover { padding-left: 0; }
 	}
 </style>
