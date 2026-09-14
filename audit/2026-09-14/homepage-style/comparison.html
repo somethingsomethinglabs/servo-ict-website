@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Servo ICT homepage: design comparison</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; background: #eeece6; color: #10103f; font: 14px/1.5 system-ui, sans-serif; }
+    main { max-width: 1320px; margin: auto; }
+    h1 { margin: 0; font-size: 24px; letter-spacing: -.03em; }
+    .intro { margin: 4px 0 20px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    figure { min-width: 0; margin: 0; }
+    figcaption { margin-bottom: 8px; font-weight: 700; }
+    img { display: block; width: 100%; }
+    .frame { position: relative; overflow: hidden; border: 1px solid #b9b7c6; background: #f4f2ec; }
+    .reference { aspect-ratio: 1401 / 759; }
+    .hero { aspect-ratio: 1423 / 882; }
+    .services { aspect-ratio: 1423 / 750; }
+    .capture img { width: calc(100% * 1581 / 1423); max-width: none; }
+    .details { margin-top: 48px; padding-top: 24px; border-top: 1px solid #b9b7c6; }
+    h2 { margin: 0 0 8px; font-size: 21px; }
+    .crop { aspect-ratio: 380 / 150; }
+    .crop img { position: absolute; max-width: none; }
+    .kristi-button img { width: calc(100% * 1401 / 380); left: calc(-100% * 70 / 380); top: calc(-100% * 490 / 150); }
+    .servo-button img { width: calc(100% * 1581 / 380); left: calc(-100% * 20 / 380); top: calc(-100% * 640 / 150); }
+    .notes { padding: 16px; border: 1px solid #b9b7c6; background: #fff; }
+    a { color: inherit; text-underline-offset: 3px; }
+    @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Servo ICT: approved direction and implementation</h1>
+    <p class="intro">Compare flat colour coverage, bold type, dark outlines and solid shadows. Servo's content, palette and project photography remain its own.</p>
+    <div class="grid">
+      <figure>
+        <figcaption><a href="https://panda-css.com/">Panda CSS</a> · large flat colour fields</figcaption>
+        <div class="frame reference"><img src="reference-panda.jpg" alt="Panda CSS with a yellow background, large black type and outlined buttons."></div>
+      </figure>
+      <figure>
+        <figcaption><a href="https://kristi.digital/">Kristi Digital</a> · outlines and solid shadows</figcaption>
+        <div class="frame reference"><img src="reference-kristi.jpg" alt="Kristi Digital with dark outlines around the main button and a colourful portrait panel."></div>
+      </figure>
+      <figure>
+        <figcaption>Servo implementation · homepage at 1440 × 900 CSS pixels</figcaption>
+        <div class="frame capture hero"><img src="desktop-hero.jpg" alt="Servo's amber hero, navy heading and violet project panel."></div>
+      </figure>
+      <figure>
+        <figcaption>Servo implementation · service cards at 1440px</figcaption>
+        <div class="frame capture services"><img src="services-desktop.jpg" alt="Three service cards in violet, lavender and amber with navy borders and solid offset shadows."></div>
+      </figure>
+    </div>
+    <section class="details" id="details">
+      <h2>Focused comparison: button treatment</h2>
+      <p>Original screenshot regions at a readable scale. Both retain a clear label, dark outline and an offset shadow without blur.</p>
+      <div class="grid">
+        <figure>
+          <figcaption>Reference · Kristi's main action</figcaption>
+          <div class="frame crop kristi-button"><img src="reference-kristi.jpg" alt="A close view of Kristi's yellow outlined button and dark shadow."></div>
+        </figure>
+        <figure>
+          <figcaption>Implementation · Servo's main action</figcaption>
+          <div class="frame crop servo-button"><img src="desktop-hero.jpg" alt="A close view of Servo's off-white call request button, navy border and dark shadow."></div>
+        </figure>
+      </div>
+      <p class="notes">Reference screenshots: 1401 × 759 pixels. Implementation screenshots: 1581 × 1000 pixels, captured with the browser reporting a 1440 × 900 CSS viewport and 0.9 device pixel ratio. The browser capture includes blank space at the right and bottom. These frames exclude that capture padding and scale each visible content region proportionally. The references are an art direction, not an exact layout to reproduce.</p>
+      <p><a href="mobile-hero.jpg">390px homepage</a> · <a href="phone-320.jpg">320px homepage</a> · <a href="tablet-768.jpg">768px homepage</a> · <a href="mobile-menu-open.jpg">Mobile menu</a> · <a href="mobile-services.jpg">Stacked service cards</a></p>
+    </section>
+  </main>
+</body>
+</html>
