@@ -1,214 +1,23 @@
----
-const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
-const examples = [
-	{ name: 'Porsche', type: 'Automotive', image: 'porsche.webp', url: 'https://www.porsche.com/' },
-	{ name: 'IKEA', type: 'Retail', image: 'ikea.webp', url: 'https://www.ikea.com/' },
-	{ name: 'Unilever', type: 'Consumer goods', image: 'unilever.webp', url: 'https://www.unilever.com/' },
-	{ name: 'Netlify', type: 'Web technology', image: 'netlify.webp', url: 'https://www.netlify.com/' }
-];
----
-
 <section id="website-technology" class="website-technology" aria-labelledby="website-technology-title">
-	<div class="technology-intro">
-		<p class="eyebrow">Built with Astro</p>
-		<h2 id="website-technology-title">A fast foundation, with room for useful ideas.</h2>
-		<p>Astro keeps service pages light, then adds interactive features only where they earn their place. It is a good fit for clear business websites, calculators and guided enquiries.</p>
-		<details>
-			<summary>Why Servo ICT chose Astro</summary>
-			<div class="details-copy">
-				<p><strong>Less work for each visitor.</strong> Astro sends page content as HTML and loads interactive code only for the parts that need it.</p>
-				<p><strong>Flexible where it matters.</strong> A focused estimator or guided enquiry can sit alongside straightforward service information.</p>
-				<p><strong>Practical to hand over.</strong> Astro is open source. We supply the agreed source and deployment notes so another developer can maintain the site.</p>
-			</div>
-		</details>
+	<div>
+		<p class="eyebrow">How it is built</p>
+		<h2 id="website-technology-title">Quick to load and easy to use on a phone.</h2>
 	</div>
-
-	<div class="showcase" data-astro-showcase>
-		<div class="showcase-heading">
-			<div>
-				<p class="showcase-kicker">Examples from Astro's showcase</p>
-				<p class="disclaimer">Independent examples, not Servo ICT client work.</p>
-			</div>
-			<div class="showcase-controls" aria-label="Browse website examples">
-				<button type="button" class="motion-toggle" data-showcase-motion aria-label="Pause automatic scrolling">Pause</button>
-				<button type="button" data-showcase-previous aria-label="Previous website" disabled><span aria-hidden="true">←</span></button>
-				<button type="button" data-showcase-next aria-label="Next website"><span aria-hidden="true">→</span></button>
-			</div>
-		</div>
-
-		<ul class="showcase-track" data-showcase-track tabindex="0" aria-label="Websites featured by Astro">
-			{examples.map((example, index) => (
-				<li class="showcase-card">
-					<a href={example.url} target="_blank" rel="noreferrer" aria-label={`Visit ${example.name} website (opens in a new tab)`}>
-						<div class="image-frame">
-							<img src={`${baseUrl}images/astro-showcase/${example.image}`} alt={`${example.name} website homepage`} width="1600" height="900" loading="lazy" decoding="async" />
-						</div>
-						<div class="card-meta">
-							<p><span>{String(index + 1).padStart(2, '0')}</span> {example.name}</p>
-							<p>{example.type} <span aria-hidden="true">↗</span></p>
-						</div>
-					</a>
-				</li>
-			))}
-		</ul>
-		<p class="source-link"><a href="https://astro.build/showcase/" target="_blank" rel="noreferrer">View the source on Astro <span aria-hidden="true">↗</span></a></p>
+	<div class="technology-copy">
+		<p>The site is built to work across phones and computers, with clear paths for calls, enquiries and ordinary links to services you already use.</p>
+		<details>
+			<summary>Technical details, if you want them</summary>
+			<p>Servo ICT uses Astro for focused business websites. It sends the page content as lightweight HTML and adds interactive code only where it is useful. Astro is open source, and the agreed source and deployment notes are included so another developer can maintain the site.</p>
+		</details>
 	</div>
 </section>
 
-<script>
-	const setupShowcase = (showcase: HTMLElement) => {
-		const track = showcase.querySelector<HTMLElement>('[data-showcase-track]');
-		const previous = showcase.querySelector<HTMLButtonElement>('[data-showcase-previous]');
-		const next = showcase.querySelector<HTMLButtonElement>('[data-showcase-next]');
-		const motion = showcase.querySelector<HTMLButtonElement>('[data-showcase-motion]');
-		if (!track || !previous || !next || !motion) return;
-
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-		let paused = reducedMotion.matches;
-		let hovering = false;
-		let visible = false;
-		let frame = 0;
-		let lastTime = 0;
-		let position = track.scrollLeft;
-		let direction = 1;
-		let end = 0;
-
-		const animate = (time: number) => {
-			if (lastTime) {
-				// Use elapsed time so the pace stays the same on different displays.
-				position += direction * Math.min(time - lastTime, 50) * .032;
-				if (position >= end) { position = end; direction = -1; }
-				if (position <= 0) { position = 0; direction = 1; }
-				track.scrollLeft = position;
-			}
-			lastTime = time;
-			frame = requestAnimationFrame(animate);
-		};
-		const syncMotion = () => {
-			cancelAnimationFrame(frame);
-			lastTime = 0;
-			position = track.scrollLeft;
-			motion.textContent = paused ? 'Play' : 'Pause';
-			motion.setAttribute('aria-label', paused ? 'Start automatic scrolling' : 'Pause automatic scrolling');
-			if (!paused && !hovering && visible && !document.hidden && end > 0) {
-				frame = requestAnimationFrame(animate);
-			}
-		};
-		const pauseForInteraction = () => {
-			paused = true;
-			syncMotion();
-		};
-
-		const updateControls = () => {
-			previous.disabled = track.scrollLeft <= 2;
-			next.disabled = track.scrollLeft >= end - 2;
-		};
-		const move = (direction: number) => {
-			pauseForInteraction();
-			const card = track.querySelector<HTMLElement>('.showcase-card');
-			const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 16;
-			const stride = (card?.getBoundingClientRect().width ?? track.clientWidth) + gap;
-			const index = direction > 0 ? Math.floor((track.scrollLeft + 2) / stride) + 1 : Math.ceil((track.scrollLeft - 2) / stride) - 1;
-			track.scrollTo({ left: Math.max(0, Math.min(end, index * stride)), behavior: reducedMotion.matches ? 'auto' : 'smooth' });
-		};
-
-		motion.addEventListener('click', () => { paused = !paused; syncMotion(); });
-		previous.addEventListener('click', () => move(-1));
-		next.addEventListener('click', () => move(1));
-		track.addEventListener('pointerenter', (event) => {
-			if (event.pointerType === 'mouse' || event.pointerType === 'pen') { hovering = true; syncMotion(); }
-		});
-		track.addEventListener('pointerleave', () => { hovering = false; syncMotion(); });
-		track.addEventListener('pointerdown', pauseForInteraction);
-		track.addEventListener('wheel', pauseForInteraction, { passive: true });
-		showcase.addEventListener('focusin', (event) => {
-			if (event.target !== motion) pauseForInteraction();
-		});
-		track.addEventListener('scroll', updateControls, { passive: true });
-		new ResizeObserver(() => {
-			end = Math.max(0, track.scrollWidth - track.clientWidth);
-			updateControls();
-			syncMotion();
-		}).observe(track);
-		new IntersectionObserver(([entry]) => {
-			visible = entry.isIntersecting;
-			syncMotion();
-		}, { threshold: .15 }).observe(track);
-		document.addEventListener('visibilitychange', syncMotion);
-		reducedMotion.addEventListener('change', () => {
-			if (reducedMotion.matches) pauseForInteraction();
-		});
-		window.addEventListener('pagehide', () => cancelAnimationFrame(frame));
-		window.addEventListener('pageshow', syncMotion);
-		showcase.dataset.ready = 'true';
-		syncMotion();
-	};
-	document.querySelectorAll<HTMLElement>('[data-astro-showcase]').forEach(setupShowcase);
-</script>
-
 <style>
-	.website-technology { padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
-	.technology-intro { display: grid; grid-template-columns: minmax(0, .86fr) minmax(20rem, 1.14fr); column-gap: clamp(2rem, 9vw, 8rem); align-items: start; margin-bottom: clamp(3.5rem, 7vw, 6rem); }
-	.technology-intro .eyebrow, h2 { grid-column: 1; }
-	h2 { max-width: 13ch; margin-bottom: 0; font-size: clamp(2.25rem, 4.6vw, 4.5rem); line-height: .98; letter-spacing: -.055em; }
-	.technology-intro > p:not(.eyebrow) { grid-column: 2; grid-row: 1 / span 2; max-width: 39rem; margin: 1.9rem 0 0; color: #393951; font-size: clamp(1.05rem, 1.7vw, 1.3rem); line-height: 1.65; }
-	details { grid-column: 2; margin-top: 2rem; border-block: 1px solid #d5d2c8; }
-	summary { position: relative; padding: 1.2rem 2.5rem 1.2rem 0; font-size: .82rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; list-style: none; }
-	summary::-webkit-details-marker { display: none; }
-	summary::after { content: '+'; position: absolute; right: .35rem; font-size: 1.25rem; font-weight: 500; line-height: .8; }
-	details[open] summary::after { content: '−'; }
-	summary:focus-visible { outline: 3px solid #f8a51b; outline-offset: 4px; }
-	.details-copy { padding: .15rem 0 1.35rem; }
-	.details-copy p { margin: 0 0 .8rem; color: #595970; font-size: .88rem; line-height: 1.65; }
-	.details-copy p:last-child { margin-bottom: 0; }
-	.details-copy strong { color: #10103f; }
-
-	.showcase { padding: clamp(1.25rem, 2.6vw, 2rem); border-radius: .35rem; background: #10103f; color: #fff; overflow: hidden; }
-	.showcase-heading { display: flex; justify-content: space-between; gap: 2rem; align-items: end; margin-bottom: 1.25rem; }
-	.showcase-kicker { margin: 0; color: #fff; font-size: clamp(1.15rem, 2vw, 1.55rem); font-weight: 760; letter-spacing: -.025em; }
-	.disclaimer { margin: .3rem 0 0; color: rgb(255 255 255 / 62%); font-size: .76rem; }
-	.showcase-controls { display: none; flex: none; gap: .45rem; }
-	.showcase[data-ready] .showcase-controls { display: flex; }
-	.showcase-track:focus-visible { outline: 3px solid #f8a51b; outline-offset: -3px; }
-	.showcase-controls button { display: grid; width: 2.75rem; height: 2.75rem; padding: 0; border: 1px solid rgb(255 255 255 / 42%); border-radius: .2rem; background: transparent; color: #fff; font: inherit; font-size: 1.2rem; place-items: center; cursor: pointer; }
-	.showcase-controls button:hover:not(:disabled) { border-color: #f8a51b; background: #f8a51b; color: #10103f; }
-	.showcase-controls button:focus-visible { outline: 3px solid #f8a51b; outline-offset: 3px; }
-	.showcase-controls button:disabled { opacity: .28; cursor: default; }
-	.showcase-controls .motion-toggle { width: auto; min-width: 4.5rem; padding-inline: .8rem; font-size: .8rem; font-weight: 750; }
-
-	.showcase-track { display: flex; gap: clamp(.8rem, 1.8vw, 1.25rem); margin: 0; padding: 0 0 1.35rem; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: inline mandatory; scrollbar-color: #f8a51b rgb(255 255 255 / 16%); scrollbar-width: thin; list-style: none; }
-	.showcase[data-ready] .showcase-track { scroll-snap-type: none; }
-	.showcase-track::-webkit-scrollbar { height: .5rem; }
-	.showcase-track::-webkit-scrollbar-track { background: rgb(255 255 255 / 16%); }
-	.showcase-track::-webkit-scrollbar-thumb { background: #f8a51b; }
-	.showcase-card { flex: 0 0 clamp(17rem, 74vw, 51rem); scroll-snap-align: start; }
-	.showcase-card a { display: block; color: inherit; text-decoration: none; }
-	.showcase-card a:focus-visible { outline: 3px solid #f8a51b; outline-offset: -3px; }
-	.image-frame { overflow: hidden; border-radius: .2rem; background: #252551; aspect-ratio: 16 / 9; }
-	.image-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 450ms ease; }
-	.showcase-card a:hover img { transform: scale(1.018); }
-	.card-meta { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem .1rem 0; }
-	.card-meta p { margin: 0; font-size: .79rem; }
-	.card-meta p:first-child { font-weight: 750; }
-	.card-meta p:first-child span { margin-right: .6rem; color: #f8a51b; font-size: .67rem; font-variant-numeric: tabular-nums; }
-	.card-meta p:last-child { color: rgb(255 255 255 / 58%); }
-	.source-link { margin: 1rem 0 0; font-size: .74rem; }
-	.source-link a { color: rgb(255 255 255 / 72%); text-underline-offset: .25em; }
-	.source-link a:hover { color: #fff; }
-	.source-link a:focus-visible { outline: 3px solid #f8a51b; outline-offset: 4px; }
-
-	@media (max-width: 760px) {
-		.technology-intro { grid-template-columns: 1fr; }
-		.technology-intro > p:not(.eyebrow), details { grid-column: 1; grid-row: auto; }
-		.technology-intro > p:not(.eyebrow) { margin-top: 1.5rem; }
-		.showcase { margin-inline: -.75rem; padding-inline: .75rem; }
-		.showcase-heading { align-items: start; flex-direction: column; gap: 1rem; }
-		.showcase-card { flex-basis: min(82vw, 34rem); }
-		.card-meta { display: block; }
-		.card-meta p:last-child { margin-top: .25rem; }
-	}
-	@media (prefers-reduced-motion: reduce) {
-		.showcase-track { scroll-behavior: auto; }
-		.image-frame img { transition: none; }
-	}
+	.website-technology { display: grid; grid-template-columns: minmax(0, .85fr) minmax(20rem, 1.15fr); gap: clamp(2rem, 9vw, 8rem); padding-block: clamp(4rem, 8vw, 7rem); border-top: 2px solid var(--ink, #242126); }
+	h2 { max-width: 12ch; margin: 0; font-size: clamp(2.25rem, 4.6vw, 4.5rem); line-height: 1; letter-spacing: -.05em; }
+	.technology-copy > p { margin: 0; color: var(--muted, #625c64); font-size: 1.05rem; line-height: 1.7; }
+	details { margin-top: 2rem; border: 2px solid var(--ink, #242126); border-radius: .3rem; background: var(--white, #FFFDFA); box-shadow: 4px 4px 0 var(--mint, #C5EDDC); }
+	summary { padding: 1.1rem 1.25rem; cursor: pointer; font-weight: 800; }
+	details p { margin: 0; padding: 0 1.25rem 1.25rem; color: var(--muted, #625c64); line-height: 1.7; }
+	@media (max-width: 760px) { .website-technology { grid-template-columns: 1fr; } }
 </style>

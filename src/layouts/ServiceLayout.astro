@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/inter/wght.css';
+import '../styles/brand.css';
 
 interface EnquiryAnswer {
 	question: string;
@@ -49,6 +50,7 @@ const siteOrigin = Astro.site ?? new URL('https://servoict.com');
 const sitePath = (path: string) => `${baseUrl}${path.replace(/^\//, '')}`;
 const canonicalUrl = new URL(sitePath(canonicalPath), siteOrigin);
 const enquiryUrl = `${baseUrl}?service=${enquiryService}#consultation-form`;
+const starterUrl = `${baseUrl}#included`;
 const serviceLinks = [
 	{ label: 'Websites', path: '/websites/' },
 	{ label: 'Business IT', path: '/business-it/' },
@@ -96,7 +98,7 @@ const schema = {
 				<span>Servo ICT</span>
 			</a>
 			<nav aria-label="Main navigation">
-				<a href={`${baseUrl}#services`}>Project work</a>
+				<a href={`${baseUrl}#other-services`}>Project work</a>
 				<a href={`${baseUrl}#about`}>About</a>
 				<a class="nav-cta" href={enquiryUrl}>Project enquiry</a>
 			</nav>
@@ -110,10 +112,15 @@ const schema = {
 				</div>
 				<div class="hero-intro">
 					<p>{intro}</p>
-					<p class="hero-qualifier"><strong>A good fit when</strong><span>{goodFit[0]}</span></p>
+					<details class="hero-qualifier"><summary>Is this the right help for you?</summary><ul>{goodFit.map((item) => <li>{item}</li>)}</ul></details>
 					<a class="button" href={enquiryUrl}>Discuss your project <span aria-hidden="true">→</span></a>
 				</div>
 			</section>
+
+			<aside class="starter-route" aria-label="Starting a business">
+				<div><strong>Starting a business?</strong><span>See the combined website, business email and essential account setup.</span></div>
+				<a href={starterUrl}>See what the starter includes <span aria-hidden="true">→</span></a>
+			</aside>
 
 			<nav class="service-switcher" aria-label="Compare services">
 				<span>Compare services</span>
@@ -128,7 +135,7 @@ const schema = {
 				<span>On this page</span>
 				{Astro.slots.has('offer') && <a href="#website-offer">Website offer</a>}
 				{Astro.slots.has('proof') && <a href="#service-proof">{enquiryService === 'website' ? 'Client work' : 'Experience'}</a>}
-				{Astro.slots.has('technology') && <a href="#website-technology">Built with Astro</a>}
+				{Astro.slots.has('technology') && <a href="#website-technology">How it is built</a>}
 				<a href="#typical-work">Typical work</a>
 				<a href="#before-enquiring">FAQs</a>
 				<a href="#example-scope">Example scope</a>
@@ -138,11 +145,6 @@ const schema = {
 			{Astro.slots.has('offer') && <slot name="offer" />}
 
 			{Astro.slots.has('proof') && <div id="service-proof"><slot name="proof" /></div>}
-
-			<section class="fit" aria-labelledby="fit-title">
-				<div><p class="eyebrow">A good fit when</p><h2 id="fit-title">Is this service right for you?</h2></div>
-				<ul>{goodFit.slice(1).map((item) => <li>{item}</li>)}</ul>
-			</section>
 
 			<section class="work" id="typical-work" aria-labelledby="work-title">
 				<div class="section-heading"><p class="eyebrow">Typical project work</p><h2 id="work-title">What we can help with</h2></div>
@@ -211,37 +213,41 @@ const schema = {
 <style is:global>
 	* { box-sizing: border-box; }
 	html { font-family: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif; font-synthesis: none; }
-	body { margin: 0; background: #f4f2ec; color: #10103f; line-height: 1.5; text-rendering: optimizeLegibility; }
+	body { margin: 0; background: var(--paper, #F7F3EC); color: var(--ink, #242126); line-height: 1.5; text-rendering: optimizeLegibility; }
 	a { color: inherit; }
-	:focus-visible { outline: 3px solid #5c5ce0; outline-offset: 4px; }
+	:focus-visible { outline: 3px solid var(--pink-dark, #A82461); outline-offset: 4px; }
 	.skip-link { position: fixed; z-index: 100; top: .75rem; left: .75rem; padding: .75rem 1rem; transform: translateY(-200%); border-radius: .5rem; background: #fff; font-weight: 800; }
 	.skip-link:focus { transform: translateY(0); }
 	.site-header, main > section, main > div, .service-switcher, .page-jumps, footer { width: min(100% - 3rem, 1120px); margin-inline: auto; }
 	.site-header { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem 0; }
 	.brand { display: inline-flex; align-items: center; gap: .75rem; font-size: 1.02rem; font-weight: 760; text-decoration: none; }
-	.brand img { width: 2.4rem; height: 2.4rem; }
+	.brand img { width: 2.4rem; height: 2.4rem; filter: grayscale(1) brightness(.35); }
 	.site-header nav { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.5rem); }
 	.site-header nav a, footer nav a { font-size: .8rem; font-weight: 720; text-decoration: none; }
-	.nav-cta, .button { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: .75rem 1.15rem; border-radius: 999px; background: #10105a; color: #fff; font-weight: 760; text-decoration: none; }
+	.nav-cta, .button { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: .75rem 1.15rem; border: 2px solid var(--ink, #242126); border-radius: .35rem; background: var(--pink, #F27AB5); color: var(--ink, #242126); box-shadow: 4px 4px 0 var(--ink, #242126); font-weight: 800; text-decoration: none; }
 	.button { min-height: 3.4rem; gap: 1.5rem; padding-inline: 1.5rem; font-size: .84rem; }
-	.nav-cta:hover, .button:hover { background: #282887; }
-	.hero { display: grid; min-height: 30rem; grid-template-columns: minmax(0, 1.18fr) minmax(20rem, .82fr); align-items: center; gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(3.5rem, 7vw, 5.5rem); border-top: 1px solid #d5d2c8; }
-	.eyebrow { margin: 0 0 1.2rem; color: #4a4ab9; font-size: .72rem; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+	.nav-cta:hover, .button:hover { background: var(--mint, #C5EDDC); }
+	.hero { display: grid; min-height: 27rem; grid-template-columns: minmax(0, 1.18fr) minmax(20rem, .82fr); align-items: center; gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(3.5rem, 7vw, 5.5rem); border-top: 2px solid var(--ink, #242126); }
+	.eyebrow { margin: 0 0 1.2rem; color: var(--pink-dark, #A82461); font-size: .72rem; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
 	h1 { max-width: 12ch; margin: 0; font-size: clamp(3.2rem, 6.8vw, 6.2rem); line-height: .96; letter-spacing: -.055em; }
 	.hero-intro > p:not(.hero-qualifier), .closing > div:last-child > p { margin: 0 0 1.5rem; color: #5b5b70; font-size: 1.08rem; line-height: 1.75; }
-	.hero-qualifier { display: grid; gap: .35rem; margin: 0 0 1.6rem; padding: .9rem 1rem; border-left: 3px solid #f8a51b; background: rgb(255 255 255 / 55%); color: #393951; font-size: .88rem; line-height: 1.55; }
-	.hero-qualifier strong { color: #4a4ab9; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; }
-	.hero-qualifier span { font-weight: 680; }
+	.hero-qualifier { display: grid; gap: .35rem; margin: 0 0 1.6rem; padding: .9rem 1rem; border: 2px solid var(--ink, #242126); border-radius: .3rem; background: var(--white, #FFFDFA); color: var(--ink, #242126); box-shadow: 3px 3px 0 var(--mint, #C5EDDC); font-size: .88rem; line-height: 1.55; }
+	.hero-qualifier summary { color: var(--pink-dark, #A82461); cursor: pointer; font-size: .78rem; font-weight: 850; }
+	.starter-route { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: min(100% - 3rem, 1120px); margin: 0 auto 1.5rem; padding: 1rem 1.25rem; border: 2px solid var(--ink, #242126); border-radius: .35rem; background: var(--mint, #C5EDDC); box-shadow: 5px 5px 0 var(--ink, #242126); }
+	.starter-route div { display: grid; gap: .15rem; }
+	.starter-route a { font-weight: 800; text-decoration-color: var(--pink-dark, #A82461); text-decoration-thickness: 3px; text-underline-offset: .25rem; }
+	.hero-qualifier ul { display: grid; gap: .35rem; margin: 0; padding-left: 1.15rem; }
+	.hero-qualifier li { font-weight: 680; }
 	.service-switcher { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1rem; border-top: 1px solid #d5d2c8; border-bottom: 1px solid #d5d2c8; }
 	.service-switcher > span { color: #626277; font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 	.service-switcher > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
 	.service-switcher a { display: inline-flex; min-height: 2.5rem; align-items: center; padding: .55rem 1rem; border: 1px solid #c7c4bb; border-radius: 999px; font-size: .78rem; font-weight: 760; text-decoration: none; }
-	.service-switcher a:hover { border-color: #4a4ab9; color: #282887; }
-	.service-switcher a[aria-current='page'] { border-color: #10105a; background: #10105a; color: #fff; }
+	.service-switcher a:hover { border-color: var(--pink-dark, #A82461); color: var(--pink-dark, #A82461); }
+	.service-switcher a[aria-current='page'] { border-color: var(--ink, #242126); background: var(--pink, #F27AB5); color: var(--ink, #242126); }
 	.page-jumps { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; padding-block: 1rem; border-bottom: 1px solid #d5d2c8; }
 	.page-jumps span { margin-right: auto; color: #626277; font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-	.page-jumps a { display: inline-flex; min-height: 2.75rem; align-items: center; padding-block: .35rem; color: #393951; font-size: .78rem; font-weight: 720; text-decoration-color: #aaa7bf; text-underline-offset: .3rem; }
-	.page-jumps a:hover { color: #4a4ab9; text-decoration-color: #4a4ab9; }
+	.page-jumps a { display: inline-flex; min-height: 2.75rem; align-items: center; padding-block: .35rem; color: var(--ink, #242126); font-size: .78rem; font-weight: 720; text-decoration-color: var(--pink, #F27AB5); text-decoration-thickness: 2px; text-underline-offset: .3rem; }
+	.page-jumps a:hover { color: var(--pink-dark, #A82461); text-decoration-color: var(--pink-dark, #A82461); }
 	.fit { display: grid; grid-template-columns: minmax(0, .85fr) minmax(22rem, 1.15fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(4rem, 8vw, 7rem); }
 	h2 { margin: 0; font-size: clamp(2.25rem, 4.8vw, 4.2rem); line-height: 1.02; letter-spacing: -.048em; }
 	.fit h2 { max-width: 11ch; }
@@ -251,9 +257,9 @@ const schema = {
 	.work { padding-block: clamp(5rem, 9vw, 8rem); }
 	.section-heading { max-width: 44rem; margin-bottom: 3.5rem; }
 	.work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-	.work article { min-height: 15rem; padding: clamp(1.5rem, 3vw, 2.4rem); border-top: 1px solid #aaa7bf; background: transparent; }
-	.work article:nth-child(2), .work article:nth-child(3) { background: #dedcf6; }
-	.work article > span { color: #4a4ab9; font-size: .68rem; font-weight: 850; }
+	.work article { min-height: 15rem; padding: clamp(1.5rem, 3vw, 2.4rem); border: 2px solid var(--ink, #242126); border-radius: .3rem; background: var(--white, #FFFDFA); box-shadow: 4px 4px 0 var(--ink, #242126); }
+	.work article:nth-child(2), .work article:nth-child(3) { background: var(--mint, #C5EDDC); }
+	.work article > span { color: var(--pink-dark, #A82461); font-size: .68rem; font-weight: 850; }
 	.work h3 { margin: 3.3rem 0 0; font-size: clamp(1.55rem, 3vw, 2.4rem); line-height: 1.05; letter-spacing: -.04em; }
 	.work article p { margin: 1rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
 	.before-enquiring { display: grid; grid-template-columns: minmax(0, .72fr) minmax(24rem, 1.28fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
@@ -271,15 +277,15 @@ const schema = {
 	.scope-details dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 1.5rem; border-top: 1px solid #dedbd2; }
 	.scope-details dl > div { padding: 1.25rem clamp(1rem, 4vw, 3rem) 0 0; }
 	.scope-details dl > div:nth-child(even) { padding-right: 0; padding-left: clamp(1rem, 4vw, 3rem); border-left: 1px solid #dedbd2; }
-	.scope-details dt { color: #4a4ab9; font-size: .72rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+	.scope-details dt { color: var(--pink-dark, #A82461); font-size: .72rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 	.scope-details dd { margin: .55rem 0 0; color: #595970; font-size: .9rem; line-height: 1.7; }
-	.process { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(3rem, 9vw, 8rem); padding: clamp(4rem, 7vw, 6rem); background: #10103f; color: #fff; }
+	.process { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(3rem, 9vw, 8rem); padding: clamp(4rem, 7vw, 6rem); border: 2px solid var(--ink, #242126); border-radius: .35rem; background: var(--ink, #242126); color: var(--white, #FFFDFA); box-shadow: 6px 6px 0 var(--pink, #F27AB5); }
 	.process h2 { max-width: 11ch; }
-	.eyebrow-light { color: #f8a51b; }
+	.eyebrow-light { color: var(--pink, #F27AB5); }
 	.process ol { margin: 0; padding: 0; list-style: none; }
 	.process li { display: grid; grid-template-columns: auto 1fr; gap: 1.3rem; padding: 1.5rem 0; border-bottom: 1px solid rgb(255 255 255 / 15%); }
 	.process li:first-child { padding-top: 0; }
-	.process li > span { color: #f8a51b; font-size: .7rem; font-weight: 850; }
+	.process li > span { color: var(--pink, #F27AB5); font-size: .7rem; font-weight: 850; }
 	.process strong { font-size: 1.1rem; }
 	.process p { margin: .5rem 0 0; color: rgb(255 255 255 / 70%); font-size: .9rem; line-height: 1.65; }
 	.closing { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .8fr); gap: clamp(3rem, 9vw, 8rem); padding-block: clamp(6rem, 11vw, 9rem); }
@@ -294,6 +300,7 @@ const schema = {
 		.site-header nav a:not(.nav-cta) { display: none; }
 		.hero, .fit, .before-enquiring, .process, .closing { grid-template-columns: 1fr; }
 		.hero { min-height: auto; gap: 2rem; padding-block: 3.5rem 4rem; }
+		.starter-route { width: min(100% - 2rem, 1120px); align-items: flex-start; flex-direction: column; }
 		h1 { font-size: clamp(3rem, 14vw, 4.4rem); }
 		.service-switcher { align-items: flex-start; flex-direction: column; gap: .75rem; }
 		.service-switcher > div { justify-content: flex-start; }
@@ -301,7 +308,9 @@ const schema = {
 		.page-jumps { align-items: flex-start; }
 		.page-jumps span { width: 100%; }
 		.work-grid { grid-template-columns: 1fr; }
-		.work article { min-height: 14rem; }
+		.work, .before-enquiring, .example-scope, .closing { padding-block: 3rem; }
+		.work article { min-height: 0; }
+		.work h3 { margin-top: 1.5rem; }
 		.scope-details dl { grid-template-columns: 1fr; }
 		.scope-details dl > div:nth-child(even) { padding-left: 0; border-left: 0; }
 		.process { padding: 2rem 1.35rem; }

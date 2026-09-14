@@ -24,6 +24,7 @@ const consultationApi = {
 
 // https://astro.build/config
 export default defineConfig({
+	devToolbar: { enabled: false },
 	site: staticBuild ? 'https://somethingsomethinglabs.com' : 'https://servoict.com',
 	base: staticBuild ? githubPagesBase : undefined,
 	output: staticBuild ? 'static' : 'server',

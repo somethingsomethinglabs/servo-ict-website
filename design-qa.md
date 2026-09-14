@@ -1,79 +1,63 @@
-# Homepage revision design QA
+# Concept 1 implementation review
 
-Date: 14 September 2026
+15 September 2026. Review build on `main`, based on merged style commit `e0c09cc`.
 
-**Findings**
+## Result and scope
 
-No actionable P0, P1 or P2 findings remain. The revised homepage follows the requested reference direction: a warm neutral reading surface, a single strong colour panel, dark outlines, solid shadows and fewer competing choices. It adapts that system to Servo ICT's content rather than reproducing the reference page.
+The selected Concept 1 is implemented for the new-business audience in `AUDIENCE.md`. The review covers the homepage, service-page handoff, responsive layout, static enquiry flow and tested server delivery logic. No actionable P0 or P1 issue remains in that scope. Review findings about text size, service context and form correctness were fixed before handoff.
 
-**Source and implementation evidence**
+This is a preview, not a production mail activation. The owner asked to choose between the existing server/Fastmail approach and a separate form service after reviewing it. No provider was selected, no production settings were changed and no real email was sent. The preview honestly opens a draft or copies an enquiry. Direct delivery remains available in the code, guarded by configuration.
 
-- Source visual truth: `audit/2026-09-14/persona-interviews/06-kristi-reference-current.png`
-- Earlier Servo state: `audit/2026-09-14/persona-interviews/01-current-home-desktop.png` through `05-current-menu-mobile.png`
-- Rendered implementation: `audit/2026-09-14/persona-interviews/07-updated-home-desktop.png` through `11-updated-menu-mobile.png`
-- Full-view comparison containing source and implementation together: `audit/2026-09-14/persona-interviews/12-design-comparison-desktop.png`
-- Focused hero-copy comparison: `audit/2026-09-14/persona-interviews/13-design-comparison-hero-copy.png`
-- Focused colour-panel comparison: `audit/2026-09-14/persona-interviews/14-design-comparison-color-panel.png`
-- Implementation route: `http://localhost:4321/servo-ict-website/`
+## Design evidence
 
-**Viewport, state and normalization**
+- Selected source: `docs/design/customer-journey-2026-09-14/merged-style-e0c09cc/concepts/concept-1.png`.
+- Journey brief: `docs/design/customer-journey-2026-09-14/plan.md`.
+- Full comparison before readability corrections: `audit/2026-09-15/concept-1-build/comparison-pass-1.png`.
+- Full comparison after corrections: `audit/2026-09-15/concept-1-build/comparison-pass-2.png`.
+- Focused comparisons: `comparison-hero.png` and `comparison-enquiry.png` in that audit directory.
+- Desktop: `desktop-final.png` and `preview-ready.jpg`.
+- Mobile: `mobile-final.png` and `mobile-menu.jpg`.
+- Interaction evidence: `enquiry-copy-result.jpg` and `booking-details.jpg`.
 
-- Desktop source and implementation files are both 1280 × 800 pixels in light mode at the top of the homepage. The collaborative preview setting was 1280 × 800. Its runtime content area measured 1402 × 876 CSS pixels and the preview normalized the implementation capture to 1280 × 800 pixels.
-- The source site's original browser density was not exposed. It was captured at the same 1280 × 800 output size. Its content and product purpose differ, so exact pixel positions and text wrapping are not acceptance criteria.
-- Mobile was rendered inside a same-origin iframe with `innerWidth` 390 CSS pixels and a 375-pixel content width after the vertical scrollbar. The preview stage normalized 1402 × 876 CSS pixels to 1280 × 800 output pixels. A 356 × 731 pixel region was cropped and normalized to 390 × 800 for `10-updated-home-mobile.png` and `11-updated-menu-mobile.png`.
-- Desktop state: homepage top, no hover, no focused control. Mobile states: homepage top and menu open.
+Both comparison images contain the source on the left and the implementation on the right. The source raster is 887 × 1774. The implementation was reviewed at 1440 CSS pixels, then normalized to the same 887-pixel width. The longer implementation is not compressed vertically to force identical section heights. It includes the agreed scope, account, later-help, contact and fallback details absent from the illustrative mockup.
 
-**Full-view comparison**
+Chrome used a 90% zoom setting during viewport overrides. Requested dimensions were adjusted to obtain the measured CSS widths. Full-page captures included extra blank padding from the browser capture; normalized files crop that padding. Desktop content width was 1423 pixels with a scrollbar; mobile was 373 within a 390-pixel viewport. The source has no mobile design, so mobile is an adaptation. Default browser sizing was restored for the delivered preview.
 
-The combined file `12-design-comparison-desktop.png` shows the reference and Servo implementation in one image. Both use a quiet off-white field, a dominant dark headline, one vivid pink region, sparse navigation and hard outlined controls. Servo's right panel contains a practical starter checklist instead of the reference portrait. That is an intentional content decision: the panel answers what a low-confidence business owner can buy without introducing a decorative asset.
+## Comparison and correction history
 
-**Focused comparisons**
+1. The first build retained the cream, charcoal, pink and mint sequence, four-line hero, illustration, three outcomes, cost panel, local proof, process and short enquiry. Independent Sol reviews found small decision-critical text, excessive proof spacing, missing connecting arrows, service context lost at the form and unclear account boundaries.
+2. Increased outcome, cost, process, proof and contact text; enlarged the illustration; shortened repeated copy; restored connecting arrows and numbered circles; moved booking and extra-feature boundaries into a native disclosure. Added concrete quote boundaries for pages, addresses, people and devices. The client screenshot remains real; the hero is explicitly labelled illustrative.
+3. Fixed shared form validation, personal-email/phone support, draft context, DOM-order error focus, copy feedback, stale copy completion, malformed-response handling, sending locks and read-only fields during delivery. Removed query-string success assertions. Native submissions now receive an escaped result page only after the server outcome, with a safe return link.
+4. The second visual review rated audience fit 8.5/10 and found no P1 visual issue. Its remaining mobile proof readability finding was addressed by increasing ownership text to 16px and captions to 14px. The final computed styles and loaded images were checked at 390 pixels. The saved full mobile image precedes that small type increase and the reduction of outcome paragraph spacing; subsequent mobile screenshot attempts intermittently timed out in Chrome.
 
-- `13-design-comparison-hero-copy.png` confirms similar headline weight, short line lengths, open surrounding space and one clear primary action. Servo's longer service promise wraps to three lines by design.
-- `14-design-comparison-color-panel.png` confirms the accent is confined to the right side and uses the same dark-border and hard-shadow language. The checklist replaces the reference illustration while retaining the panel's visual weight.
+The score is a simulated audience/expert review, not a real-customer study. A numerical starter price remains an offer decision; the approved concept uses a written quote.
 
-**Required fidelity surfaces**
+## Fidelity and accessibility
 
-- Fonts and typography: Servo retains Inter Variable with system fallbacks. The hero uses an 820 optical weight, tight tracking and a 0.97 line height; body copy uses a quieter weight and 1.65 line height. Desktop and 390px captures show no clipping, truncation or accidental orphaned controls. The reference uses a different display face, but matching its font was not requested and would weaken Servo's existing consistency.
-- Spacing and layout rhythm: the desktop hero is a balanced two-column composition with generous outer space. Mobile stacks message, actions and starter panel in that order. Cards use equal padding, 2px outlines and consistent solid shadows. No horizontal overflow was detected at desktop or 390px.
-- Colours and visual tokens: the page uses ink `#242126`, cream `#F7F3EC`, off-white `#FFFDFA`, coral `#F27AB5` and mint `#C5EDDC`. Coral marks starter choices and selected work; mint marks reassurance, handover and contact. The rejected mustard, blue and violet tokens are absent from the revised components. Contrast checks returned 14.38:1 for ink on cream, 6.23:1 for ink on coral, 12.51:1 for ink on mint, 15.66:1 for off-white on ink and 6.14:1 for the dark magenta kicker on cream.
-- Image quality and asset fidelity: the Servo logo and real 12Grapes screenshot remain source assets. The logo is rendered in monochrome to keep the new palette coherent. The project screenshot retains its natural aspect ratio, border and sharp rectangular crop. No reference artwork, generated substitute, emoji or CSS-drawn asset was introduced.
-- Copy and content: the first screen names the starter offer, the next section presents three familiar problems, and framework and supplier terms were removed from the homepage proof. The project moved below service choices, the homepage blog section was removed, and the email handoff now states what the primary button does in one sentence.
+- Inter Variable, heavy tight display type, rectangular surfaces, 2px outlines and hard shadows preserve the merged identity. Core colours are ink `#242126`, cream `#f7f3ec`, off-white `#fffdfa`, pink `#f27ab5` and mint `#c5eddc`.
+- Official Phosphor icons provide one consistent family. The hero uses a generated raster illustration; the case study uses the existing 12Grapes screenshot. The delivered hero WebP is about 94 KB. Images have dimensions and descriptive alt text; the decorative logo and icons are hidden from redundant announcements.
+- The browser showed no content overflow at 1440 or 390 pixels. Additional DOM checks at 320 and 768 pixels found no visible content outside the viewport; the intentional honeypot is excluded. Full visual captures at those two additional sizes were limited by intermittent screenshot timeouts.
+- Mobile navigation opens, Escape closes it and returns focus. The primary action reaches the form. Native booking details expand and collapse from the keyboard. Inputs use 16px text; labels, error descriptions and high-contrast focus rings remain visible.
+- Reduced-motion CSS disables smooth scrolling and button movement. A complete assistive-technology audit and OS-level reduced-motion session were not performed.
 
-**Interaction and implementation checks**
+## Functional checks
 
-- The header enquiry action reached the form and placed it at the top of the viewport.
-- Name, email and message fields accepted input; the service select accepted the website choice.
-- `Copy instead` produced the successful `Enquiry copied` state without sending anything externally.
-- The 390px menu opened with three large destinations. The existing Escape handler and focus return remain in the component.
-- Desktop and mobile document widths matched their content widths, with no horizontal overflow.
-- The browser console was checked on the correct route. No application-origin error appeared. The preview retained its own Electron sandbox messages and one 404 from an earlier deliberate navigation to the unbased root path; neither came from the rendered application route.
-- `npm run check`: 0 errors, 0 warnings and 0 hints.
-- `npm test`: 2 files and 5 tests passed.
-- `npm run build:static` and `npm run build`: passed.
-- `git diff --check`: passed.
+- Empty-copy validation showed required-field errors. Malformed contact input showed a specific message and focused the contact field. The final validation order follows name, contact, then description.
+- A phone-only enquiry copied successfully through keyboard navigation. The page stayed on the preview, retained the entered details and explicitly instructed the visitor to send the copied text from email.
+- A Business IT draft retained its project type and used “What I would like help with.” The browser exposed the prepared mailto URL. Its configured Fastmail handler was at a login screen; no message was sent or saved in a signed-in inbox.
+- Server tests cover phone-only delivery, validation without transport, owner transport failure, acknowledgement-only failure, safe native result links, HTML escaping, unknown service values, response parsing and the production/local mode guard.
+- `npm run check`: 23 files, zero errors, warnings or hints.
+- `npm test`: 3 files, 17 passing tests.
+- `npm run build:static` and `npm run build`: pass.
+- Static artifact check: 10 pages, 198 internal links and 43 asset references; no missing path, missing anchor or duplicate ID. Details: `audit/2026-09-15/concept-1-build/static-link-check.json`.
+- `git diff --check`: pass.
 
-**Comparison history**
+## Preview
 
-1. Initial review found three blocking design issues: strong colour filled both hero columns, the website case study appeared before visitors could identify their need, and navigation and form language demanded too much interpretation. Evidence: `01-current-home-desktop.png` through `05-current-menu-mobile.png`.
-2. The implementation moved strong coral to one side, made cream the reading field, placed plain service choices first, reduced the menu to three destinations, moved proof down and simplified the enquiry instructions. Post-fix evidence: `07-updated-home-desktop.png` through `11-updated-menu-mobile.png`.
-3. The combined full and focused comparisons found no remaining P0, P1 or P2 visual difference against the requested reference direction. Evidence: `12-design-comparison-desktop.png` through `14-design-comparison-color-panel.png`.
+`http://localhost:4321/servo-ict-website/`
 
-**Open questions**
+Restart if needed with `PUBLIC_SITE_MODE=static npm run astro -- dev --background`. Use `npm run astro -- dev status`, `logs` or `stop` to manage it.
 
-- The only supplied customer example is a website project. A real business-IT or account-security outcome would strengthen trust when one becomes available; inventing one would be misleading.
+Production activation requirements are in `docs/enquiry-setup.md`. The live delivery decision and a deployed end-to-end mail test remain for after the preview.
 
-**Implementation checklist**
-
-- [x] Confine vivid colour to purposeful panels.
-- [x] Put familiar service choices before portfolio proof.
-- [x] Reduce navigation and remove the homepage blog section.
-- [x] Simplify process and enquiry language.
-- [x] Verify desktop, mobile, menu, form and copy-fallback states.
-- [x] Compare reference and implementation in combined full and focused images.
-
-**Follow-up polish**
-
-- Add one verified business-IT result when a suitable customer story and approved wording exist.
-
-final result: passed
+final result: passed for the approved review-build scope, with the browser-capture and production-delivery limits above.

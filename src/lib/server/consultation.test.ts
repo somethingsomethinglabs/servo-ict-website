@@ -1,49 +1,33 @@
 import { describe, expect, it } from 'vitest';
-import { FormValidationError, parseConsultationRequest } from './consultation';
+import { FormValidationError, escapeHtml, parseConsultationRequest } from './consultation';
 
-function validForm(overrides: Record<string, string> = {}): FormData {
-	const values = {
-		name: 'Alex Example',
-		email: 'alex@example.com',
-		organisation: 'Example & Co',
-		service: 'website',
-		message: 'We need a clearer website that is easier to update.',
-		...overrides
-	};
-	const form = new FormData();
-	for (const [name, value] of Object.entries(values)) form.set(name, value);
-	return form;
+function form(values: Record<string, string>) {
+	const data = new FormData();
+	for (const [key, value] of Object.entries(values)) data.set(key, value);
+	return data;
 }
 
 describe('parseConsultationRequest', () => {
-	it('parses and normalises a valid project enquiry', () => {
-		const request = parseConsultationRequest(validForm({ email: ' ALEX@EXAMPLE.COM ' }));
-
-		expect(request).toEqual({
-			name: 'Alex Example',
-			email: 'alex@example.com',
-			organisation: 'Example & Co',
-			service: 'website',
-			message: 'We need a clearer website that is easier to update.'
+	it('accepts a phone-only short enquiry and supplies the starter service', () => {
+		expect(parseConsultationRequest(form({ name: 'Alex', contact: '0412 345 678', message: 'Opening a new cafe' }))).toEqual({
+			name: 'Alex', phone: '0412 345 678', service: 'starter', message: 'Opening a new cafe'
 		});
 	});
 
-	it('allows an enquiry without an organisation', () => {
-		expect(parseConsultationRequest(validForm({ organisation: '' })).organisation).toBeUndefined();
+	it('accepts and normalises a personal email address', () => {
+		expect(parseConsultationRequest(form({ name: 'Alex', contact: ' ALEX@GMAIL.COM ', message: 'Starting my own business' })).email).toBe('alex@gmail.com');
 	});
 
-	it('returns field-level errors for incomplete submissions', () => {
-		expect(() =>
-			parseConsultationRequest(validForm({ email: 'not-an-email', service: '', message: 'Too short' }))
-		).toThrow(FormValidationError);
-
+	it('rejects invalid fields and inherited service keys', () => {
+		expect(() => parseConsultationRequest(form({ name: '', contact: 'nope', service: 'toString', message: 'short' }))).toThrow(FormValidationError);
 		try {
-			parseConsultationRequest(validForm({ email: 'not-an-email', service: '', message: 'Too short' }));
+			parseConsultationRequest(form({ name: '', contact: 'nope', service: 'toString', message: 'short' }));
 		} catch (error) {
-			const validationError = error as FormValidationError;
-			expect(validationError.fieldErrors.email).toMatch(/valid email/i);
-			expect(validationError.fieldErrors.service).toMatch(/choose/i);
-			expect(validationError.fieldErrors.message).toMatch(/20 characters/i);
+			expect((error as FormValidationError).fieldErrors).toMatchObject({ name: expect.any(String), contact: expect.any(String), service: expect.any(String), message: expect.any(String) });
 		}
+	});
+
+	it('escapes visitor content used in HTML email', () => {
+		expect(escapeHtml(`<script>"x" & 'y'</script>`)).toBe('&lt;script&gt;&quot;x&quot; &amp; &#39;y&#39;&lt;/script&gt;');
 	});
 });

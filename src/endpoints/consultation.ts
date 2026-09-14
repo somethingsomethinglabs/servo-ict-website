@@ -22,14 +22,26 @@ function wantsJson(request: Request): boolean {
 function response(
 	request: Request,
 	body: { ok: boolean; message: string; fieldErrors?: Record<string, string> },
-	status: number
+	status: number,
+	returnPath = '/'
 ): Response {
 	if (wantsJson(request)) {
 		return Response.json(body, { status });
 	}
 
-	const state = body.ok ? 'sent' : 'error';
-	return Response.redirect(new URL(`/?request=${state}#consultation-form`, request.url), 303);
+	const safePath = returnPath.startsWith('/') && !returnPath.startsWith('//') ? returnPath : '/';
+	const returnUrl = new URL(safePath, request.url);
+	returnUrl.search = '';
+	returnUrl.hash = 'consultation-form';
+	const title = body.ok ? 'Enquiry sent' : 'Enquiry not sent';
+	const linkText = body.ok ? 'Return to Servo ICT' : 'Return to your enquiry';
+	const html = `<!doctype html>
+	<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+	<title>${title} | Servo ICT</title><style>
+	*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:1.5rem;background:#c5eddc;color:#242126;font-family:system-ui,sans-serif}
+	main{width:min(100%,38rem);padding:clamp(1.5rem,5vw,3rem);border:2px solid #242126;background:#fffdfa;box-shadow:7px 7px 0 #242126}h1{margin:0 0 1rem;font-size:clamp(2rem,8vw,3.5rem);line-height:1}p{line-height:1.6}a{display:inline-block;min-height:44px;margin-top:1rem;padding:.75rem 1rem;border:2px solid #242126;background:#242126;color:#fffdfa;box-shadow:5px 5px 0 #f27ab5;font-weight:800}
+	</style></head><body><main><p>Servo ICT</p><h1>${title}</h1><p>${escapeHtml(body.message)}</p><a href="${escapeHtml(returnUrl.pathname + returnUrl.hash)}">${linkText}</a></main></body></html>`;
+	return new Response(html, { status, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
 
 async function verifyTurnstile(token: string, secret: string, remoteIp?: string): Promise<boolean> {
@@ -53,11 +65,12 @@ async function verifyTurnstile(token: string, secret: string, remoteIp?: string)
 	return result.success && (!result.action || result.action === 'consultation');
 }
 
-function ownerEmailHtml(submission: ConsultationRequest): string {
+export function ownerEmailHtml(submission: ConsultationRequest): string {
 	return `
 		<h1>New project enquiry</h1>
 		<p><strong>Name:</strong> ${escapeHtml(submission.name)}</p>
-		<p><strong>Email:</strong> ${escapeHtml(submission.email)}</p>
+		${submission.email ? `<p><strong>Email:</strong> ${escapeHtml(submission.email)}</p>` : ''}
+		${submission.phone ? `<p><strong>Phone:</strong> ${escapeHtml(submission.phone)}</p>` : ''}
 		${submission.organisation ? `<p><strong>Organisation:</strong> ${escapeHtml(submission.organisation)}</p>` : ''}
 		<p><strong>Project type:</strong> ${escapeHtml(serviceLabels[submission.service])}</p>
 		<h2>What they would like to build, change, or fix</h2>
@@ -65,12 +78,13 @@ function ownerEmailHtml(submission: ConsultationRequest): string {
 	`;
 }
 
-function ownerEmailText(submission: ConsultationRequest): string {
+export function ownerEmailText(submission: ConsultationRequest): string {
 	return [
 		'New project enquiry',
 		'',
 		`Name: ${submission.name}`,
-		`Email: ${submission.email}`,
+		submission.email ? `Email: ${submission.email}` : '',
+		submission.phone ? `Phone: ${submission.phone}` : '',
 		submission.organisation ? `Organisation: ${submission.organisation}` : '',
 		`Project type: ${serviceLabels[submission.service]}`,
 		'',
@@ -88,13 +102,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 	} catch {
 		return response(request, { ok: false, message: 'The submitted form could not be read.' }, 400);
 	}
+	const returnPath = String(form.get('returnPath') || '/');
 
 	// Bots commonly fill hidden fields. Return an ordinary success so the trap is not advertised.
 	if (String(form.get('companyWebsite') || '').trim()) {
 		return response(
 			request,
 			{ ok: true, message: 'Thanks — your consultation request has been sent.' },
-			200
+			200,
+			returnPath
 		);
 	}
 
@@ -123,7 +139,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 				return response(
 					request,
 					{ ok: false, message: 'Please complete the spam check and try again.' },
-					400
+					400,
+					returnPath
 				);
 			}
 		}
@@ -141,7 +158,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 		await mailer.sendMail({
 			from,
 			to: config.toEmail,
-			replyTo: { name: submission.name, address: submission.email },
+			replyTo: submission.email ? { name: submission.name, address: submission.email } : config.toEmail,
 			subject: `Project enquiry from ${submission.name}`,
 			text: ownerEmailText(submission),
 			html: ownerEmailHtml(submission)
@@ -149,7 +166,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
 		// The owner notification is the critical delivery. A failed acknowledgement should not
 		// make the visitor resubmit and create a duplicate enquiry.
-		try {
+		if (submission.email) try {
 			await mailer.sendMail({
 				from,
 				to: { name: submission.name, address: submission.email },
@@ -172,14 +189,16 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 		return response(
 			request,
 			{ ok: true, message: 'Thanks — your consultation request has been sent.' },
-			200
+			200,
+			returnPath
 		);
 	} catch (error) {
 		if (error instanceof FormValidationError) {
 			return response(
 				request,
 				{ ok: false, message: error.message, fieldErrors: error.fieldErrors },
-				400
+				400,
+				returnPath
 			);
 		}
 		if (error instanceof ConfigurationError) {
@@ -187,7 +206,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 			return response(
 				request,
 				{ ok: false, message: 'The form is temporarily unavailable. Please email support@servoict.com.' },
-				503
+				503,
+				returnPath
 			);
 		}
 
@@ -195,7 +215,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 		return response(
 			request,
 			{ ok: false, message: 'Your request could not be sent. Please email support@servoict.com.' },
-			500
+			500,
+			returnPath
 		);
 	}
 };

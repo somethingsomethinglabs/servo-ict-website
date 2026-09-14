@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/inter/wght.css';
+import '../styles/brand.css';
 
 interface Props {
 	title: string;
@@ -62,8 +63,8 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 				</a>
 				<nav aria-label="Blog navigation">
 					<a href={sitePath('/blog/')}>All posts</a>
-					<a href={`${baseUrl}#services`}>Project work</a>
-					<a class="nav-cta" href={`${baseUrl}#consultation-form`}>Talk about your project</a>
+					<a href={`${baseUrl}#other-services`}>Project work</a>
+					<a class="nav-cta" href={`${baseUrl}#consultation-form`}><span class="cta-wide">Talk about your project</span><span class="cta-short">Enquire</span></a>
 				</nav>
 			</header>
 
@@ -97,8 +98,8 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 
 	body {
 		margin: 0;
-		background: #f4f2ec;
-		color: #10103f;
+		background: var(--paper, #F7F3EC);
+		color: var(--ink, #242126);
 		font-family: inherit;
 		line-height: 1.5;
 		text-rendering: optimizeLegibility;
@@ -113,7 +114,7 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	}
 
 	:focus-visible {
-		outline: 3px solid #5c5ce0;
+		outline: 3px solid var(--pink-dark, #A82461);
 		outline-offset: 4px;
 	}
 
@@ -165,7 +166,10 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	.brand img {
 		width: 2.4rem;
 		height: 2.4rem;
+		filter: grayscale(1) brightness(.35);
 	}
+
+	.cta-short { display: none; }
 
 	.site-header nav {
 		display: flex;
@@ -181,20 +185,22 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 
 	.site-header nav a:hover,
 	.site-header nav a:focus-visible {
-		color: #4a4ab9;
+		color: var(--pink-dark, #A82461);
 	}
 
 	.site-header nav .nav-cta {
 		padding: 0.72rem 1rem;
-		border-radius: 999px;
-		background: #10105a;
-		color: #fff;
+		border: 2px solid var(--ink, #242126);
+		border-radius: .35rem;
+		background: var(--pink, #F27AB5);
+		color: var(--ink, #242126);
+		box-shadow: 4px 4px 0 var(--ink, #242126);
 	}
 
 	.site-header nav .nav-cta:hover,
 	.site-header nav .nav-cta:focus-visible {
-		background: #282887;
-		color: #fff;
+		background: var(--mint, #C5EDDC);
+		color: var(--ink, #242126);
 	}
 
 	footer {
@@ -211,7 +217,7 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	}
 
 	footer .brand {
-		color: #10103f;
+		color: var(--ink, #242126);
 	}
 
 	footer nav {
@@ -250,6 +256,9 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 			padding-inline: 0.85rem;
 			font-size: 0.72rem;
 		}
+
+		.cta-wide { display: none; }
+		.cta-short { display: inline; }
 
 		footer {
 			align-items: flex-start;

@@ -4,10 +4,11 @@ const enquiryUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/?service=webs
 
 <section class="website-offer" id="website-offer" aria-labelledby="website-offer-title">
 	<div class="offer-heading">
-		<div><p class="eyebrow">A defined website project</p>
-		<h2 id="website-offer-title">A useful website, worked out with you.</h2></div>
-		<p>A planning workshop, custom design and writing for up to five core pages, plus one useful feature — a calculator, guided choice or structured enquiry.</p>
+		<div><p class="eyebrow">For a larger or custom website</p>
+		<h2 id="website-offer-title">A custom website project, worked out with you.</h2></div>
+		<p>This offer is for an existing business that needs a rebuild, more involved content or a useful custom feature. If you are starting a business, the combined starter covers a website, business email and essential account setup together.</p>
 	</div>
+	<p class="starter-link"><a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/#included`}>See the combined startup offer <span aria-hidden="true">→</span></a></p>
 
 	<div class="pricing" aria-label="Website pricing">
 		<div class="price-card primary">
@@ -24,10 +25,10 @@ const enquiryUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/?service=webs
 			<p>Build and defined care included. Available by written proposal.</p>
 		</div>
 	</div>
-	<p class="offer-currency">All prices are in AUD. GST is not currently charged. Planning allowance: six to eight weeks once the agreed content, access and feedback arrive on schedule.</p>
+	<p class="offer-currency">All prices are in AUD. GST is not currently charged. The proposal confirms timing once the scope, content, access and review process are understood.</p>
 
 	<div class="offer-disclosures">
-		<details><summary>What the starting scope includes</summary><ul><li>One planning workshop and a written project scope</li><li>Custom structure, design and writing for up to five core pages</li><li>One focused interactive feature with agreed inputs and outputs</li><li>Two consolidated review rounds</li><li>Search and analytics setup, enquiry testing, launch and handover</li></ul></details>
+		<details><summary>What the custom scope includes</summary><ul><li>One planning workshop and a written project scope</li><li>Custom structure, design and writing for up to five core pages</li><li>One focused interactive feature with agreed inputs and outputs</li><li>Two consolidated review rounds</li><li>Search and analytics setup, enquiry testing, launch and handover</li></ul></details>
 		<details><summary>Managed care after launch</summary><p>Available where included in the project proposal. It covers the scoped build plus hosting, backups, monitoring, scheduled form checks, up to 30 minutes of small edits each month and a quarterly review. After the 24-month term, choose handover to your own hosting or ask for a separately quoted care arrangement.</p></details>
 		<details><summary>Ownership and responsibilities</summary><p>Your domain and business accounts stay in your name. Before work starts, the proposal sets out hosting costs, care limits, the payment schedule, how launch delays affect billing, and the ownership, cancellation and early-handover terms. Monitoring does not include a staffed 24-hour response.</p></details>
 		<details><summary>Work that needs a separate quote</summary><p>Online shops, customer accounts, complex booking systems, external integrations and larger data-backed tools sit outside the starting scope. Large content migrations, photography, logo work, legal writing and third-party fees are also quoted separately when needed.</p></details>
@@ -35,25 +36,27 @@ const enquiryUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/?service=webs
 </section>
 
 <style>
-	.website-offer { padding-block: clamp(5rem, 9vw, 8rem); border-top: 1px solid #d5d2c8; }
+	.website-offer { padding-block: clamp(5rem, 9vw, 8rem); border-top: 2px solid var(--ink, #242126); }
 	.offer-heading { display: grid; grid-template-columns: minmax(0, .9fr) minmax(22rem, 1.1fr); gap: clamp(2rem, 8vw, 7rem); align-items: end; margin-bottom: 3.5rem; }
 	.offer-heading h2 { max-width: 12ch; }
 	.offer-heading > p:last-child { margin: 0; color: #595970; font-size: 1.05rem; line-height: 1.75; }
-	.pricing { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid #c9c6bd; }
+	.starter-link { margin: -1.5rem 0 2rem; }
+	.starter-link a { color: var(--pink-dark, #A82461); font-weight: 800; text-decoration-thickness: 3px; text-underline-offset: .25em; }
+	.pricing { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 2px solid var(--ink, #242126); border-radius: .35rem; box-shadow: 6px 6px 0 var(--ink, #242126); overflow: hidden; }
 	.price-card { padding: clamp(1.5rem, 3.5vw, 2.6rem); background: rgb(255 255 255 / 45%); }
 	.price-card + .price-card { border-left: 1px solid #c9c6bd; }
 	.offer-currency { margin: .9rem 0 2rem; color: #595970; font-size: .85rem; }
 	.price-card > p { color: #595970; font-size: .9rem; line-height: 1.7; }
-	.price-card.primary { background: #10103f; color: #fff; }
-	.price-card.primary > p { color: rgb(255 255 255 / 72%); }
-	.price-label { margin: 0 0 .8rem !important; color: #4a4ab9 !important; font-size: .7rem !important; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
-	.primary .price-label { color: #f8a51b !important; }
+	.price-card.primary { background: var(--pink, #F27AB5); color: var(--ink, #242126); }
+	.price-card.primary > p { color: var(--ink, #242126); }
+	.price-label { margin: 0 0 .8rem !important; color: var(--pink-dark, #A82461) !important; font-size: .7rem !important; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+	.primary .price-label { color: var(--ink, #242126) !important; }
 	.price { margin: 0 !important; font-weight: 720; }
 	.price span { color: inherit; font-size: clamp(2.3rem, 5vw, 4rem); font-weight: 800; line-height: 1; letter-spacing: -.05em; }
 	.total span { display: block; font-size: clamp(2.3rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -.05em; }
 	.monthly { margin-block: .4rem 0 !important; }
-	.total { margin: 1.2rem 0 !important; padding-block: .9rem; border-block: 1px solid #d5d2c8; color: #10103f !important; font-weight: 780; }
-	.price-card a { display: inline-flex; gap: 1.5rem; margin-top: 1rem; color: #fff; font-size: .86rem; font-weight: 760; text-underline-offset: .25em; }
+	.total { margin: 1.2rem 0 !important; padding-block: .9rem; border-block: 2px solid var(--ink, #242126); color: var(--ink, #242126) !important; font-weight: 780; }
+	.price-card a { display: inline-flex; gap: 1.5rem; margin-top: 1rem; color: var(--ink, #242126); font-size: .86rem; font-weight: 800; text-decoration-thickness: 3px; text-underline-offset: .25em; }
 	.offer-disclosures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #c9c6bd; }
 	.offer-disclosures details { padding-right: clamp(1rem, 4vw, 3rem); border-bottom: 1px solid #c9c6bd; }
 	.offer-disclosures details:nth-child(even) { padding-right: 0; padding-left: clamp(1rem, 4vw, 3rem); border-left: 1px solid #c9c6bd; }

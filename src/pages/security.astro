@@ -6,11 +6,11 @@ export const prerender = true;
 
 <ServiceLayout
 	title="Practical small business security | Servo ICT"
-	description="Practical account, access, Windows update and recovery improvements for small businesses, delivered remotely or in Gippsland by arrangement."
+	description="Practical sign-in, access, automatic update and file recovery improvements for small businesses, delivered remotely or in Gippsland by arrangement."
 	canonicalPath="/security/"
 	eyebrow="Practical security"
-	headline="Security for the systems you already use."
-	intro="Servo ICT helps small businesses protect important accounts, remove old access, bring Windows updates under control and check whether recovery plans are usable. Work is remote by default, with visits in Gippsland by arrangement."
+	headline="Protect the accounts and files your business relies on."
+	intro="Servo ICT helps you strengthen sign-in, remove access that should no longer be there, check automatic updates and work out whether important files can be recovered. Work is remote by default, with Gippsland visits by arrangement."
 	goodFit={[
 		'Important accounts do not have strong sign-in protection.',
 		'Staff or suppliers may still have access they no longer need.',
@@ -18,13 +18,17 @@ export const prerender = true;
 		'Backups exist, but no one is confident they can be restored.'
 	]}
 	typicalWork={[
-		{ title: 'Account protection', description: 'Strengthen sign-in, recovery details and multi-factor authentication for important services.' },
+		{ title: 'Safer sign-in', description: 'Strengthen sign-in and recovery details for the important services your business uses.' },
 		{ title: 'Access review', description: 'Map who can reach critical systems and remove access that is unclear or no longer needed.' },
-		{ title: 'Windows security and updates', description: 'Start with Microsoft Defender Antivirus, Windows Firewall and automatic updates when they suit the devices and risks. Recommend other controls only when the project calls for them.' },
-		{ title: 'Backups and recovery', description: 'Review what is backed up, where it is stored and how the business would restore it.' }
+		{ title: 'Automatic updates', description: 'Check whether suitable computers receive important updates and agree on any settings that need attention.' },
+		{ title: 'File recovery', description: 'Review what is backed up, where it is stored and how the business would restore important files.' }
 	]}
 	enquiryService="security"
 	beforeEnquiring={[
+		{
+			question: 'What will the work cost?',
+			answer: 'Security projects are quoted after the systems, equipment and work involved are confirmed. The written proposal lists the scope, fee, schedule, any travel costs and third-party fees. You approve it before work begins.'
+		},
 		{
 			question: 'Can you help with an urgent cyber incident?',
 			answer: 'This service covers planned security improvements. Urgent work depends on availability and does not include guaranteed incident response. For an active cyber incident, contact the Australian Cyber Security Hotline on 1300 CYBER1 (1300 292 371).'
@@ -38,8 +42,8 @@ export const prerender = true;
 			answer: 'No. Describe the issue and affected services, but do not include passwords, recovery codes or other credentials. Any access needed for agreed work is identified during scoping.'
 		},
 		{
-			question: 'Do you install antivirus software?',
-			answer: 'Microsoft Defender Antivirus and Windows Firewall are the starting point when they suit the device, business needs and risks. Any additional security software is considered during scoping and quoted if needed.'
+			question: 'What security software do you use?',
+			answer: 'For Windows computers, Microsoft Defender Antivirus, Windows Firewall and automatic updates are the starting point when they suit the device, business needs and risks. Any additional security software is considered during scoping and quoted if needed.'
 		},
 		{
 			question: 'Can you secure Macs?',
@@ -57,6 +61,6 @@ export const prerender = true;
 		timing: 'The initial review establishes which systems are included and how changes will be coordinated. You receive a written scope, quote and schedule before changes start.',
 		handover: 'You receive the agreed protections, an updated access record, recovery notes and a prioritised list of any follow-up work.'
 	}}
-	closingTitle="Fix the important gaps before chasing every possible risk."
-	closingCopy="Share the systems you depend on and the issues you are worried about. Get help identifying what needs attention first and what can be planned for later."
+	closingTitle="Start with the risk that worries you most."
+	closingCopy="Name the account, computer or files you depend on and what concerns you. Servo ICT can help work out what needs attention first."
 />

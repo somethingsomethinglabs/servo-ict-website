@@ -25,11 +25,10 @@ const formatDate = (date: Date) =>
 	canonicalPath="/blog/"
 >
 	<section class="blog-hero" aria-labelledby="blog-title">
-		<p class="eyebrow"><span aria-hidden="true"></span> The Servo ICT blog</p>
-		<h1 id="blog-title">Useful notes for small business.</h1>
+		<p class="eyebrow"><span aria-hidden="true"></span> Practical guides</p>
+		<h1 id="blog-title">Help with the technology your business uses.</h1>
 		<p>
-			Plain-English guidance on accounts, devices, cyber security and the systems your
-			business depends on.
+			Short explanations for business owners who want to make a sensible decision without learning the jargon first.
 		</p>
 	</section>
 
@@ -85,8 +84,8 @@ const formatDate = (date: Date) =>
 		width: 0.6rem;
 		height: 0.6rem;
 		border-radius: 50%;
-		background: #f8a51b;
-		box-shadow: 0 0 0 0.35rem rgb(248 165 27 / 15%);
+		background: var(--pink, #F27AB5);
+		box-shadow: 0 0 0 0.35rem rgb(242 122 181 / 18%);
 	}
 
 	h1 {
@@ -114,9 +113,10 @@ const formatDate = (date: Date) =>
 	.post-card {
 		display: grid;
 		overflow: hidden;
-		border: 1px solid #d5d2c8;
-		border-radius: 1.15rem;
-		background: #fff;
+		border: 2px solid var(--ink, #242126);
+		border-radius: .35rem;
+		background: var(--white, #FFFDFA);
+		box-shadow: 5px 5px 0 var(--ink, #242126);
 		text-decoration: none;
 		transition:
 			border-color 160ms ease,
@@ -140,7 +140,7 @@ const formatDate = (date: Date) =>
 	.post-image {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
-		background: #10105a;
+		background: var(--ink, #242126);
 	}
 
 	.featured .post-image {
@@ -182,7 +182,7 @@ const formatDate = (date: Date) =>
 	}
 
 	.post-meta span {
-		color: #4a4ab9;
+		color: var(--pink-dark, #A82461);
 	}
 
 	.post-copy h2 {
