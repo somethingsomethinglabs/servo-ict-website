@@ -3,7 +3,7 @@
 	--colour-background: #dad7cd;
 	--colour-canvas: #eeece6;
 	--colour-support: #4e8098;
-	--colour-feature: #3e655e;
+	--colour-feature: #365c55;
 	--colour-accent: #b8a66a;
 	--colour-text-muted: color-mix(in srgb, var(--colour-text) 72%, var(--colour-background));
 	--colour-line: color-mix(in srgb, var(--colour-support) 55%, var(--colour-background));
