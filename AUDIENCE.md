@@ -2,6 +2,8 @@
 
 Status: working brief based on the owner's instructions, 14 September 2026. Customer interviews have not been conducted. This document records the intended audience, not measured customer behaviour.
 
+Current visual direction: Concept 3, selected by the owner after reviewing the published Concept 1 implementation. The [Concept 3 implementation note](docs/design/concept-3-build/implementation.md) records the selected image and page sequence. The audience and starter-offer decisions below still apply.
+
 ## Who this is for
 
 Small business owners with very little technical experience or confidence. Setting up an email account may already be difficult. They know their business; they should not need to learn technology vocabulary to decide whether Servo can help.
@@ -95,8 +97,8 @@ These are the owner's explicit answers, not customer interview findings. Remaini
 - Support claims with actual work, a defined service or a relevant check.
 - Remove or move material that mainly reassures a technical supplier rather than this customer.
 
-The [14 September audience review](audit/2026-09-14/audience/review.md) applies this brief to the homepage and website service page. It includes independent Sol and Luna scores for every section. Its recommendations have not been implemented.
+The [14 September audience review](audit/2026-09-14/audience/review.md) applies this brief to the earlier homepage and website service page. It includes independent Sol and Luna scores for every section. These findings informed the later customer journey and concept work.
 
-The later [five-persona exercise](audit/2026-09-14/personas/recommendations.md) tests the clarified starter audience across the homepage, Websites, Business IT and Security pages. It uses fictional cafe, tyre-shop, cleaning, salon and bookkeeping owners. Their needs and reactions are hypotheses for review, not customer research or additional owner-approved inclusions. The resulting website proposals have not been implemented.
+The later [five-persona exercise](audit/2026-09-14/personas/recommendations.md) tests the clarified starter audience across the homepage, Websites, Business IT and Security pages. It uses fictional cafe, tyre-shop, cleaning, salon and bookkeeping owners. Their needs and reactions are hypotheses for review, not customer research or additional owner-approved inclusions. The proposals informed the current page sequence; undefined prices and direct enquiry delivery remain separate decisions.
 
 The [customer journey plan](docs/design/customer-journey-2026-09-14/plan.md) connects that feedback to the page order, enquiry process, service delivery and implementation sequence. Its starter quantities and boundaries are proposed planning defaults, not confirmed inclusions or published prices.

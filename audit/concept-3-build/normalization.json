@@ -1,0 +1,23 @@
+{
+  "viewport": {
+    "file": "desktop-final-0.jpg",
+    "height": 852,
+    "scrollY": 0,
+    "total": 3471,
+    "width": 1574
+  },
+  "capture": {
+    "width": 1557,
+    "height": 843
+  },
+  "scale": 0.9894366197183099,
+  "composite": {
+    "width": 1540,
+    "height": 3435
+  },
+  "normalized": {
+    "width": 887,
+    "height": 1978
+  },
+  "method": "Five overlapping browser viewport screenshots, placed at measured scroll positions. Scrollbar removed; no webpage content redrawn."
+}

@@ -8,8 +8,10 @@
 	import user from '@phosphor-icons/core/assets/regular/user-circle.svg?raw';
 	import list from '@phosphor-icons/core/assets/regular/list.svg?raw';
 	import close from '@phosphor-icons/core/assets/regular/x.svg?raw';
+	import shieldCheck from '@phosphor-icons/core/assets/regular/shield-check.svg?raw';
+	import creditCard from '@phosphor-icons/core/assets/regular/credit-card.svg?raw';
 
-	const icons = { arrowRight, arrowUpRight, envelope, gear, plus, search, user, list, close };
+	const icons = { arrowRight, arrowUpRight, envelope, gear, plus, search, user, list, close, shieldCheck, creditCard };
 	let { name, size = 24 }: { name: keyof typeof icons; size?: number } = $props();
 </script>
 

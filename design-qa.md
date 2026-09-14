@@ -1,63 +1,75 @@
-# Concept 1 implementation review
+# Concept 3 implementation review
 
-15 September 2026. Review build on `main`, based on merged style commit `e0c09cc`.
+The owner selected the restyled Concept 3 after reviewing the published Concept 1. The homepage now follows that image's storefront hero, connected website and email example, compact pricing, pink project strip, dark process section and open mint enquiry area.
 
-## Result and scope
+## Result
 
-The selected Concept 1 is implemented for the new-business audience in `AUDIENCE.md`. The review covers the homepage, service-page handoff, responsive layout, static enquiry flow and tested server delivery logic. No actionable P0 or P1 issue remains in that scope. Review findings about text size, service context and form correctness were fixed before handoff.
+No actionable P0, P1 or P2 finding remains in the implemented homepage scope. An independent Sol review checked audience fit, the code changes, desktop captures and seven phone-width captures. Its earlier wording finding and the visual issues found during implementation were corrected. This is an expert and simulated-audience review, not customer testing.
 
-This is a preview, not a production mail activation. The owner asked to choose between the existing server/Fastmail approach and a separate form service after reviewing it. No provider was selected, no production settings were changed and no real email was sent. The preview honestly opens a draft or copies an enquiry. Direct delivery remains available in the code, guarded by configuration.
+## Source and capture evidence
 
-## Design evidence
+Source visual truth: `docs/design/customer-journey-2026-09-14/merged-style-e0c09cc/concepts/concept-3.png`, 887 x 1774 pixels. This is an image mock-up of a desktop page, with no separate mobile reference.
 
-- Selected source: `docs/design/customer-journey-2026-09-14/merged-style-e0c09cc/concepts/concept-1.png`.
-- Journey brief: `docs/design/customer-journey-2026-09-14/plan.md`.
-- Full comparison before readability corrections: `audit/2026-09-15/concept-1-build/comparison-pass-1.png`.
-- Full comparison after corrections: `audit/2026-09-15/concept-1-build/comparison-pass-2.png`.
-- Focused comparisons: `comparison-hero.png` and `comparison-enquiry.png` in that audit directory.
-- Desktop: `desktop-final.png` and `preview-ready.jpg`.
-- Mobile: `mobile-final.png` and `mobile-menu.jpg`.
-- Interaction evidence: `enquiry-copy-result.jpg` and `booking-details.jpg`.
+Implementation: `http://localhost:4321/servo-ict-website/`, empty form and collapsed disclosures for the final design captures.
 
-Both comparison images contain the source on the left and the implementation on the right. The source raster is 887 × 1774. The implementation was reviewed at 1440 CSS pixels, then normalized to the same 887-pixel width. The longer implementation is not compressed vertically to force identical section heights. It includes the agreed scope, account, later-help, contact and fallback details absent from the illustrative mockup.
+- Full journey comparison: `audit/concept-3-build/comparison-final.png`. Source is on the left, implementation on the right.
+- Final desktop composite: `audit/concept-3-build/desktop-final.png`.
+- Focused same-region comparisons: `comparison-hero-final.png`, `comparison-connected-final.png` and `comparison-process-final.png` in the same directory. These were opened together with the full comparison to check text, image treatment, spacing and controls.
+- Mobile evidence: `mobile-journey-final.png`, with individual `mobile-390-hero.png`, `mobile-390-included.png`, `mobile-390-email.png`, `mobile-390-costs.png`, `mobile-390-work.png`, `mobile-390-process-final.png` and `mobile-390-form.png`.
+- Independent findings and resolution: `docs/design/concept-3-build/review.md`.
 
-Chrome used a 90% zoom setting during viewport overrides. Requested dimensions were adjusted to obtain the measured CSS widths. Full-page captures included extra blank padding from the browser capture; normalized files crop that padding. Desktop content width was 1423 pixels with a scrollbar; mobile was 373 within a 390-pixel viewport. The source has no mobile design, so mobile is an adaptation. Default browser sizing was restored for the delivered preview.
+The desktop browser viewport measured 1574 x 852 CSS pixels. Five normal viewport captures measured 1557 x 843 pixels. They were placed at their measured scroll positions, with overlap and without redrawing page content, producing a 1540 x 3435 image after removing the scrollbar. Comparison copies normalize the page width to 887 pixels, preserving height. The implementation is 1978 pixels high at that scale. Capture measurements and the scale are in `desktop-capture-manifest.json` and `normalization.json`. The reference is treated as a desktop composition; the implementation caps content width on wide screens.
+
+Chrome's full-page and resized-window screenshots repeatedly timed out. Final desktop evidence therefore uses overlapping ordinary captures. Phone evidence uses the actual page inside a same-origin 390 x 770 CSS-pixel iframe, captured in Chrome at normal window size. The iframe is cropped from the raw screenshot at its measured bounds. These are real responsive renders, not image mock-ups or a CSS recreation of the mobile page. The temporary review wrapper was removed before the final builds. Separate browser viewport checks measured 320, 390 and 768 CSS pixels and verified layout bounds and interactions. A physical handset and mobile browser chrome were not tested.
 
 ## Comparison and correction history
 
-1. The first build retained the cream, charcoal, pink and mint sequence, four-line hero, illustration, three outcomes, cost panel, local proof, process and short enquiry. Independent Sol reviews found small decision-critical text, excessive proof spacing, missing connecting arrows, service context lost at the form and unclear account boundaries.
-2. Increased outcome, cost, process, proof and contact text; enlarged the illustration; shortened repeated copy; restored connecting arrows and numbered circles; moved booking and extra-feature boundaries into a native disclosure. Added concrete quote boundaries for pages, addresses, people and devices. The client screenshot remains real; the hero is explicitly labelled illustrative.
-3. Fixed shared form validation, personal-email/phone support, draft context, DOM-order error focus, copy feedback, stale copy completion, malformed-response handling, sending locks and read-only fields during delivery. Removed query-string success assertions. Native submissions now receive an escaped result page only after the server outcome, with a safe return link.
-4. The second visual review rated audience fit 8.5/10 and found no P1 visual issue. Its remaining mobile proof readability finding was addressed by increasing ownership text to 16px and captions to 14px. The final computed styles and loaded images were checked at 390 pixels. The saved full mobile image precedes that small type increase and the reduction of outcome paragraph spacing; subsequent mobile screenshot attempts intermittently timed out in Chrome.
+1. The independent review found a P2 audience issue in the setup row and quote disclosure. The phrases about accounts and devices were unclear. Setup now says "Website and business email setup, help with the wording, and a short walkthrough." The quote explains who needs access and where email will be used. The reviewer verified the resolution in the source and desktop pricing capture.
+2. The first desktop process heading left "next." on an extra line. `comparison-process-before.png` contains the source and that capture. Adjusted its column proportions and type scale. `comparison-process-final.png` shows the corrected two-line heading on desktop.
+3. The first phone process capture exposed missing spaces where desktop line breaks were hidden. Added actual spaces around those breaks. `mobile-390-process-final.png` shows the corrected headings, and the independent reviewer confirmed the fix.
+4. The final full comparison and focused comparisons show no remaining actionable P0/P1/P2 difference. The phone review confirms the reading order, visible ownership statement, card fit, readable copy, form labels and touch targets.
 
-The score is a simulated audience/expert review, not a real-customer study. A numerical starter price remains an offer decision; the approved concept uses a written quote.
+## Required fidelity surfaces
 
-## Fidelity and accessibility
+| Surface | Assessment |
+| --- | --- |
+| Fonts and typography | Existing Inter Variable and heavy, tight editorial headings retained. The hero uses the selected three-line composition on desktop. Section labels, ordinary body copy and form text keep distinct sizes. Form inputs are 16px. Process heading wrapping and mobile word spacing were corrected. |
+| Spacing and layout | The selected page order, asymmetric hero, side-by-side example, mint ownership strip, row-based pricing and three-column process are implemented. Phone layouts stack without requiring a horizontal swipe. Full-width colour bands and flat shadows retain the reference's structure. |
+| Colours and tokens | Uses the merged exact charcoal, cream, off-white, pink and mint tokens. Generated texture and gradient artefacts from the mock are replaced by the established flat colours. Contrast and visible focus treatments remain in place. |
+| Image quality and assets | Storefront, handwritten annotation and email illustration were generated from the selected reference, inspected and delivered as optimized WebP assets. They total about 200 KB. The real 12Grapes screenshot supplies both the website example and client proof. Matching Phosphor icons provide the controls and supporting symbols. No custom icon drawings or image placeholders were introduced. |
+| Copy and content | The combined website, email and account setup offer stays focused on a new business owner. Costs remain quote-based; no price, duration, account quantity or guarantee was invented. Ownership, quote approval, later changes, phone hours and the reply target remain available. |
 
-- Inter Variable, heavy tight display type, rectangular surfaces, 2px outlines and hard shadows preserve the merged identity. Core colours are ink `#242126`, cream `#f7f3ec`, off-white `#fffdfa`, pink `#f27ab5` and mint `#c5eddc`.
-- Official Phosphor icons provide one consistent family. The hero uses a generated raster illustration; the case study uses the existing 12Grapes screenshot. The delivered hero WebP is about 94 KB. Images have dimensions and descriptive alt text; the decorative logo and icons are hidden from redundant announcements.
-- The browser showed no content overflow at 1440 or 390 pixels. Additional DOM checks at 320 and 768 pixels found no visible content outside the viewport; the intentional honeypot is excluded. Full visual captures at those two additional sizes were limited by intermittent screenshot timeouts.
-- Mobile navigation opens, Escape closes it and returns focus. The primary action reaches the form. Native booking details expand and collapse from the keyboard. Inputs use 16px text; labels, error descriptions and high-contrast focus rings remain visible.
-- Reduced-motion CSS disables smooth scrolling and button movement. A complete assistive-technology audit and OS-level reduced-motion session were not performed.
+## Deliberate production adaptations
+
+The real client screenshot replaces the image generator's reconstructed project. Its surrounding captions explain how customers find the business and how enquiries reach the owner. The sample inbox is labelled illustrative and contains no invented customer evidence.
+
+The production page contains more contact and scope information than the mock. That accounts for its extra height, along with supporting service links and owner information in the footer. The selected layout is preserved while the footer remains useful for visitors seeking existing-business help.
+
+The static form retains "Open email draft" and "Copy enquiry instead". It explains that the visitor must send the draft. The owner deferred the direct delivery provider decision until after preview; this design change does not select a provider or alter delivery logic. No actual email was sent in this review.
 
 ## Functional checks
 
-- Empty-copy validation showed required-field errors. Malformed contact input showed a specific message and focused the contact field. The final validation order follows name, contact, then description.
-- A phone-only enquiry copied successfully through keyboard navigation. The page stayed on the preview, retained the entered details and explicitly instructed the visitor to send the copied text from email.
-- A Business IT draft retained its project type and used “What I would like help with.” The browser exposed the prepared mailto URL. Its configured Fastmail handler was at a login screen; no message was sent or saved in a signed-in inbox.
-- Server tests cover phone-only delivery, validation without transport, owner transport failure, acknowledgement-only failure, safe native result links, HTML escaping, unknown service values, response parsing and the production/local mode guard.
-- `npm run check`: 23 files, zero errors, warnings or hints.
-- `npm test`: 3 files, 17 passing tests.
-- `npm run build:static` and `npm run build`: pass.
-- Static artifact check: 10 pages, 198 internal links and 43 asset references; no missing path, missing anchor or duplicate ID. Details: `audit/2026-09-15/concept-1-build/static-link-check.json`.
-- `git diff --check`: pass.
+- At 320, 390 and 768 CSS pixels, visible homepage content stayed within the viewport. The intentionally hidden honeypot was excluded from the check.
+- At 390 pixels, the menu opened; Escape closed it and returned focus to the menu button.
+- The primary "Help me get started" action reached `#consultation-form`.
+- Quote and booking disclosures opened and closed normally.
+- At tablet width, an invalid contact value produced "Enter a valid email address or phone number.", focused the contact field, set its invalid state and retained the other entered values.
+- All homepage images loaded. The rebuilt supporting routes remain available. Form inputs retained 16px text.
+- Existing reduced-motion rules continue to disable smooth scrolling and button movement. An OS-level reduced-motion or assistive-technology session was not performed.
+- No error overlay or visible runtime failure appeared during the final page interactions. A complete browser-console export was not obtained; build and type diagnostics were checked separately.
 
-## Preview
+## Build checks
 
-`http://localhost:4321/servo-ict-website/`
+- `npm run check`: 23 files, no errors, warnings or hints.
+- `npm test`: 3 files, 17 passing tests. Delivery logic is unchanged by this redesign.
+- `npm run build:static`: passed, 10 pages.
+- `npm run build`: passed, Node server build.
+- `git diff --check`: passed.
 
-Restart if needed with `PUBLIC_SITE_MODE=static npm run astro -- dev --background`. Use `npm run astro -- dev status`, `logs` or `stop` to manage it.
+The background preview remains running. Default browser sizing is restored for handoff. The previous Concept 1 QA report is preserved at `docs/design/concept-3-build/previous-concept-1-qa.md`.
 
-Production activation requirements are in `docs/enquiry-setup.md`. The live delivery decision and a deployed end-to-end mail test remain for after the preview.
+## Follow-up polish
 
-final result: passed for the approved review-build scope, with the browser-capture and production-delivery limits above.
+No P3 item needs to delay this implementation. Actual customer feedback and the separately deferred direct enquiry setup remain outside this visual change.
+
+final result: passed

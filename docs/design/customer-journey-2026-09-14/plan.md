@@ -1,8 +1,8 @@
 # Servo ICT customer journey and implementation plan
 
-Prepared 14 September 2026 for the owner to review alongside three AI-generated visual concepts. This is a proposed customer journey and delivery plan. No website implementation, price change, account creation or deployment has taken place in this design pass.
+Originally prepared 14 September 2026 for the owner to review alongside three AI-generated visual concepts. Concept 1 was subsequently implemented and published in commit 6f17756. The owner has now selected Concept 3. The journey and proposed delivery boundaries below remain the planning basis, with the [Concept 3 implementation note](../concept-3-build/implementation.md) recording the current layout.
 
-The owner selected concept 1, then requested that all three images receive the newly merged colour and design changes before implementation. The [updated concepts and source review](merged-style-e0c09cc/README.md) are the current visual reference. Their numbers preserve the original concept identities. The [original concepts and inspection notes](concepts.md) remain available for comparison.
+The owner requested that all three images receive the merged colour and design changes. The selected visual reference is now [updated Concept 3](merged-style-e0c09cc/concepts/concept-3.png). The concept numbers preserve the original identities. Earlier selection notes remain historical records.
 
 ## The decision
 
