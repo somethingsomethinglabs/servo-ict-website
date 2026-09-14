@@ -84,8 +84,8 @@ const formatDate = (date: Date) =>
 		width: 0.6rem;
 		height: 0.6rem;
 		border-radius: 50%;
-		background: var(--pink, #F27AB5);
-		box-shadow: 0 0 0 0.35rem rgb(242 122 181 / 18%);
+		background: var(--colour-support);
+		box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--colour-support) 18%, transparent);
 	}
 
 	h1 {
@@ -99,7 +99,7 @@ const formatDate = (date: Date) =>
 	.blog-hero > p:last-child {
 		max-width: 42rem;
 		margin: 1.7rem 0 0;
-		color: #5f5f74;
+		color: var(--colour-text-muted);
 		font-size: clamp(1rem, 1.6vw, 1.15rem);
 		line-height: 1.7;
 	}
@@ -113,10 +113,10 @@ const formatDate = (date: Date) =>
 	.post-card {
 		display: grid;
 		overflow: hidden;
-		border: 2px solid var(--ink, #242126);
+		border: 2px solid var(--colour-text);
 		border-radius: .35rem;
-		background: var(--white, #FFFDFA);
-		box-shadow: 5px 5px 0 var(--ink, #242126);
+		background: var(--colour-background);
+		box-shadow: 5px 5px 0 var(--colour-support);
 		text-decoration: none;
 		transition:
 			border-color 160ms ease,
@@ -132,15 +132,15 @@ const formatDate = (date: Date) =>
 
 	.post-card:hover,
 	.post-card:focus-visible {
-		border-color: #aaa7d8;
-		box-shadow: 0 1.2rem 3rem rgb(16 16 90 / 10%);
+		border-color: var(--colour-support);
+		box-shadow: 0 1.2rem 3rem color-mix(in srgb, var(--colour-text) 12%, transparent);
 		transform: translateY(-3px);
 	}
 
 	.post-image {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
-		background: var(--ink, #242126);
+		background: var(--colour-text);
 	}
 
 	.featured .post-image {
@@ -174,7 +174,7 @@ const formatDate = (date: Date) =>
 		justify-content: space-between;
 		gap: 1rem;
 		width: 100%;
-		color: #626277;
+		color: var(--colour-text-muted);
 		font-size: 0.68rem;
 		font-weight: 750;
 		letter-spacing: 0.06em;
@@ -182,7 +182,7 @@ const formatDate = (date: Date) =>
 	}
 
 	.post-meta span {
-		color: var(--pink-dark, #A82461);
+		color: var(--colour-feature);
 	}
 
 	.post-copy h2 {
@@ -198,7 +198,7 @@ const formatDate = (date: Date) =>
 
 	.post-copy p {
 		margin: 1rem 0 0;
-		color: #626277;
+		color: var(--colour-text-muted);
 		font-size: 0.9rem;
 		line-height: 1.65;
 	}

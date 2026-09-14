@@ -38,8 +38,8 @@ function response(
 	const html = `<!doctype html>
 	<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 	<title>${title} | Servo ICT</title><style>
-	*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:1.5rem;background:#c5eddc;color:#242126;font-family:system-ui,sans-serif}
-	main{width:min(100%,38rem);padding:clamp(1.5rem,5vw,3rem);border:2px solid #242126;background:#fffdfa;box-shadow:7px 7px 0 #242126}h1{margin:0 0 1rem;font-size:clamp(2rem,8vw,3.5rem);line-height:1}p{line-height:1.6}a{display:inline-block;min-height:44px;margin-top:1rem;padding:.75rem 1rem;border:2px solid #242126;background:#242126;color:#fffdfa;box-shadow:5px 5px 0 #f27ab5;font-weight:800}
+	*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:1.5rem;background:#dad7cd;color:#011627;font-family:system-ui,sans-serif}
+	main{width:min(100%,38rem);padding:clamp(1.5rem,5vw,3rem);border:2px solid #011627;background:#dad7cd;box-shadow:7px 7px 0 #4e8098}h1{margin:0 0 1rem;font-size:clamp(2rem,8vw,3.5rem);line-height:1}p{line-height:1.6}a{display:inline-block;min-height:44px;margin-top:1rem;padding:.75rem 1rem;border:2px solid #011627;background:#b8a66a;color:#011627;box-shadow:5px 5px 0 #011627;font-weight:800}
 	</style></head><body><main><p>Servo ICT</p><h1>${title}</h1><p>${escapeHtml(body.message)}</p><a href="${escapeHtml(returnUrl.pathname + returnUrl.hash)}">${linkText}</a></main></body></html>`;
 	return new Response(html, { status, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }

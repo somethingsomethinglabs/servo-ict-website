@@ -98,8 +98,8 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 
 	body {
 		margin: 0;
-		background: var(--paper, #F7F3EC);
-		color: var(--ink, #242126);
+		background: var(--colour-background);
+		color: var(--colour-text);
 		font-family: inherit;
 		line-height: 1.5;
 		text-rendering: optimizeLegibility;
@@ -114,7 +114,7 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	}
 
 	:focus-visible {
-		outline: 3px solid var(--pink-dark, #A82461);
+		outline: 3px solid var(--colour-accent);
 		outline-offset: 4px;
 	}
 
@@ -126,7 +126,8 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 		padding: 0.75rem 1rem;
 		transform: translateY(-200%);
 		border-radius: 0.5rem;
-		background: #fff;
+		background: var(--colour-text);
+		color: var(--colour-background);
 		font-weight: 800;
 	}
 
@@ -185,29 +186,32 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 
 	.site-header nav a:hover,
 	.site-header nav a:focus-visible {
-		color: var(--pink-dark, #A82461);
+		color: var(--colour-feature);
 	}
 
 	.site-header nav .nav-cta {
 		padding: 0.72rem 1rem;
-		border: 2px solid var(--ink, #242126);
+		border: 2px solid var(--colour-text);
 		border-radius: .35rem;
-		background: var(--pink, #F27AB5);
-		color: var(--ink, #242126);
-		box-shadow: 4px 4px 0 var(--ink, #242126);
+		background: var(--colour-accent);
+		color: var(--colour-text);
+		box-shadow: 4px 4px 0 var(--colour-text);
 	}
 
 	.site-header nav .nav-cta:hover,
 	.site-header nav .nav-cta:focus-visible {
-		background: var(--mint, #C5EDDC);
-		color: var(--ink, #242126);
+		background: var(--colour-accent);
+		color: var(--colour-text);
+		box-shadow: 6px 6px 0 var(--colour-text);
 	}
 
 	footer {
 		margin-top: 5rem;
 		padding: 1.5rem 0 2.5rem;
-		border-top: 1px solid #d0cdc3;
-		color: #626277;
+		background: var(--colour-feature);
+		color: var(--colour-background);
+		box-shadow: 0 0 0 100vmax var(--colour-feature);
+		clip-path: inset(0 -100vmax);
 		font-size: 0.75rem;
 	}
 
@@ -217,7 +221,11 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	}
 
 	footer .brand {
-		color: var(--ink, #242126);
+		color: var(--colour-background);
+	}
+
+	footer .brand img {
+		filter: grayscale(1) brightness(0) invert(.86);
 	}
 
 	footer nav {
