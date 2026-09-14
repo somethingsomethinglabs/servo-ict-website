@@ -30,6 +30,7 @@ const examples = [
 				<p class="disclaimer">Independent examples, not Servo ICT client work.</p>
 			</div>
 			<div class="showcase-controls" aria-label="Browse website examples">
+				<button type="button" class="motion-toggle" data-showcase-motion aria-label="Pause automatic scrolling">Pause</button>
 				<button type="button" data-showcase-previous aria-label="Previous website" disabled><span aria-hidden="true">←</span></button>
 				<button type="button" data-showcase-next aria-label="Next website"><span aria-hidden="true">→</span></button>
 			</div>
@@ -59,26 +60,88 @@ const examples = [
 		const track = showcase.querySelector<HTMLElement>('[data-showcase-track]');
 		const previous = showcase.querySelector<HTMLButtonElement>('[data-showcase-previous]');
 		const next = showcase.querySelector<HTMLButtonElement>('[data-showcase-next]');
-		if (!track || !previous || !next) return;
+		const motion = showcase.querySelector<HTMLButtonElement>('[data-showcase-motion]');
+		if (!track || !previous || !next || !motion) return;
+
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+		let paused = reducedMotion.matches;
+		let hovering = false;
+		let visible = false;
+		let frame = 0;
+		let lastTime = 0;
+		let position = track.scrollLeft;
+		let direction = 1;
+		let end = 0;
+
+		const animate = (time: number) => {
+			if (lastTime) {
+				// Use elapsed time so the pace stays the same on different displays.
+				position += direction * Math.min(time - lastTime, 50) * .032;
+				if (position >= end) { position = end; direction = -1; }
+				if (position <= 0) { position = 0; direction = 1; }
+				track.scrollLeft = position;
+			}
+			lastTime = time;
+			frame = requestAnimationFrame(animate);
+		};
+		const syncMotion = () => {
+			cancelAnimationFrame(frame);
+			lastTime = 0;
+			position = track.scrollLeft;
+			motion.textContent = paused ? 'Play' : 'Pause';
+			motion.setAttribute('aria-label', paused ? 'Start automatic scrolling' : 'Pause automatic scrolling');
+			if (!paused && !hovering && visible && !document.hidden && end > 0) {
+				frame = requestAnimationFrame(animate);
+			}
+		};
+		const pauseForInteraction = () => {
+			paused = true;
+			syncMotion();
+		};
 
 		const updateControls = () => {
-			const end = track.scrollWidth - track.clientWidth;
 			previous.disabled = track.scrollLeft <= 2;
 			next.disabled = track.scrollLeft >= end - 2;
 		};
 		const move = (direction: number) => {
+			pauseForInteraction();
 			const card = track.querySelector<HTMLElement>('.showcase-card');
 			const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 16;
-			const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			track.scrollBy({ left: direction * ((card?.offsetWidth ?? track.clientWidth) + gap), behavior: reduceMotion ? 'auto' : 'smooth' });
+			const stride = (card?.getBoundingClientRect().width ?? track.clientWidth) + gap;
+			const index = direction > 0 ? Math.floor((track.scrollLeft + 2) / stride) + 1 : Math.ceil((track.scrollLeft - 2) / stride) - 1;
+			track.scrollTo({ left: Math.max(0, Math.min(end, index * stride)), behavior: reducedMotion.matches ? 'auto' : 'smooth' });
 		};
 
+		motion.addEventListener('click', () => { paused = !paused; syncMotion(); });
 		previous.addEventListener('click', () => move(-1));
 		next.addEventListener('click', () => move(1));
+		track.addEventListener('pointerenter', (event) => {
+			if (event.pointerType === 'mouse' || event.pointerType === 'pen') { hovering = true; syncMotion(); }
+		});
+		track.addEventListener('pointerleave', () => { hovering = false; syncMotion(); });
+		track.addEventListener('pointerdown', pauseForInteraction);
+		track.addEventListener('wheel', pauseForInteraction, { passive: true });
+		showcase.addEventListener('focusin', (event) => {
+			if (event.target !== motion) pauseForInteraction();
+		});
 		track.addEventListener('scroll', updateControls, { passive: true });
-		new ResizeObserver(updateControls).observe(track);
-		updateControls();
+		new ResizeObserver(() => {
+			end = Math.max(0, track.scrollWidth - track.clientWidth);
+			updateControls();
+			syncMotion();
+		}).observe(track);
+		new IntersectionObserver(([entry]) => {
+			visible = entry.isIntersecting;
+			syncMotion();
+		}, { threshold: .15 }).observe(track);
+		document.addEventListener('visibilitychange', syncMotion);
+		reducedMotion.addEventListener('change', () => {
+			if (reducedMotion.matches) pauseForInteraction();
+		});
+		window.addEventListener('pagehide', () => cancelAnimationFrame(frame));
+		window.addEventListener('pageshow', syncMotion);
 		showcase.dataset.ready = 'true';
+		syncMotion();
 	};
 	document.querySelectorAll<HTMLElement>('[data-astro-showcase]').forEach(setupShowcase);
 </script>
@@ -111,8 +174,10 @@ const examples = [
 	.showcase-controls button:hover:not(:disabled) { border-color: #f8a51b; background: #f8a51b; color: #10103f; }
 	.showcase-controls button:focus-visible { outline: 3px solid #f8a51b; outline-offset: 3px; }
 	.showcase-controls button:disabled { opacity: .28; cursor: default; }
+	.showcase-controls .motion-toggle { width: auto; min-width: 4.5rem; padding-inline: .8rem; font-size: .8rem; font-weight: 750; }
 
 	.showcase-track { display: flex; gap: clamp(.8rem, 1.8vw, 1.25rem); margin: 0; padding: 0 0 1.35rem; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: inline mandatory; scrollbar-color: #f8a51b rgb(255 255 255 / 16%); scrollbar-width: thin; list-style: none; }
+	.showcase[data-ready] .showcase-track { scroll-snap-type: none; }
 	.showcase-track::-webkit-scrollbar { height: .5rem; }
 	.showcase-track::-webkit-scrollbar-track { background: rgb(255 255 255 / 16%); }
 	.showcase-track::-webkit-scrollbar-thumb { background: #f8a51b; }
@@ -137,6 +202,7 @@ const examples = [
 		.technology-intro > p:not(.eyebrow), details { grid-column: 1; grid-row: auto; }
 		.technology-intro > p:not(.eyebrow) { margin-top: 1.5rem; }
 		.showcase { margin-inline: -.75rem; padding-inline: .75rem; }
+		.showcase-heading { align-items: start; flex-direction: column; gap: 1rem; }
 		.showcase-card { flex-basis: min(82vw, 34rem); }
 		.card-meta { display: block; }
 		.card-meta p:last-child { margin-top: .25rem; }
