@@ -1,6 +1,6 @@
-# Concept 3 implementation review
+# Concept 3 implementation and colour system review
 
-The owner selected the restyled Concept 3 after reviewing the published Concept 1. The homepage now follows that image's storefront hero, connected website and email example, compact pricing, pink project strip, dark process section and open mint enquiry area.
+The owner selected the restyled Concept 3 after reviewing the published Concept 1. The homepage follows that image's storefront hero, connected website and email example, compact pricing, project proof strip, dark process section and open enquiry area.
 
 ## Result
 
@@ -34,8 +34,8 @@ Chrome's full-page and resized-window screenshots repeatedly timed out. Final de
 | Surface | Assessment |
 | --- | --- |
 | Fonts and typography | Existing Inter Variable and heavy, tight editorial headings retained. The hero uses the selected three-line composition on desktop. Section labels, ordinary body copy and form text keep distinct sizes. Form inputs are 16px. Process heading wrapping and mobile word spacing were corrected. |
-| Spacing and layout | The selected page order, asymmetric hero, side-by-side example, mint ownership strip, row-based pricing and three-column process are implemented. Phone layouts stack without requiring a horizontal swipe. Full-width colour bands and flat shadows retain the reference's structure. |
-| Colours and tokens | Uses the merged exact charcoal, cream, off-white, pink and mint tokens. Generated texture and gradient artefacts from the mock are replaced by the established flat colours. Contrast and visible focus treatments remain in place. |
+| Spacing and layout | The selected page order, asymmetric hero, side-by-side example, teal ownership strip, row-based pricing and three-column process are implemented. Phone layouts stack without requiring a horizontal swipe. Full-width colour bands and flat shadows retain the reference's structure. |
+| Colours and tokens | Uses Ink Black, Dust Grey, a lighter Dust-derived canvas, Air Force Blue, Dark Teal and Soft Brass. The flat role-based colour system replaces the earlier pink and mint treatment. Contrast and visible focus treatments remain in place. |
 | Image quality and assets | Storefront, handwritten annotation and email illustration were generated from the selected reference, inspected and delivered as optimized WebP assets. They total about 200 KB. The real 12Grapes screenshot supplies both the website example and client proof. Matching Phosphor icons provide the controls and supporting symbols. No custom icon drawings or image placeholders were introduced. |
 | Copy and content | The combined website, email and account setup offer stays focused on a new business owner. Costs remain quote-based; no price, duration, account quantity or guarantee was invented. Ownership, quote approval, later changes, phone hours and the reply target remain available. |
 
@@ -71,5 +71,31 @@ The background preview remains running. Default browser sizing is restored for h
 ## Follow-up polish
 
 No P3 item needs to delay this implementation. Actual customer feedback and the separately deferred direct enquiry setup remain outside this visual change.
+
+Historical Concept 3 result: passed
+
+## Deeper teal refinement, 15 September 2026
+
+The selected visual target was the approved browser trial using `#365C55` for the global feature-colour token. The implementation changes only `--colour-feature`; typography, spacing, imagery, copy and interactions remain unchanged.
+
+- Source visual truth: `audit/colour-style-guide/deeper-teal-trial.png`, 1150 x 945 pixels.
+- Browser-rendered implementation: `audit/colour-style-guide/deeper-teal-implemented.png`, 1150 x 945 pixels.
+- Full-view comparison: `audit/colour-style-guide/deeper-teal-comparison.png`, with the trial on the left and implementation on the right.
+- Viewport and state: 1150 x 945 CSS pixels at 1x density, homepage at `scrollY = 943`, empty form and collapsed disclosures.
+- Focused comparison: not needed because the requested change is one global token, the relevant teal regions are legible in the full-view comparison, and the equal-size captures have an absolute pixel error count of zero.
+
+### Comparison result
+
+No P0, P1 or P2 mismatch remains. The implemented feature token computes to `#365C55` on the ownership strip, client-work band and footer. Dust Grey on the deeper teal has a 5.17:1 contrast ratio, improving the earlier 4.52:1 pairing.
+
+| Surface | Assessment |
+| --- | --- |
+| Fonts and typography | Unchanged from the accepted implementation; weights, wrapping and hierarchy match the trial exactly. |
+| Spacing and layout | Unchanged; the equal-size trial and implementation captures align exactly. |
+| Colours and tokens | `--colour-feature` matches the selected `#365C55`; all other palette tokens remain unchanged. |
+| Image quality and assets | Existing raster artwork, client screenshot, logo and icons are unchanged and remain sharp. |
+| Copy and content | No text changed. |
+
+The primary homepage action still reaches `#consultation-form`. The final browser check found no console errors, failed requests, broken images or horizontal overflow. `npm run check`, all 17 tests and the production build passed.
 
 final result: passed
