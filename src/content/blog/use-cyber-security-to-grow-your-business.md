@@ -4,8 +4,8 @@ description: "Reliable accounts, devices and documents give a small business mor
 publishedAt: 2025-01-02
 updatedAt: 2025-01-03
 author: "Rowan Paterson"
-featuredImage: "/images/blog/business-resilience.webp"
-featuredImageAlt: "A laptop recovering from a system problem"
+featuredImage: "/images/pages/security-desk.webp"
+featuredImageAlt: "A business desk with an illustrative sign-in confirmation."
 topic: "Business resilience"
 ---
 
@@ -39,4 +39,4 @@ Start with the failures that would interrupt the business most.
 
 The goal is straightforward. People should be able to do their work, and the business should be able to recover when something breaks.
 
-[Talk to Servo ICT about making your systems more reliable](../#consultation-form).
+[Talk to Servo ICT about making your systems more reliable](../contact/?service=security#consultation-form).

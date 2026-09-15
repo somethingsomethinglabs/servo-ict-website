@@ -14,6 +14,7 @@ export interface ConsultationRequest {
 	email?: string;
 	phone?: string;
 	organisation?: string;
+	timing?: string;
 	service: Service;
 	message: string;
 }
@@ -44,16 +45,18 @@ function parseContact(form: FormData, fieldErrors: Record<string, string>): { em
 	const legacyPhone = value(form, 'phone');
 	const fieldName = contact ? 'contact' : legacyEmail ? 'email' : legacyPhone ? 'phone' : 'contact';
 	const input = contact || legacyEmail || legacyPhone;
+	const method = value(form, 'contactMethod');
+	if (method && method !== 'email' && method !== 'phone') fieldErrors.contactMethod = 'Choose email or phone.';
 	if (!input) {
-		fieldErrors[fieldName] = 'Enter an email address or phone number.';
+		fieldErrors[fieldName] = method === 'email' ? 'Enter your email address.' : method === 'phone' ? 'Enter your phone number.' : 'Enter an email address or phone number.';
 		return {};
 	}
-	if (input.includes('@')) {
+	if (method === 'email' || (!method && input.includes('@'))) {
 		const email = input.toLowerCase();
-		if (!emailPattern.test(email) || email.length > 254) fieldErrors[fieldName] = 'Enter a valid email address or phone number.';
+		if (!emailPattern.test(email) || email.length > 254) fieldErrors[fieldName] = method === 'email' ? 'Enter a valid email address.' : 'Enter a valid email address or phone number.';
 		return { email };
 	}
-	if (!phonePattern.test(input) || input.replace(/\D/g, '').length < 8) fieldErrors[fieldName] = 'Enter a valid email address or phone number.';
+	if (!phonePattern.test(input) || input.replace(/\D/g, '').length < 8) fieldErrors[fieldName] = method === 'phone' ? 'Enter a valid phone number.' : 'Enter a valid email address or phone number.';
 	return { phone: input };
 }
 
@@ -61,6 +64,7 @@ export function parseConsultationRequest(form: FormData): ConsultationRequest {
 	const fieldErrors: Record<string, string> = {};
 	const name = value(form, 'name');
 	const organisation = value(form, 'organisation');
+	const timing = value(form, 'timing');
 	const service = value(form, 'service') || 'starter';
 	const message = value(form, 'message');
 	const contact = parseContact(form, fieldErrors);
@@ -69,11 +73,13 @@ export function parseConsultationRequest(form: FormData): ConsultationRequest {
 	if (/\r|\n/.test(name)) fieldErrors.name = 'Enter your name on one line.';
 	checkLength(fieldErrors, 'organisation', 'Organisation', organisation, 120);
 	if (/\r|\n/.test(organisation)) fieldErrors.organisation = 'Enter the organisation on one line.';
+	checkLength(fieldErrors, 'timing', 'Timing', timing, 160);
+	if (/\r|\n/.test(timing)) fieldErrors.timing = 'Enter the timing on one line.';
 	if (!Object.prototype.hasOwnProperty.call(serviceLabels, service)) fieldErrors.service = 'Choose what you would like help with.';
 	if (!message) fieldErrors.message = 'Tell us a little about what you are starting.';
 	checkLength(fieldErrors, 'message', 'Description', message, 2000, 10);
 	if (Object.keys(fieldErrors).length > 0) throw new FormValidationError('Please check the highlighted details and try again.', fieldErrors);
-	return { name, ...contact, organisation: organisation || undefined, service: service as Service, message };
+	return { name, ...contact, organisation: organisation || undefined, timing: timing || undefined, service: service as Service, message };
 }
 
 export function escapeHtml(input: string): string {

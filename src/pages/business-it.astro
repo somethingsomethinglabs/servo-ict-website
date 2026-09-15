@@ -1,7 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 
-export const prerender = true;
+export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
 ---
 
 <ServiceLayout
@@ -9,19 +9,13 @@ export const prerender = true;
 	description="Windows device, business email and Wi-Fi setup and improvement projects for small businesses, delivered remotely or in Gippsland by arrangement."
 	canonicalPath="/business-it/"
 	eyebrow="Business IT"
-	headline="Get the computers, email and Wi-Fi working properly."
-	intro="Servo ICT sets up and improves the everyday systems a small business relies on. That can include Windows computers, business email, staff access and Wi-Fi. Work is remote by default, with Gippsland visits by arrangement."
+	headline="Computers, email and Wi-Fi. Working properly."
+	intro="We set up and improve the everyday tools your business relies on, then show you how to use them."
 	goodFit={[
 		'Important access lives with former staff or an outside supplier.',
 		'Email, files or team tools need to move without unnecessary disruption.',
 		'Windows devices, business accounts or workplace Wi-Fi need a consistent setup.',
 		'No one has a clear record of the systems the business depends on.'
-	]}
-	typicalWork={[
-		{ title: 'Business email and accounts', description: 'Set up or move email, make account ownership clear and give the right people access.' },
-		{ title: 'Windows device setup', description: 'Prepare Windows computers with a consistent setup, automatic updates and the accounts and tools each person needs.' },
-		{ title: 'Workplace Wi-Fi', description: 'Set up or improve Wi-Fi for suitable small business premises, with clear ownership and handover.' },
-		{ title: 'A practical handover', description: 'Receive the important access details and steps your business needs to handle routine tasks. Optional check-ins can be arranged.' }
 	]}
 	enquiryService="technology"
 	beforeEnquiring={[
@@ -49,7 +43,7 @@ export const prerender = true;
 		timing: 'An initial review identifies the systems involved and any changeover constraints. You receive a written scope, quote and schedule before any account or device changes begin.',
 		handover: 'You receive the agreed account and device setup, an ownership record and clear steps the business can follow when staff or equipment changes.'
 	}}
-	closingTitle="Tell us what is getting in the way."
+	closingTitle="What is getting in the way?"
 	closingCopy="Explain what people are trying to do and where it stops working. You do not need to diagnose the cause before getting in touch."
 >
 	<section slot="proof" class="before-enquiring" aria-labelledby="business-experience-title">

@@ -2,17 +2,11 @@
 import '@fontsource-variable/inter/wght.css';
 import '../styles/brand.css';
 import LandingPage from '../components/LandingPage.svelte';
-import { resolveConsultationMode } from '../lib/consultationEmail';
+import { getEnquirySettings } from '../lib/server/enquirySettings';
 
 export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
 
-const configuredSiteKey = (process.env.PUBLIC_TURNSTILE_SITE_KEY ?? import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '').trim();
-const consultationMode = resolveConsultationMode({
-	staticSite: import.meta.env.PUBLIC_SITE_MODE === 'static',
-	hasTurnstileSiteKey: Boolean(configuredSiteKey),
-	allowInsecureLocal: (process.env.FORM_ALLOW_INSECURE_LOCAL ?? import.meta.env.FORM_ALLOW_INSECURE_LOCAL) === 'true',
-	isDevelopment: import.meta.env.DEV
-});
+const {consultationMode,turnstileSiteKey} = getEnquirySettings();
 const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
 const siteOrigin = Astro.site ?? new URL('https://servoict.com');
 const canonicalUrl = new URL(baseUrl, siteOrigin);
@@ -30,7 +24,6 @@ const organisationSchema = {
 	knowsAbout: ['Website design and development', 'Business IT', 'Small business cyber security']
 };
 
-const turnstileSiteKey = consultationMode === 'server' ? configuredSiteKey : '';
 ---
 
 <html lang="en">

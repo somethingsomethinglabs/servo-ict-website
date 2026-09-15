@@ -72,6 +72,7 @@ export function ownerEmailHtml(submission: ConsultationRequest): string {
 		${submission.email ? `<p><strong>Email:</strong> ${escapeHtml(submission.email)}</p>` : ''}
 		${submission.phone ? `<p><strong>Phone:</strong> ${escapeHtml(submission.phone)}</p>` : ''}
 		${submission.organisation ? `<p><strong>Organisation:</strong> ${escapeHtml(submission.organisation)}</p>` : ''}
+		${submission.timing ? `<p><strong>Timing:</strong> ${escapeHtml(submission.timing)}</p>` : ''}
 		<p><strong>Project type:</strong> ${escapeHtml(serviceLabels[submission.service])}</p>
 		<h2>What they would like to build, change, or fix</h2>
 		<p>${escapeHtml(submission.message).replace(/\r?\n/g, '<br>')}</p>
@@ -86,6 +87,7 @@ export function ownerEmailText(submission: ConsultationRequest): string {
 		submission.email ? `Email: ${submission.email}` : '',
 		submission.phone ? `Phone: ${submission.phone}` : '',
 		submission.organisation ? `Organisation: ${submission.organisation}` : '',
+		submission.timing ? `Timing: ${submission.timing}` : '',
 		`Project type: ${serviceLabels[submission.service]}`,
 		'',
 		'What they would like to build, change, or fix:',

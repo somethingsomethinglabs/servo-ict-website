@@ -1,0 +1,48 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PageIcon from '../components/PageIcon.astro';
+import EnquiryForm from '../components/EnquiryForm.svelte';
+import ServiceLinks from '../components/ServiceLinks.astro';
+import { getEnquirySettings } from '../lib/server/enquirySettings';
+import { baseUrl, sitePath } from '../lib/site';
+export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
+const {consultationMode,turnstileSiteKey} = getEnquirySettings();
+const nextSteps = [
+ {title:'We reply',copy:'We check what you need and whether the work is a fit.'},
+ {title:'We talk it through',copy:'We clarify the result, what you have already and any timing constraints.'},
+ {title:'You get a written quote',copy:'The work, costs and responsibilities are clear before you approve it.'}
+];
+---
+<PageLayout title="Get in touch | Servo ICT" description="Talk with Servo ICT about starting a business, a website or everyday IT. Remote work and Gippsland visits by arrangement." canonicalPath="/contact/" active="contact" {turnstileSiteKey}>
+ <section class="contact-hero section-space"><div class="container split"><div><p class="eyebrow">Get in touch</p><h1>Tell us what you need a hand with.</h1><p class="lead">Starting a business, updating a website or sorting out everyday IT? A rough description is enough.</p><p class="fine-print">You do not need a technical brief.</p></div><div class="contact-art"><img class="contact-note" src={sitePath('/images/pages/local-help-note.webp')} alt="Local help for Gippsland businesses" width="600" height="600" /><img class="photo-frame" src={sitePath('/images/pages/contact-storefront.webp')} alt="A shop-window sign reading: Let’s make it work together." width="1122" height="1402" fetchpriority="high" /></div></div></section>
+ <section class="contact-panel" aria-labelledby="conversation-title"><div class="contact-intro"><h2 id="conversation-title">Start with a conversation.</h2><p class="lead">We aim to acknowledge enquiries within two business days. Then we can talk through the fit, the next steps and what a quote needs to cover.</p><div class="contact-details"><h3>Prefer to call?</h3><a class="contact-phone" href="tel:0341488665">(03) 4148 8665</a><p class="hours">Phone hours: Monday, Tuesday and Friday, 9am–4pm.</p><a class="contact-email" href="mailto:support@servoict.com">support@servoict.com</a></div><p class="lead">Remote work. Gippsland visits by arrangement.</p></div><div class="form-panel"><h2>Your enquiry</h2><EnquiryForm client:load {baseUrl} {turnstileSiteKey} {consultationMode} expanded /></div></section>
+ <section class="section-space"><div class="container"><p class="eyebrow">After your enquiry</p><h2>What happens next?</h2><ol class="next-steps">{nextSteps.map((step,index) => <li><span class="step-number" aria-hidden="true">{index+1}</span><div><h3>{step.title}</h3><p>{step.copy}</p></div></li>)}</ol></div></section>
+ <section class="process-band section-space"><div class="container split expectation"><div><h2>A clear next step,<br /><span>before any work begins.</span></h2><p class="lead">Your enquiry starts a conversation.<br />We agree the scope and timing with you.</p></div><div class="availability"><PageIcon name="chat" size={64}/><p>Urgent IT or security work depends on availability. No guaranteed emergency response.</p></div></div></section>
+ <section class="section-space"><div class="container"><p class="eyebrow">Explore further</p><ServiceLinks title="Still working out what you need?" copy="Have a look at these pages for more information. When you’re ready, you can get in touch." includeStarter /></div></section>
+</PageLayout>
+<style>
+ .contact-hero .split { grid-template-columns:1.35fr .9fr; }
+ .contact-hero h1 { max-width:13ch; font-size:clamp(2.65rem,6.4vw,5.6rem); }
+ .contact-art { display:grid; grid-template-columns:.5fr 1fr; align-items:start; gap:1rem; padding:0 1rem 1rem 0; }
+ .contact-note { display:block; width:100%; height:auto; margin-top:1.5rem; mix-blend-mode:multiply; }
+ .contact-panel { width:min(calc(100% - 2rem),1392px); margin-inline:auto; padding:clamp(1.5rem,3.5vw,3rem); display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.25fr); gap:clamp(2rem,5vw,4.5rem); align-items:start; background:var(--mint); border:2px solid var(--ink); box-shadow:7px 7px 0 var(--ink); }
+ .contact-intro{padding-top:2rem}.contact-intro .lead { color:#466054; font-size:1.12rem; }
+ .contact-details { margin-top:2.5rem; padding-top:2.5rem; border-top:1px solid #85b29f; }
+ .contact-details a { display:inline-flex; align-items:center; min-height:44px; font-weight:800; text-decoration:none; }
+ .contact-phone { font-size:clamp(1.5rem,2.7vw,2.5rem); letter-spacing:-.05em; }
+ .contact-email { margin-top:1.25rem; font-size:clamp(1.05rem,1.65vw,1.5rem); overflow-wrap:anywhere; }
+ .hours { color:#466054; font-size:.95rem; max-width:24rem; }
+ .form-panel { min-width:0; padding:clamp(1.5rem,3vw,2.5rem); border:2px solid var(--ink); box-shadow:5px 5px 0 var(--ink); background:var(--white); }
+ .form-panel h2 { font-size:1.8rem; margin:0 0 2rem; letter-spacing:-.04em; }
+ .next-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); list-style:none; padding:2rem 0 0; margin:2rem 0 0; border-top:1px solid var(--ink); }
+ .next-steps li { display:flex; align-items:start; gap:1.5rem; padding-inline:2rem; border-left:1px solid var(--line); }
+ .next-steps li:first-child { padding-left:0; border:0; }.next-steps li:last-child{padding-right:0}
+ .next-steps .step-number { flex-shrink:0; }.next-steps p{color:var(--muted)}
+ .expectation { grid-template-columns:1.5fr .8fr; }
+ .expectation h2 span { color:var(--pink); }
+ .expectation .lead { color:#e8e4e9; }
+ .availability { border-left:1px solid #807b84; padding-left:3rem; }
+ .availability p { max-width:22rem; color:#e8e4e9; font-size:1.05rem; }
+ @media(max-width:1050px){.contact-panel{grid-template-columns:.8fr 1.2fr;gap:2rem}.contact-art{max-width:360px;justify-self:end}.next-steps li{padding-inline:1.25rem;gap:1rem}.next-steps h3{font-size:1.1rem}.contact-intro h2{font-size:2.8rem}.availability{padding-left:2rem}}
+ @media(max-width:700px){.contact-hero .split,.contact-panel,.expectation{grid-template-columns:1fr}.contact-hero h1{max-width:14ch}.contact-art{grid-template-columns:.5fr 1fr;max-width:360px;justify-self:center}.contact-note{display:block}.contact-panel{width:calc(100% - 2rem);padding:1.25rem;gap:2.5rem;box-shadow:5px 5px 0 var(--ink)}.form-panel{padding:1.25rem}.contact-intro h2{font-size:2.5rem}.contact-details{margin-top:2rem;padding-top:2rem}.next-steps{grid-template-columns:1fr;gap:2rem}.next-steps li{padding:0;border:0}.next-steps h3{font-size:1.2rem}.availability{border-left:0;padding:0;border-top:1px solid #807b84;padding-top:2rem}}
+</style>

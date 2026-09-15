@@ -7,6 +7,7 @@ function consultationForm() {
 		name: ' Alex Example ',
 		email: 'alex@example.com',
 		organisation: 'Example & Co',
+		timing: 'Before our November opening',
 		service: 'website',
 		message: 'We need a website refresh.\nThe current site is difficult to update.'
 	})) {
@@ -27,6 +28,7 @@ describe('buildConsultationEmailDraft', () => {
 		expect(mailto.searchParams.get('subject')).toBe(draft.subject);
 		expect(mailto.searchParams.get('body')).toBe(draft.body);
 		expect(draft.body).toContain('Organisation: Example & Co');
+		expect(draft.body).toContain('Timing: Before our November opening');
 		expect(draft.body).toContain('Project type: Website design or development');
 		expect(draft.body).toContain(
 			'We need a website refresh.\nThe current site is difficult to update.'
@@ -39,10 +41,12 @@ describe('buildConsultationEmailDraft', () => {
 	it('omits the optional organisation without adding extra blank lines', () => {
 		const form = consultationForm();
 		form.set('organisation', '   ');
+		form.set('timing', '');
 
 		const draft = buildConsultationEmailDraft(form);
 
 		expect(draft.body).not.toContain('Organisation:');
+		expect(draft.body).not.toContain('Timing:');
 		expect(draft.body).not.toContain('\n\n\n');
 	});
 

@@ -4,8 +4,8 @@ description: "Use unique passwords, a password manager and two-factor authentica
 publishedAt: 2024-12-10
 updatedAt: 2024-12-10
 author: "Rowan Paterson"
-featuredImage: "/images/blog/protect-business-accounts.webp"
-featuredImageAlt: "Business account security shown on a laptop"
+featuredImage: "/images/pages/account-security-desk.webp"
+featuredImageAlt: "A laptop with an illustrative account sign-in screen, with a phone on the desk."
 topic: "Account security"
 ---
 
@@ -37,4 +37,4 @@ Review business accounts when a staff member or supplier leaves. Remove their ac
 
 Small changes here prevent a surprisingly large number of account problems.
 
-[Ask Servo ICT for help securing your accounts](../#consultation-form).
+[Ask Servo ICT for help securing your accounts](../contact/?service=security#consultation-form).

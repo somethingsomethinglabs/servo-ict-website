@@ -4,8 +4,8 @@ description: "What the end of Windows 10 support means for small businesses and 
 publishedAt: 2025-02-11
 updatedAt: 2026-09-10
 author: "Rowan Paterson"
-featuredImage: "/images/blog/windows-10-end-of-life.webp"
-featuredImageAlt: "Windows 10 end of life in 2025"
+featuredImage: "/images/pages/business-it-desk.webp"
+featuredImageAlt: "A Windows laptop on a tidy business desk."
 topic: "Devices and updates"
 ---
 
@@ -51,4 +51,4 @@ Move a low-risk computer first. Once the software, printers and sign-in process 
 
 Compatible computers can use Microsoft's [Windows 11 installation options](https://www.microsoft.com/en-au/software-download/windows11). Older computers may need replacement. Compare the cost of replacement with the time and risk involved in keeping an unsupported device working.
 
-[Ask Servo ICT to help plan the move](../#consultation-form).
+[Ask Servo ICT to help plan the move](../contact/?service=technology#consultation-form).

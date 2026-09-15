@@ -1,0 +1,47 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PageClose from '../../components/PageClose.astro';
+import PageIcon from '../../components/PageIcon.astro';
+import { sitePath } from '../../lib/site';
+export const prerender = true;
+---
+<PageLayout title="12Grapes Vineyard Services — our work | Servo ICT" description="A service website and enquiry estimator for 12Grapes Vineyard Services in Gippsland, designed and built by Servo ICT." canonicalPath="/work/12grapes/" active="work" image="/images/work/12grapes-website.jpg">
+ <div class="container breadcrumb"><a href={sitePath('/websites/#work-example')}>Our work</a><span aria-hidden="true">/</span><span>12Grapes Vineyard Services</span></div>
+ <section class="section-space project-hero"><div class="container split">
+  <div><p class="eyebrow">Local website project</p><h1>A local business,<br /> ready to <span class="underline">be found.</span></h1><p class="project-name">12Grapes Vineyard Services</p><p class="lead">A website that explains the work and helps customers start an enquiry.</p>
+   <ul class="project-facts"><li><PageIcon name="pin" size={28}/>Gippsland</li><li><PageIcon name="laptop" size={28}/>Website design and writing</li><li><PageIcon name="file" size={28}/>Enquiry estimator</li></ul>
+  </div>
+  <div class="project-image"><img class="photo-frame" src={sitePath('/images/work/12grapes-website.jpg')} alt="The 12Grapes Vineyard Services website, showing vineyard services and its ground-management cost estimator." width="1425" height="891" fetchpriority="high" /><a class="text-link" href="https://somethingsomethinglabs.com/website-12Grapes/">View the 12Grapes website<PageIcon name="arrowUpRight" /></a></div>
+ </div></section>
+ <section class="section-space ruled-section"><div class="container">
+  <p class="eyebrow">The business and the website</p><h2>Make the <span class="underline">next step</span> clear.</h2>
+  <div class="split project-brief"><div><h3>The business need</h3><p class="lead">Explain vineyard services clearly and give Gippsland growers a useful way to ask about work.</p></div><div><h3>What we built</h3><p class="lead">Service information, clear contact routes and a project-specific enquiry estimator.</p></div></div>
+ </div></section>
+ <section class="section-space ruled-section"><div class="container">
+  <div class="split project-detail"><div><p class="eyebrow">The enquiry estimator</p><h2>Useful details before the conversation.</h2><p class="lead">Growers choose their vineyard area and the work required to see an indicative planning range.</p><p class="fine-print">The estimate explains what can change the price and directs growers to confirm the job with the operator.</p></div><figure><img class="handover-image" src={sitePath('/images/pages/project-enquiry-flow.webp')} alt="Illustrative enquiry flow: describe the work, share the details, start an enquiry." width="1400" height="933" loading="lazy" /><figcaption>This estimator is an extra feature agreed for this project.</figcaption></figure></div>
+  <p class="ownership-strip"><PageIcon name="shield" size={30} />A simple website can start with services, hours and a clear contact route.</p>
+ </div></section>
+ <section class="proof-band section-space"><div class="container split"><div><p class="eyebrow">A website for your business</p><h2>Your website can start smaller.</h2></div><div><p class="lead">A clear set of pages and the right way to get in touch may be all you need. We agree useful extras around the business.</p><div class="actions"><a class="button" href={sitePath('/websites/')}>Explore website help<PageIcon name="arrowRight" /></a></div></div></div></section>
+ <section id="about" class="process-band section-space"><div class="container split"><div><p class="eyebrow">About Servo ICT</p><h2>Local advice.<br />One point of contact.</h2><p>Servo ICT is owned and operated by Rowan Paterson in Gippsland.</p><p>Microsoft Fundamentals training, Azure consulting experience and cybersecurity experience inform the practical work.</p><p>Remote by default. Local visits by arrangement.</p></div><div class="about-brand"><img src={sitePath('/images/servo-ict-logo.png')} alt="" width="150" height="150" /><span>Servo ICT</span></div></div></section>
+ <PageClose compact title="Tell us about the business and the next step you want people to take." copy="A rough description is enough to start the conversation." action="Talk about my website" service="website" />
+</PageLayout>
+<style>
+ .project-hero { padding-top:var(--section-space-compact); background:var(--white); }
+ .project-name { font-size:clamp(1.5rem,2.5vw,2.3rem); line-height:1.25; letter-spacing:-.04em; margin-top:2rem; }
+ .project-facts { display:flex; list-style:none; margin:2.5rem 0 0; padding:1.5rem 0 0; border-top:1px solid var(--line); }
+ .project-facts li { display:flex; align-items:center; gap:.8rem; font-size:.9rem; font-weight:650; padding-inline:1.2rem; border-left:1px solid var(--line); }
+ .project-facts li:first-child { padding-left:0; border:0; }.project-facts li:last-child{padding-right:0}
+ .project-image { padding:0 1rem 0 0; }
+ .project-image .text-link { margin-top:2rem; }
+ .project-brief { align-items:start; margin-top:3rem; }
+ .project-brief > div + div { border-left:1px solid var(--line); padding-left:3rem; }
+ .project-brief .lead { margin-top:1rem; }
+ figure { margin:0; min-width:0; }figcaption{margin-top:1.25rem;color:var(--muted);font-size:.95rem}
+ .ownership-strip { margin-top:3.5rem; }
+ .proof-band .lead { margin:0; color:var(--ink); }
+ .about-brand { display:flex; justify-content:center; align-items:center; gap:1.5rem; font-size:clamp(2rem,4.5vw,4rem); font-weight:800; letter-spacing:-.05em; }
+ .about-brand img { filter:grayscale(1) brightness(0) invert(1); width:clamp(70px,10vw,150px); height:auto; flex-shrink:0; }
+ #about p:not(.eyebrow) { font-size:1.1rem; color:#e8e4e9; max-width:35rem; }
+ @media(max-width:1050px){.project-facts{flex-wrap:wrap;gap:1rem}.project-facts li{padding:0;border:0}.project-brief>div+div{padding-left:2rem}}
+ @media(max-width:700px){.project-facts{margin-top:2rem}.project-brief>div+div{padding:0;border:0}.about-brand{justify-content:start;padding-top:1rem}.project-image{padding-right:.75rem}}
+</style>

@@ -4,8 +4,8 @@ description: "A basic guide to making cyber security approachable for a small bu
 publishedAt: 2025-02-13
 updatedAt: 2025-03-04
 author: "Rowan Paterson"
-featuredImage: "/images/blog/cyber-security-basics.webp"
-featuredImageAlt: "Simplify your cyber security"
+featuredImage: "/images/pages/advice-desk.webp"
+featuredImageAlt: "An open notebook and laptop on a sunny desk."
 topic: "Cyber security basics"
 ---
 
@@ -69,4 +69,4 @@ What stops if your internet, computer or cloud service is unavailable? Document 
 
 Cyber security is not about reaching perfection. It is about reducing avoidable risks and knowing how the business will recover when something goes wrong.
 
-[Talk to Servo ICT about your setup](../#consultation-form).
+[Talk to Servo ICT about your setup](../contact/?service=security#consultation-form).

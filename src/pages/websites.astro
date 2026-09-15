@@ -2,10 +2,8 @@
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 import WebsiteOffer from '../components/WebsiteOffer.astro';
 import WebsiteTechnology from '../components/WebsiteTechnology.astro';
-import WorkExample from '../components/WorkExample.svelte';
 
 export const prerender = true;
-const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
 ---
 
 <ServiceLayout
@@ -13,19 +11,13 @@ const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
 	description="New websites, rebuilds and focused improvements for small businesses in Gippsland and across Victoria."
 	canonicalPath="/websites/"
 	eyebrow="Website design and development"
-	headline="A website that helps customers choose and get in touch."
-	intro="Servo ICT plans the pages, helps shape the wording and builds a site that works on phones and computers. Start with rough notes and the photos you have."
+	headline="A website that helps customers get in touch."
+	intro="Clear pages, useful information and a simple next step. We help with the wording and build around your business."
 	goodFit={[
 		'Your current site no longer reflects the business.',
 		'Visitors struggle to understand what you offer or what to do next.',
 		'Updates are awkward, unreliable or depend on the wrong person.',
 		'You are starting from scratch and need help turning business details into a finished site.'
-	]}
-	typicalWork={[
-		{ title: 'New websites', description: 'Give customers the services, prices, hours or service area they need, with a clear way to call or enquire.' },
-		{ title: 'Rebuilds', description: 'Keep what still works, improve the structure and replace the parts that create confusion or friction.' },
-		{ title: 'Writing and structure', description: 'Turn a conversation, rough notes and supplied photos into clear pages for customers to check.' },
-		{ title: 'Care and improvements', description: 'Fix specific issues, improve important pages or agree on sensible ongoing care after launch.' }
 	]}
 	enquiryService="website"
 	beforeEnquiring={[
@@ -49,10 +41,9 @@ const baseUrl = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
 		timing: 'Before work starts, the proposal confirms the scope, price, responsibilities and delivery dates.',
 		handover: 'You receive the working website, agreed account access and practical notes for routine updates, along with any next steps agreed during the project.'
 	}}
-	closingTitle="Bring the business problem, not a technical brief."
+	closingTitle="Tell us about your website."
 	closingCopy="A rough description of the site you have, the result you need and what is getting in the way is enough to start."
 >
 	<WebsiteOffer slot="offer" />
 	<WebsiteTechnology slot="technology" />
-	<WorkExample slot="proof" {baseUrl} />
 </ServiceLayout>

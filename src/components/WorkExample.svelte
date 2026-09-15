@@ -19,7 +19,7 @@
 				</dl>
 			</details>
 		{/if}
-		<a class="project-link" href={compact ? sitePath('/websites/#work-example') : 'https://somethingsomethinglabs.com/website-12Grapes/'}>{compact ? 'See what was built' : 'View the 12Grapes website'} <Icon name={compact ? 'arrowRight' : 'arrowUpRight'} size={22} /></a>
+		<a class="project-link" href={compact ? sitePath('/work/12grapes/') : 'https://somethingsomethinglabs.com/website-12Grapes/'}>{compact ? 'See what was built' : 'View the 12Grapes website'} <Icon name={compact ? 'arrowRight' : 'arrowUpRight'} size={22} /></a>
 	</div>
 	<figure>
 		<div class="project-preview">

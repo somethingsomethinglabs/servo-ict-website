@@ -47,6 +47,17 @@ describe('consultation endpoint', () => {
 		expect(await result.json()).toMatchObject({ ok: false });
 	});
 
+	it('includes optional contact-page details in both owner email formats', async () => {
+		mail.sendMail.mockResolvedValue({messageId:'owner'});
+		const result = await post(request({name:'Alex',contactMethod:'phone',contact:'0412 345 678',organisation:'Example & Co',timing:'Before November <opening>',message:'Please help with our shop website.',returnPath:'/servo-ict-website/contact/','cf-turnstile-response':'valid'},false));
+		expect(result.status).toBe(200);
+		const email = mail.sendMail.mock.calls[0][0];
+		expect(email.text).toContain('Organisation: Example & Co');
+		expect(email.text).toContain('Timing: Before November <opening>');
+		expect(email.html).toContain('Before November &lt;opening&gt;');
+		expect(await result.text()).toContain('href="/servo-ict-website/contact/#consultation-form"');
+	});
+
 	it('keeps success when only the visitor acknowledgement fails', async () => {
 		mail.sendMail.mockResolvedValueOnce({ messageId: 'owner' }).mockRejectedValueOnce(new Error('ack failed'));
 		const result = await post(request({ name: 'Alex', contact: 'alex@gmail.com', message: 'Starting a new shop', 'cf-turnstile-response': 'valid' }));

@@ -48,6 +48,7 @@ export function buildConsultationEmailDraft(form: FormData, recipient = consulta
 	const body = [
 		'Project enquiry', '', `Name: ${name}`, `Email or phone: ${contact}`,
 		value(form, 'organisation') ? `Organisation: ${value(form, 'organisation')}` : '',
+		value(form, 'timing') ? `Timing: ${value(form, 'timing')}` : '',
 		`Project type: ${serviceLabels[service] || service}`, '', messageHeading, value(form, 'message')
 	].filter((line, index, lines) => line || index === 1 || lines[index - 1] !== '').join('\n');
 	const subject = `Project enquiry from ${name}`;

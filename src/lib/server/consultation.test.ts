@@ -30,4 +30,24 @@ describe('parseConsultationRequest', () => {
 	it('escapes visitor content used in HTML email', () => {
 		expect(escapeHtml(`<script>"x" & 'y'</script>`)).toBe('&lt;script&gt;&quot;x&quot; &amp; &#39;y&#39;&lt;/script&gt;');
 	});
+
+	it('preserves optional business and timing details from the expanded form', () => {
+		const submission = parseConsultationRequest(form({ name:'Alex', contactMethod:'phone', contact:'0412 345 678', organisation:' Example & Co ', timing:' Before our November opening ', service:'website', message:'We need a website for our new shop.' }));
+		expect(submission).toMatchObject({ phone:'0412 345 678', organisation:'Example & Co', timing:'Before our November opening', service:'website' });
+		expect(submission.email).toBeUndefined();
+	});
+
+	it.each([['email','0412 345 678'],['phone','alex@example.com']])('validates the chosen %s reply method', (contactMethod, contact) => {
+		expect(() => parseConsultationRequest(form({name:'Alex',contactMethod,contact,message:'Please help with our computers.'}))).toThrow(FormValidationError);
+	});
+
+	it.each(['x'.repeat(161),'Next month\nAnother line'])('rejects an invalid timing note', (timing) => {
+		try {
+			parseConsultationRequest(form({name:'Alex',contact:'alex@example.com',message:'Please help with our computers.',timing}));
+			throw new Error('Expected timing validation to fail');
+		} catch (error) {
+			expect(error).toBeInstanceOf(FormValidationError);
+			expect((error as FormValidationError).fieldErrors.timing).toBeTruthy();
+		}
+	});
 });

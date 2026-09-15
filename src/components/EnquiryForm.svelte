@@ -3,18 +3,20 @@
 	import { FormValidationError, parseConsultationRequest, serviceLabels } from '../lib/server/consultation';
 	import Icon from './Icon.svelte';
 
-	let { baseUrl = '/', turnstileSiteKey = '', consultationMode = 'server' }: { baseUrl?: string; turnstileSiteKey?: string; consultationMode?: 'server' | 'email' } = $props();
+	let { baseUrl = '/', turnstileSiteKey = '', consultationMode = 'server', expanded = false, defaultService, returnPath }: { baseUrl?: string; turnstileSiteKey?: string; consultationMode?: 'server' | 'email'; expanded?: boolean; defaultService?: keyof typeof serviceLabels; returnPath?: string } = $props();
+	let contactMethod = $state<'email' | 'phone'>('email');
 	let state = $state<'idle' | 'sending' | 'success' | 'error'>('idle');
 	let message = $state('');
 	let fieldErrors = $state<Record<string, string>>({});
 	let copyText = $state('');
 	let showCopy = $state(false);
-	let service = $state<keyof typeof serviceLabels>('starter');
+	let requestedService = $state<string | null>(null);
+	let service = $derived<keyof typeof serviceLabels>(requestedService ? resolveConsultationService(requestedService) as keyof typeof serviceLabels : defaultService ?? (expanded ? 'other' : 'starter'));
 	let editVersion = 0;
 	const sitePath = (path: string) => `${baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`}${path.replace(/^\//, '')}`;
 
 	$effect(() => {
-		service = resolveConsultationService(new URLSearchParams(window.location.search).get('service')) as keyof typeof serviceLabels;
+		requestedService = new URLSearchParams(window.location.search).get('service');
 	});
 
 	function clearFeedback() {
@@ -36,7 +38,7 @@
 			fieldErrors = error.fieldErrors;
 			state = 'error';
 			message = error.message;
-			const first = ['name', 'contact', 'message'].find((name) => fieldErrors[name]) ?? Object.keys(fieldErrors)[0];
+			const first = ['name', 'contact', 'organisation', 'message', 'timing'].find((name) => fieldErrors[name]) ?? Object.keys(fieldErrors)[0];
 			if (first) (form.elements.namedItem(first) as HTMLElement | null)?.focus();
 			return false;
 		}
@@ -89,7 +91,7 @@
 			fieldErrors = body.fieldErrors || {};
 			if (sent) form.reset();
 			else {
-				const first = ['name', 'contact', 'message'].find((name) => fieldErrors[name]) ?? Object.keys(fieldErrors)[0];
+				const first = ['name', 'contact', 'organisation', 'message', 'timing'].find((name) => fieldErrors[name]) ?? Object.keys(fieldErrors)[0];
 				if (first) (form.elements.namedItem(first) as HTMLElement | null)?.focus();
 				else prepareFallback(form);
 			}
@@ -103,13 +105,16 @@
 	}
 </script>
 
-<form id="consultation-form" method="post" action={consultationMode === 'email' ? `mailto:${consultationRecipient}?subject=Project%20enquiry` : sitePath('/api/consultation')} onsubmit={submit} oninput={clearFeedback}>
+<form id="consultation-form" class:expanded method="post" action={consultationMode === 'email' ? `mailto:${consultationRecipient}?subject=Project%20enquiry` : sitePath('/api/consultation')} onsubmit={submit} oninput={clearFeedback}>
 	<input type="hidden" name="service" value={service} />
-	<input type="hidden" name="returnPath" value={baseUrl} />
+	<input type="hidden" name="returnPath" value={returnPath ?? (expanded ? sitePath('/contact/') : baseUrl)} />
 	<div class="fields">
-		<label><span>Your name</span><input name="name" autocomplete="name" maxlength="100" placeholder="Jane Smith" required readonly={state === 'sending'} aria-invalid={fieldErrors.name ? 'true' : undefined} aria-describedby={fieldErrors.name ? 'name-error' : undefined} />{#if fieldErrors.name}<small id="name-error">{fieldErrors.name}</small>{/if}</label>
-		<label><span id="contact-label">Email or phone</span><input name="contact" maxlength="254" placeholder="jane@gmail.com or 0412 345 678" required readonly={state === 'sending'} aria-labelledby="contact-label" aria-invalid={fieldErrors.contact ? 'true' : undefined} aria-describedby={fieldErrors.contact ? 'contact-help contact-error' : 'contact-help'} /><small id="contact-help" class="help">A personal email address is fine.</small>{#if fieldErrors.contact}<small id="contact-error">{fieldErrors.contact}</small>{/if}</label>
-		<label class="wide"><span>{service === 'starter' ? 'What are you starting?' : 'What would you like help with?'}</span><textarea name="message" rows="3" minlength="10" maxlength="2000" placeholder={service === 'starter' ? 'e.g. cafe, trade business, local service...' : 'A rough description is enough...'} required readonly={state === 'sending'} aria-invalid={fieldErrors.message ? 'true' : undefined} aria-describedby={fieldErrors.message ? 'message-error' : undefined}></textarea>{#if fieldErrors.message}<small id="message-error">{fieldErrors.message}</small>{/if}</label>
+		<label><span id="name-label">Your name</span><input aria-labelledby="name-label" name="name" autocomplete="name" maxlength="100" placeholder="Jane Smith" required readonly={state === 'sending'} aria-invalid={fieldErrors.name ? 'true' : undefined} aria-describedby={fieldErrors.name ? 'name-error' : undefined} />{#if fieldErrors.name}<small id="name-error">{fieldErrors.name}</small>{/if}</label>
+		{#if expanded}<fieldset disabled={state === 'sending'}><legend>How would you like us to reply?</legend><div class="reply-options"><label><input type="radio" name="contactMethod" value="email" bind:group={contactMethod} />Email</label><label><input type="radio" name="contactMethod" value="phone" bind:group={contactMethod} />Phone</label></div></fieldset>{/if}
+		<label><span id="contact-label">{expanded ? contactMethod === 'email' ? 'Email address' : 'Phone number' : 'Email or phone'}</span><input name="contact" type={expanded ? contactMethod === 'email' ? 'email' : 'tel' : 'text'} autocomplete={expanded ? contactMethod === 'email' ? 'email' : 'tel' : undefined} maxlength="254" placeholder={expanded ? contactMethod === 'email' ? 'jane@example.com' : '0412 345 678' : 'jane@gmail.com or 0412 345 678'} required readonly={state === 'sending'} aria-labelledby="contact-label" aria-invalid={fieldErrors.contact ? 'true' : undefined} aria-describedby={fieldErrors.contact ? 'contact-help contact-error' : 'contact-help'} /><small id="contact-help" class="help">{expanded && contactMethod === 'phone' ? 'The best number to reach you on.' : 'A personal email address is fine.'}</small>{#if fieldErrors.contact}<small id="contact-error">{fieldErrors.contact}</small>{/if}</label>
+		{#if expanded}<label><span id="organisation-label">Business name, if you have one <em>(optional)</em></span><input aria-labelledby="organisation-label" name="organisation" autocomplete="organization" maxlength="120" placeholder="e.g. Gippsland Garden Care" readonly={state === 'sending'} aria-invalid={fieldErrors.organisation ? 'true' : undefined} aria-describedby={fieldErrors.organisation ? 'organisation-error' : undefined}/>{#if fieldErrors.organisation}<small id="organisation-error">{fieldErrors.organisation}</small>{/if}</label>{/if}
+		<label class="wide"><span id="message-label">{expanded ? 'What are you starting or trying to sort out?' : service === 'starter' ? 'What are you starting?' : 'What would you like help with?'}</span><textarea aria-labelledby="message-label" name="message" rows={expanded ? 4 : 3} minlength="10" maxlength="2000" placeholder={service === 'starter' ? 'e.g. cafe, trade business, local service...' : 'A rough description is enough...'} required readonly={state === 'sending'} aria-invalid={fieldErrors.message ? 'true' : undefined} aria-describedby={fieldErrors.message ? 'message-error' : undefined}></textarea>{#if fieldErrors.message}<small id="message-error">{fieldErrors.message}</small>{/if}</label>
+		{#if expanded}<label><span id="timing-label">Any date we should know about? <em>(optional)</em></span><input aria-labelledby="timing-label" name="timing" maxlength="160" placeholder="e.g. in the next few months" readonly={state === 'sending'} aria-invalid={fieldErrors.timing ? 'true' : undefined} aria-describedby={fieldErrors.timing ? 'timing-error' : undefined}/>{#if fieldErrors.timing}<small id="timing-error">{fieldErrors.timing}</small>{/if}</label>{/if}
 	</div>
 	<label class="honeypot" aria-hidden="true">Company website<input name="companyWebsite" tabindex="-1" autocomplete="off" /></label>
 	{#if consultationMode === 'server' && turnstileSiteKey}<div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-action="consultation" data-theme="light"></div>{/if}
@@ -123,7 +128,12 @@
 </form>
 
 <style>
-	form { position: relative; min-width: 0; color: #242126; }
+	form { container-type:inline-size; position: relative; min-width: 0; color: #242126; }
+	.expanded .fields { grid-template-columns:1fr; gap:1.5rem; }
+	em { color:var(--muted); font-style:normal; font-weight:450; }
+	fieldset { margin:0; padding:0; border:0; min-width:0; }legend { margin-bottom:.45rem; padding:0; font-size:.9rem; font-weight:800; }
+	.reply-options { display:flex; gap:1.5rem; }.reply-options label{display:flex;align-items:center;gap:.6rem;min-height:44px;cursor:pointer}
+	.reply-options input{width:20px;height:20px;min-height:20px;margin:0;accent-color:#a82461;cursor:pointer}
 	.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 1rem 1.5rem; }
 	label { display: grid; gap: .38rem; min-width: 0; } label > span { font-size: .9rem; font-weight: 800; } .wide { grid-column: 1 / -1; }
 	input, textarea { width: 100%; min-width: 0; box-sizing: border-box; border: 1px solid #908b91; border-radius: 2px; background: #fffdfa; color: #242126; font: inherit; font-size: 1rem; padding: .75rem .8rem; outline: none; }
@@ -136,6 +146,6 @@
 	.copy { min-height: 44px; margin-top: .4rem; padding: .65rem .2rem; border: 0; background: transparent; color: #242126; font: inherit; font-size: .85rem; font-weight: 750; text-decoration: underline; cursor: pointer; }
 	.prepared { margin-top: .8rem; } .honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; } .cf-turnstile { margin-top: 1rem; }
 	.delivery-note, .privacy, .no-script { margin: .9rem 0 0; color: #625c64; font-size: .85rem; line-height: 1.5; } .privacy a { color: #242126; font-weight: 700; }
-	@media (max-width: 60rem) { .fields { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
+	@container (max-width: 420px) { .fields { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
 	@media (max-width: 36rem) { input, textarea { font-size: 16px; } button[type='submit'] { width: 100%; min-width: 0; } }
 </style>

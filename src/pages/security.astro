@@ -1,7 +1,7 @@
 ---
 import ServiceLayout from '../layouts/ServiceLayout.astro';
 
-export const prerender = true;
+export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
 ---
 
 <ServiceLayout
@@ -10,18 +10,12 @@ export const prerender = true;
 	canonicalPath="/security/"
 	eyebrow="Practical security"
 	headline="Protect the accounts and files your business relies on."
-	intro="Servo ICT helps you strengthen sign-in, remove access that should no longer be there, check automatic updates and work out whether important files can be recovered. Work is remote by default, with Gippsland visits by arrangement."
+	intro="Stronger sign-in, clearer staff access and a plan for recovering important files. We help you work out what needs attention first."
 	goodFit={[
 		'Important accounts do not have strong sign-in protection.',
 		'Staff or suppliers may still have access they no longer need.',
 		'Updates and device settings have become inconsistent.',
 		'Backups exist, but no one is confident they can be restored.'
-	]}
-	typicalWork={[
-		{ title: 'Safer sign-in', description: 'Strengthen sign-in and recovery details for the important services your business uses.' },
-		{ title: 'Access review', description: 'Map who can reach critical systems and remove access that is unclear or no longer needed.' },
-		{ title: 'Automatic updates', description: 'Check whether suitable computers receive important updates and agree on any settings that need attention.' },
-		{ title: 'File recovery', description: 'Review what is backed up, where it is stored and how the business would restore important files.' }
 	]}
 	enquiryService="security"
 	beforeEnquiring={[
@@ -61,6 +55,6 @@ export const prerender = true;
 		timing: 'The initial review establishes which systems are included and how changes will be coordinated. You receive a written scope, quote and schedule before changes start.',
 		handover: 'You receive the agreed protections, an updated access record, recovery notes and a prioritised list of any follow-up work.'
 	}}
-	closingTitle="Start with the risk that worries you most."
+	closingTitle="Start with the concern on your mind."
 	closingCopy="Name the account, computer or files you depend on and what concerns you. Servo ICT can help work out what needs attention first."
 />

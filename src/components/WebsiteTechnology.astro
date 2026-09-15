@@ -1,23 +1,10 @@
-<section id="website-technology" class="website-technology" aria-labelledby="website-technology-title">
-	<div>
-		<p class="eyebrow">How it is built</p>
-		<h2 id="website-technology-title">Quick to load and easy to use on a phone.</h2>
-	</div>
-	<div class="technology-copy">
-		<p>The site is built to work across phones and computers, with clear paths for calls, enquiries and ordinary links to services you already use.</p>
-		<details>
-			<summary>Technical details, if you want them</summary>
-			<p>Servo ICT uses Astro for focused business websites. It sends the page content as lightweight HTML and adds interactive code only where it is useful. Astro is open source, and the agreed source and deployment notes are included so another developer can maintain the site.</p>
-		</details>
-	</div>
-</section>
-
+<details id="website-technology" class="website-technology">
+ <summary>How the website is built</summary>
+ <p>The site is built to work across phones and computers, with clear paths for calls, enquiries and ordinary links to services you already use.</p>
+ <p>Servo ICT uses Astro for focused business websites. It sends the page content as lightweight HTML and adds interactive code where it is useful. Astro is open source, and the agreed source and deployment notes are included so another developer can maintain the site.</p>
+</details>
 <style>
-	.website-technology { display: grid; grid-template-columns: minmax(0, .85fr) minmax(20rem, 1.15fr); gap: clamp(2rem, 9vw, 8rem); padding-block: clamp(4rem, 8vw, 7rem); border-top: 2px solid var(--ink, #242126); }
-	h2 { max-width: 12ch; margin: 0; font-size: clamp(2.25rem, 4.6vw, 4.5rem); line-height: 1; letter-spacing: -.05em; }
-	.technology-copy > p { margin: 0; color: var(--muted, #625c64); font-size: 1.05rem; line-height: 1.7; }
-	details { margin-top: 2rem; border: 2px solid var(--ink, #242126); border-radius: .3rem; background: var(--white, #FFFDFA); box-shadow: 4px 4px 0 var(--mint, #C5EDDC); }
-	summary { padding: 1.1rem 1.25rem; cursor: pointer; font-weight: 800; }
-	details p { margin: 0; padding: 0 1.25rem 1.25rem; color: var(--muted, #625c64); line-height: 1.7; }
-	@media (max-width: 760px) { .website-technology { grid-template-columns: 1fr; } }
+ details { border-block:1px solid var(--line); }
+ summary { padding-block:1.2rem; min-height:64px; cursor:pointer; font-weight:780; }
+ p { max-width:60rem; margin:0 0 1.5rem; color:var(--muted); line-height:1.7; }
 </style>

@@ -1,0 +1,34 @@
+---
+import '@fontsource-variable/inter/wght.css';
+import '../styles/brand.css';
+import '../styles/pages.css';
+import SiteHeader from '../components/SiteHeader.svelte';
+import { baseUrl, sitePath } from '../lib/site';
+interface Props { title: string; description: string; canonicalPath: string; active?: string; image?: string; type?: 'website' | 'article'; publishedAt?: Date; updatedAt?: Date; turnstileSiteKey?: string }
+const { title, description, canonicalPath, active = '', image = '/og.png', type = 'website', publishedAt, updatedAt, turnstileSiteKey } = Astro.props;
+const origin = Astro.site ?? new URL('https://servoict.com');
+const canonicalUrl = new URL(sitePath(canonicalPath), origin);
+const socialImage = new URL(sitePath(image), origin);
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><meta name="generator" content={Astro.generator} />
+		<title>{title}</title><meta name="description" content={description} /><link rel="canonical" href={canonicalUrl} /><link rel="icon" type="image/png" href={sitePath('/images/servo-ict-logo.png')} />
+		<meta property="og:site_name" content="Servo ICT" /><meta property="og:type" content={type} /><meta property="og:url" content={canonicalUrl} /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:image" content={socialImage} /><meta property="og:image:alt" content={description} />
+		<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={socialImage} />
+		{publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}{updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
+		<slot name="head" />
+	</head>
+	<body class="content-page">
+		<a class="skip-link" href="#main-content">Skip to content</a>
+		<SiteHeader client:load {baseUrl} {active} />
+		<main id="main-content"><slot /></main>
+		<footer class="page-footer container">
+			<a class="footer-brand" href={baseUrl}><img src={sitePath('/images/servo-ict-logo.png')} alt="" width="42" height="42" /><span>Servo ICT · Gippsland</span></a>
+			<nav aria-label="Footer navigation"><a href={sitePath('/websites/')}>Websites</a><a href={sitePath('/business-it/')}>Business IT</a><a href={sitePath('/security/')}>Security</a><a href={sitePath('/blog/')}>Advice</a><a href={sitePath('/work/12grapes/#about')}>About</a><a href={sitePath('/contact/')}>Contact</a><a href={sitePath('/privacy/')}>Privacy</a></nav>
+			<div class="footer-contact"><a href="tel:0341488665">(03) 4148 8665</a><a href="mailto:support@servoict.com">support@servoict.com</a><small>© {new Date().getFullYear()} Servo ICT</small></div>
+		</footer>
+		{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+	</body>
+</html>

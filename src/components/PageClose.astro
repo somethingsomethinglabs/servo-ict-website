@@ -1,0 +1,10 @@
+---
+import PageIcon from './PageIcon.astro';
+import EnquiryForm from './EnquiryForm.svelte';
+import { baseUrl, enquiryPath } from '../lib/site';
+import { serviceLabels } from '../lib/server/consultation';
+interface Props { title?:string; copy?:string; action?:string; service?:keyof typeof serviceLabels; note?:string; inlineForm?:boolean; compact?:boolean; consultationMode?:'server'|'email'; turnstileSiteKey?:string; returnPath?:string }
+const {title='Tell us what you need a hand with.',copy='A rough description is enough. We can talk through the fit and the next steps.',action='Get in touch',service,note,inlineForm=false,compact=false,consultationMode='email',turnstileSiteKey='',returnPath}=Astro.props;
+---
+<section class:list={["page-close", "section-space", {compact}]} aria-labelledby="closing-title"><div class:list={['container','split','closing-grid',{'with-form':inlineForm}]}><div><p class="eyebrow">Get in touch</p><h2 id="closing-title">{title}</h2><p class="lead">{copy}</p>{note && <p class="fine-print">{note}</p>}{inlineForm && <a class="phone-link" href="tel:0341488665"><PageIcon name="phone"/>(03) 4148 8665</a>}</div>{inlineForm ? <EnquiryForm client:load {baseUrl} {consultationMode} {turnstileSiteKey} {returnPath} defaultService={service}/> : <div class="closing-actions"><a class="button" href={enquiryPath(service)}>{action}<PageIcon name="arrowRight" size={22}/></a>{!compact && <a class="phone-link" href="tel:0341488665"><PageIcon name="phone"/>(03) 4148 8665</a>}</div>}</div></section>
+<style>.compact{padding-block:var(--section-space-compact)}.compact h2{font-size:clamp(1.65rem,3.1vw,2.65rem)}.with-form{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:start}.with-form .phone-link{margin-top:1.5rem}@media(max-width:700px){.with-form{grid-template-columns:1fr}}</style>
