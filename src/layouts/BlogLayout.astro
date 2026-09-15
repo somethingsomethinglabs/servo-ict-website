@@ -114,7 +114,7 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	}
 
 	:focus-visible {
-		outline: 3px solid var(--colour-accent);
+		outline: 3px solid var(--colour-text);
 		outline-offset: 4px;
 	}
 
@@ -127,7 +127,7 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 		transform: translateY(-200%);
 		border-radius: 0.5rem;
 		background: var(--colour-text);
-		color: var(--colour-background);
+		color: var(--colour-inverse);
 		font-weight: 800;
 	}
 
@@ -209,7 +209,7 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 		margin-top: 5rem;
 		padding: 1.5rem 0 2.5rem;
 		background: var(--colour-feature);
-		color: var(--colour-background);
+		color: var(--colour-inverse);
 		box-shadow: 0 0 0 100vmax var(--colour-feature);
 		clip-path: inset(0 -100vmax);
 		font-size: 0.75rem;
@@ -221,11 +221,15 @@ const imageUrl = new URL(sitePath(image), siteOrigin);
 	}
 
 	footer .brand {
-		color: var(--colour-background);
+		color: var(--colour-inverse);
 	}
 
 	footer .brand img {
 		filter: grayscale(1) brightness(0) invert(.86);
+	}
+
+	footer :focus-visible {
+		outline-color: var(--colour-accent);
 	}
 
 	footer nav {

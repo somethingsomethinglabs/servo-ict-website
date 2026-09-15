@@ -30,12 +30,12 @@
 </section>
 
 <style>
-	.work-example { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(2rem, 5vw, 5rem); width: 100%; margin-inline: auto; padding: clamp(2rem, 4vw, 3.5rem); background: var(--colour-feature); color: var(--colour-background); }
+	.work-example { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(2rem, 5vw, 5rem); width: 100%; margin-inline: auto; padding: clamp(2rem, 4vw, 3.5rem); background: var(--colour-feature); color: var(--colour-inverse); }
 	.work-example.compact { grid-template-columns: minmax(0, .9fr) minmax(0, 1.15fr); gap: 3rem; padding: 0; background: none; color: inherit; }
 	.example-kicker { margin: 0 0 1rem; font-size: .8rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
 	h2 { max-width: 15ch; margin: 0; font-size: clamp(2.2rem, 3.9vw, 3.8rem); font-weight: 820; line-height: 1.04; letter-spacing: -.06em; }
 	.example-intro { max-width: 31rem; margin: 1.3rem 0; font-size: 1.2rem; line-height: 1.6; }
-	details { margin: 1.5rem 0; border-block: 1px solid color-mix(in srgb, var(--colour-background) 40%, var(--colour-feature)); }
+	details { margin: 1.5rem 0; border-block: 1px solid color-mix(in srgb, var(--colour-inverse) 40%, var(--colour-feature)); }
 	summary { padding-block: 1rem; cursor: pointer; font-size: .9rem; font-weight: 750; }
 	dl { margin: 0 0 1rem; }
 	dl > div { padding-block: .65rem; }
@@ -43,7 +43,8 @@
 	dd { margin: .35rem 0 0; font-size: .9rem; line-height: 1.65; }
 	.project-link { display: inline-flex; align-items: center; gap: 1.5rem; min-height: 48px; margin-top: .4rem; font-size: 1rem; font-weight: 800; text-decoration-thickness: 2px; text-underline-offset: .3em; }
 	.project-link:hover { text-underline-offset: .45em; }
-	.project-link:focus-visible { outline: 3px solid var(--colour-accent); outline-offset: 4px; }
+	.project-link:focus-visible { outline: 3px solid var(--colour-text); outline-offset: 4px; }
+	.work-example:not(.compact) :focus-visible { outline-color: var(--colour-accent); }
 	figure { min-width: 0; margin: 0; }
 	.project-preview { border: 2px solid var(--colour-text); border-radius: 3px; box-shadow: 8px 8px 0 var(--colour-support); background: var(--colour-background); overflow: hidden; }
 	img { display: block; width: 100%; height: auto; }
