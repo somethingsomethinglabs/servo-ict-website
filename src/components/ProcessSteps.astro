@@ -7,4 +7,4 @@ const emphasis = divider < 0 ? '' : title.slice(divider+2);
 ---
 <section id="process" class="process-band section-space"><div class="container process-grid"><div><p class="eyebrow">How it works</p><h2>{lead}{emphasis && <><br /><span>{emphasis}</span></>}</h2></div><div><ol>{steps.map((step, index) => <li><span class="step-number">{index + 1}</span><h3>{step.title}</h3><p>{step.copy}</p></li>)}</ol>{note && <p class="process-note">{note}</p>}</div></div></section>
 
-<style>h2 span{color:var(--pink)}</style>
+<style>h2 span{color:var(--ink)}</style>

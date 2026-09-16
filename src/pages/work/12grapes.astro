@@ -26,7 +26,7 @@ export const prerender = true;
  <PageClose compact title="Tell us about the business and the next step you want people to take." copy="A rough description is enough to start the conversation." action="Talk about my website" service="website" />
 </PageLayout>
 <style>
- .project-hero { padding-top:var(--section-space-compact); background:var(--white); }
+ .project-hero { padding-top:var(--section-space-compact); background-color:var(--plastic); }
  .project-name { font-size:clamp(1.5rem,2.5vw,2.3rem); line-height:1.25; letter-spacing:-.04em; margin-top:2rem; }
  .project-facts { display:flex; list-style:none; margin:2.5rem 0 0; padding:1.5rem 0 0; border-top:1px solid var(--line); }
  .project-facts li { display:flex; align-items:center; gap:.8rem; font-size:.9rem; font-weight:650; padding-inline:1.2rem; border-left:1px solid var(--line); }
@@ -39,9 +39,9 @@ export const prerender = true;
  figure { margin:0; min-width:0; }figcaption{margin-top:1.25rem;color:var(--muted);font-size:.95rem}
  .ownership-strip { margin-top:3.5rem; }
  .proof-band .lead { margin:0; color:var(--ink); }
- .about-brand { display:flex; justify-content:center; align-items:center; gap:1.5rem; font-size:clamp(2rem,4.5vw,4rem); font-weight:800; letter-spacing:-.05em; }
- .about-brand img { filter:grayscale(1) brightness(0) invert(1); width:clamp(70px,10vw,150px); height:auto; flex-shrink:0; }
- #about p:not(.eyebrow) { font-size:1.1rem; color:#e8e4e9; max-width:35rem; }
+ .about-brand { display:flex; justify-content:center; align-items:center; gap:1.5rem; font-size:clamp(2rem,4.5vw,4rem); font-weight:700; letter-spacing:-.04em; }
+ .about-brand img { filter:grayscale(1) brightness(0) invert(.79); width:clamp(70px,10vw,150px); height:auto; flex-shrink:0; }
+ #about p:not(.eyebrow) { font-size:1.1rem; color:var(--ink-muted); max-width:35rem; }
  @media(max-width:1050px){.project-facts{flex-wrap:wrap;gap:1rem}.project-facts li{padding:0;border:0}.project-brief>div+div{padding-left:2rem}}
  @media(max-width:700px){.project-facts{margin-top:2rem}.project-brief>div+div{padding:0;border:0}.about-brand{justify-content:start;padding-top:1rem}.project-image{padding-right:.75rem}}
 </style>

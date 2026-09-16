@@ -30,8 +30,8 @@ const computerArticle = post.data.topic === 'Devices and updates';
  <PageClose compact title="A rough description is enough to get started." copy="We can talk through the work and the next steps." service={computerArticle ? 'technology' : 'security'} />
 </BlogLayout>
 <style>
- .article-header { background:var(--white); border-bottom:1px solid var(--line); padding-top:2rem; }
- .back-link { display:inline-flex; gap:.8rem; align-items:center; min-height:44px; margin-bottom:2rem; color:var(--muted); font-size:.95rem; font-weight:750; text-decoration:none; }
+ .article-header { background-color:var(--plastic); border-bottom:1px solid var(--seam); box-shadow:inset 0 -1px 0 var(--edge); padding-top:2rem; }
+ .back-link { display:inline-flex; gap:.8rem; align-items:center; min-height:44px; margin-bottom:2rem; color:var(--muted); font-size:.95rem; font-weight:700; text-decoration:none; }
  .article-hero { grid-template-columns:1.2fr 1fr; }
  .article-hero h1 { font-size:clamp(2.5rem,4.8vw,4.65rem); }
  .article-photo { padding:0 1rem 1rem 0; }
@@ -42,8 +42,7 @@ const computerArticle = post.data.topic === 'Devices and updates';
  .contents { position:sticky; top:2rem; }
  .contents ol { list-style:none; padding:0; margin:0; }
  .contents li { border-bottom:1px solid var(--line); }
- .contents li a { display:block; min-height:44px; padding:.8rem 0; color:var(--muted); font-size:.95rem; text-decoration:none; }
- .contents li a:hover { color:var(--ink); text-decoration:underline; }
+ .contents li a { display:block; min-height:44px; padding:.8rem 0; color:var(--muted); font-size:.95rem; }
  .contents .text-link { margin-top:1.5rem; }
  .article-copy { max-width:46rem; }
  .prose { font-size:1.1rem; line-height:1.78; color:var(--muted); }
@@ -52,16 +51,15 @@ const computerArticle = post.data.topic === 'Devices and updates';
  .prose :global(h3) { margin:2rem 0 .8rem; color:var(--ink); font-size:1.35rem; }
  .prose :global(p),.prose :global(ul),.prose :global(ol) { margin:1.2rem 0; }
  .prose :global(li + li) { margin-top:.6rem; }
- .prose :global(a) { color:var(--ink); font-weight:700; text-decoration-color:var(--pink-dark); text-decoration-thickness:2px; overflow-wrap:anywhere; }
- .prose :global(blockquote) { margin:2rem 0; padding:1rem 1.5rem; border-left:5px solid var(--pink); background:var(--white); }
- .article-help { display:flex; gap:1.5rem; padding:2rem; margin-top:3.5rem; background:var(--mint); border:1px solid #8cb6b5; }
+ .prose :global(a) { color:var(--ink); font-weight:700; text-decoration-color:var(--ink); text-decoration-thickness:2px; overflow-wrap:anywhere; }
+ .prose :global(blockquote) { margin:2rem 0; padding:1rem 1.5rem; border-left:5px solid var(--ink); background-color:var(--plastic); }
+ .article-help { display:flex; gap:1.5rem; padding:2rem; margin-top:3.5rem; background-color:var(--plastic); border:1px solid var(--line); }
  .article-help h2 { font-size:clamp(1.5rem,2.2vw,2rem); line-height:1.15; }
  .article-help .text-link { margin-top:1rem; }
  .related-inner { margin-left:calc(clamp(140px,17vw,220px) + clamp(3rem,7vw,7rem)); max-width:46rem; }
  .related-list { display:grid; margin-top:2rem; }
- .related-list a { display:flex; align-items:center; gap:1.25rem; padding:1.3rem 0; border-bottom:1px solid var(--line); font-weight:750; text-decoration:none; }
+ .related-list a { display:flex; align-items:center; gap:1.25rem; padding:1.3rem 0; border-bottom:1px solid var(--line); font-weight:700; text-decoration:none; }
  .related-list a span { margin-right:auto; }
- .related-list a:hover { text-decoration:underline; text-decoration-thickness:2px; }
  @media(max-width:1050px){.article-grid{gap:2.5rem}.related-inner{margin-left:calc(clamp(140px,17vw,220px) + 2.5rem)}}
  @media(max-width:700px){.article-hero,.article-grid{grid-template-columns:1fr}.article-header{padding-top:1.5rem}.contents{position:static}.contents ol{display:grid;gap:0}.article-grid{gap:3rem}.article-copy{min-width:0}.prose{font-size:1.05rem;line-height:1.8}.article-help{padding:1.5rem;gap:1rem;display:block}.article-help h2{margin-top:1rem}.related-inner{margin:0}.related-list a{gap:1rem}}
 </style>

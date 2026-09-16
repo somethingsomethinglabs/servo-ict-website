@@ -16,10 +16,9 @@ const links = [
 </section>
 <style>
  .service-links { align-items:start; }
- .framed { padding:clamp(1.5rem,4vw,3rem); border:2px solid var(--ink); border-left:1.5rem solid var(--mint); background:var(--white); }
+ .framed { padding:clamp(1.5rem,4vw,3rem); border-block:1px solid var(--line); }
  h2 { max-width:16ch; }
  nav { border-top:1px solid var(--line); }
- nav a { display:flex; justify-content:space-between; gap:1.5rem; align-items:center; min-height:70px; padding:1rem 0; border-bottom:1px solid var(--line); font-size:1.05rem; font-weight:750; text-decoration:none; }
- nav a:hover { text-decoration:underline; text-decoration-thickness:2px; }
- @media(max-width:700px) { .framed{border-left-width:.65rem;padding:1.5rem}nav a{min-height:64px} }
+ nav a { display:flex; justify-content:space-between; gap:1.5rem; align-items:center; min-height:70px; padding:1rem 0; border-bottom:1px solid var(--line); font-size:1.05rem; font-weight:700; text-decoration:none; }
+ @media(max-width:700px) { .framed{padding:1.5rem}nav a{min-height:64px} }
 </style>
