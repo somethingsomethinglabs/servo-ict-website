@@ -23,6 +23,7 @@
 	--plastic: var(--plastic-silver);
 	--ink: var(--ink-on-silver);
 	--ink-muted: var(--ink-muted-on-silver);
+	--printed-ink: rgb(48 50 52 / 88%);
 	--muted: var(--ink-muted-on-silver);
 	--seam: var(--seam-silver);
 	--line: rgb(48 50 52 / 28%);
@@ -48,6 +49,7 @@
 	--plastic: var(--plastic-black);
 	--ink: var(--ink-on-black);
 	--ink-muted: var(--ink-muted-on-black);
+	--printed-ink: rgb(201 203 204 / 88%);
 	--muted: var(--ink-muted-on-black);
 	--seam: var(--seam-black);
 	--line: rgb(201 203 204 / 24%);
@@ -124,6 +126,30 @@ img { max-width: 100%; }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
 ::selection { color: var(--plastic); background: var(--ink); }
 [id] { scroll-margin-top: 1.5rem; }
+
+/* Fine material variation in the ink, without fading the whole element. */
+@supports (background-clip: text) and (-webkit-text-fill-color: transparent) {
+	:is(.page-shell, .content-page) :is(h1, h2, .brand, .footer-brand) {
+		background-color: var(--ink);
+		background-image: linear-gradient(var(--printed-ink), var(--printed-ink)), var(--plastic-grain);
+		background-size: 100% 100%, var(--grain-size);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	:is(h1, h2, .brand, .footer-brand)::selection,
+	:is(h1, h2, .brand, .footer-brand) ::selection {
+		-webkit-text-fill-color: var(--plastic);
+	}
+}
+
+@media (forced-colors: active), print {
+	:is(.page-shell, .content-page) :is(h1, h2, .brand, .footer-brand) {
+		background: none;
+		-webkit-text-fill-color: currentColor;
+	}
+}
 
 /* Plain actions share an ink-only response, including labels that wrap. */
 :is(.page-shell, .content-page) :is(a[href], summary, .copy, .filters button):not(.button, .header-cta, .brand, .footer-brand, .skip-link, .thumbnail):not(:has(img)) {

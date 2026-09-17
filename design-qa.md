@@ -55,3 +55,9 @@ Fresh screenshot review covered home, websites, business IT, security, contact, 
 Conservative contrast bounds include the full possible 0–255 grain range and worst specified panel/control gradient. Silver panel text is at least 7.19:1, supporting text 4.62:1 and silver-button text 6.33:1. Black supporting text is at least 5.08:1, header supporting text 4.90:1, and error/success text 6.15:1/6.27:1. The calculations are saved in `.astro/review-cycle/contrast-bounds.json`.
 
 Reduced-motion and forced-colour rules were reviewed in source; the available browser did not emulate these modes. Transient pressed states were source-checked. No live enquiry was sent or external email application opened during this review. This is targeted design and interaction verification, not a full accessibility certification.
+
+## Printed lettering refinement, 18 September 2026
+
+Added faint grain within h1/h2 and brand lettering, using the existing 256px texture scale and an 88% ink wash. Body text, navigation, form labels and controls retain solid ink. No content or layout changed. Background clipping preserves sharp glyph edges; solid-ink fallbacks cover unsupported browsers, forced colours and print. Selection retains contrasting ink.
+
+Desktop silver/black sections were visually checked in the browser. Conservative textured-ink contrast bounds are 4.92:1 on silver and 4.96:1 on black. Astro check and the 12-page static build pass; forced-colour/print fallbacks were source-reviewed.
