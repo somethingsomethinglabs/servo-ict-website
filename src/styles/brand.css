@@ -136,6 +136,8 @@ img { max-width: 100%; }
 		-webkit-background-clip: text;
 		background-clip: text;
 		-webkit-text-fill-color: transparent;
+		/* A subpixel upper-left glint and lower edge suggest a very thin ink layer. */
+		filter: drop-shadow(-.25px -.35px 0 rgb(255 255 255 / 18%)) drop-shadow(.25px .35px 0 rgb(0 0 0 / 16%));
 	}
 
 	:is(h1, h2, .brand, .footer-brand)::selection,
@@ -148,6 +150,7 @@ img { max-width: 100%; }
 	:is(.page-shell, .content-page) :is(h1, h2, .brand, .footer-brand) {
 		background: none;
 		-webkit-text-fill-color: currentColor;
+		filter: none;
 	}
 }
 
