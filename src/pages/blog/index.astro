@@ -9,13 +9,13 @@ export const prerender = true;
 const posts = (await getCollection('blog', ({data}) => !data.draft))
  .sort((a,b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
  .map(post => ({id:post.id,title:post.data.title,description:post.data.description,topic:post.data.topic,
-  category:post.data.topic === 'Devices and updates' ? 'Computers' : 'Accounts & security',
+  category:post.data.topic === 'Starting a business' ? 'Starting a business' : post.data.topic === 'Devices and updates' ? 'Computers' : 'Accounts & security',
   image:sitePath(post.data.featuredImage),imageAlt:post.data.featuredImageAlt,
   href:sitePath(`/${post.id}/`),date:post.data.publishedAt.toISOString()}));
 ---
 <BlogLayout title="Practical advice | Servo ICT" description="Clear explanations for small business owners about accounts, security and everyday computers." canonicalPath="/blog/">
  <section class="service-hero section-space"><div class="container split advice-hero"><div><p class="eyebrow">Practical advice</p><h1>A little help with the everyday tech.</h1><p class="lead">Clear explanations for small business owners.<br />Start with the question you have.</p></div><div class="advice-photo"><img class="photo-frame" src={sitePath('/images/pages/advice-desk.webp')} alt="An open notebook beside a laptop and coffee on a sunny desk." width="1400" height="1120" fetchpriority="high" /></div></div></section>
- <section class="section-space ruled-section"><div class="container"><AdviceList client:load {posts} /><div class="services"><ServiceLinks framed /></div></div></section>
+ <section class="section-space ruled-section"><div class="container"><AdviceList client:load {posts} /><div class="services"><ServiceLinks framed includeStarter /></div></div></section>
  <section class="process-band section-space"><div class="container"><h2>You don’t need to learn it all.</h2><p class="reassurance">We can handle the setup and show you the few things you need to know.</p></div></section>
  <PageClose compact title="Tell us what you need a hand with." copy="One point of contact. Remote setup, local visits by arrangement." service="other" />
 </BlogLayout>

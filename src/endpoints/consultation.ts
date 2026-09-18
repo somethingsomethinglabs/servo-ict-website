@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import nodemailer from 'nodemailer';
+import { recordDeliveredEnquiry } from '../lib/server/enquiryMetrics';
 import { ConfigurationError, getConsultationConfig } from '../lib/server/config';
 import {
 	escapeHtml,
@@ -74,6 +75,8 @@ export function ownerEmailHtml(submission: ConsultationRequest): string {
 		${submission.organisation ? `<p><strong>Organisation:</strong> ${escapeHtml(submission.organisation)}</p>` : ''}
 		${submission.timing ? `<p><strong>Timing:</strong> ${escapeHtml(submission.timing)}</p>` : ''}
 		<p><strong>Project type:</strong> ${escapeHtml(serviceLabels[submission.service])}</p>
+		${submission.source ? `<p><strong>Source:</strong> ${escapeHtml(submission.source)}</p>` : ''}
+		${submission.originPath ? `<p><strong>Page:</strong> ${escapeHtml(submission.originPath)}</p>` : ''}
 		<h2>What they would like to build, change, or fix</h2>
 		<p>${escapeHtml(submission.message).replace(/\r?\n/g, '<br>')}</p>
 	`;
@@ -89,6 +92,8 @@ export function ownerEmailText(submission: ConsultationRequest): string {
 		submission.organisation ? `Organisation: ${submission.organisation}` : '',
 		submission.timing ? `Timing: ${submission.timing}` : '',
 		`Project type: ${serviceLabels[submission.service]}`,
+		submission.source ? `Source: ${submission.source}` : '',
+		submission.originPath ? `Page: ${submission.originPath}` : '',
 		'',
 		'What they would like to build, change, or fix:',
 		submission.message
@@ -110,7 +115,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 	if (String(form.get('companyWebsite') || '').trim()) {
 		return response(
 			request,
-			{ ok: true, message: 'Thanks — your consultation request has been sent.' },
+			{ ok: true, message: 'Thanks, your enquiry has been sent. We aim to reply within two business days.' },
 			200,
 			returnPath
 		);
@@ -166,6 +171,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 			html: ownerEmailHtml(submission)
 		});
 
+		await recordDeliveredEnquiry({ service: submission.service, source: submission.source, pagePath: submission.originPath });
+
 		// The owner notification is the critical delivery. A failed acknowledgement should not
 		// make the visitor resubmit and create a duplicate enquiry.
 		if (submission.email) try {
@@ -179,7 +186,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 					'',
 					'Thanks for getting in touch. We received your project enquiry.',
 					'',
-					'We\'ll reply by email to confirm whether the project is a good fit and arrange a time.',
+					'We aim to reply within two business days to confirm whether the project is a good fit and arrange a time.',
 					'',
 					'Servo ICT'
 				].join('\n')
@@ -190,7 +197,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
 		return response(
 			request,
-			{ ok: true, message: 'Thanks — your consultation request has been sent.' },
+			{ ok: true, message: 'Thanks, your enquiry has been sent. We aim to reply within two business days.' },
 			200,
 			returnPath
 		);
@@ -207,7 +214,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 			console.error(`Consultation form configuration error: ${error.message}`);
 			return response(
 				request,
-				{ ok: false, message: 'The form is temporarily unavailable. Please email support@servoict.com.' },
+				{ ok: false, message: 'The form is temporarily unavailable. Try again, call (03) 4148 8665, or email support@servoict.com.' },
 				503,
 				returnPath
 			);
@@ -216,7 +223,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 		console.error('Consultation request could not be delivered.');
 		return response(
 			request,
-			{ ok: false, message: 'Your request could not be sent. Please email support@servoict.com.' },
+			{ ok: false, message: 'Your enquiry could not be sent. Try again, call (03) 4148 8665, or email support@servoict.com.' },
 			500,
 			returnPath
 		);

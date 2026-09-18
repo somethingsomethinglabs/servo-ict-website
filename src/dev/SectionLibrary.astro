@@ -1,0 +1,143 @@
+---
+import OutcomeGrid from '../components/OutcomeGrid.astro';
+import FaqSection from '../components/FaqSection.astro';
+import ServiceHero from '../components/ServiceHero.astro';
+import ServiceLinks from '../components/ServiceLinks.astro';
+import * as ServiceChooser from '../components/service-chooser';
+import { sitePath } from '../lib/site';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import PageClose from '../components/PageClose.astro';
+const outcomes = [
+  { icon: 'file', title: 'Find the details', copy: 'Services, hours, prices or the area you cover.' },
+  { icon: 'phone', title: 'Choose the next step', copy: 'Call, enquire or follow your existing booking link.' },
+  { icon: 'pencil', title: 'Keep it useful', copy: 'Agree how to update hours, photos and service details.' },
+];
+const standards = [
+  ['Outcome', 'Icon + H3 + short paragraph. Use for a benefit or task; keep links separate.', 'OutcomeGrid'],
+  ['Expandable answer', 'A descriptive question and a plain answer. Keep essential scope and prices visible outside accordions.', 'FaqList'],
+  ['Action group', 'One primary button and an optional text link. Use a verb that describes the next step.', '.actions / .button / .text-link'],
+  ['Image frame', 'An image with meaningful alt text, intrinsic dimensions and a recessed border. Add a caption when context is needed.', '.photo-frame / WorkExample'],
+  ['Price card', 'Label, price, scope, ongoing cost and payment terms. Group comparable offers together.', 'WebsiteOffer'],
+  ['Form field', 'Visible label, optional marker, input, helper and associated error. Use the enquiry form for submission behaviour.', 'EnquiryForm'],
+];
+---
+<section id="components" class="library" aria-labelledby="component-library-title">
+  <header class="library-heading"><p class="eyebrow">08 / Component standards</p><h2 id="component-library-title">Small, repeatable parts.</h2><p class="lead">Use the same structure each time. Change the content to suit the page.</p></header>
+  <div class="standard-grid">{standards.map(([title, copy, source]) => <article><h3>{title}</h3><p>{copy}</p><code>{source}</code></article>)}</div>
+  <div class="layout-rules">
+    <h3>Shared layout rules</h3>
+    <ul><li>Silver is the default content surface. Use charcoal for process and closing sections.</li><li>Keep content within the 1280px container. Use the shared section spacing and compact spacing tokens.</li><li>One H1 per published page, H2 for section headings, H3 for items inside a section.</li><li>Use ruled rows for information. Reserve framed cards for prices, images and grouped choices.</li><li>Stack columns on small screens and keep reading order the same as the markup.</li></ul>
+  </div>
+</section>
+<section id="sections" class="library" aria-labelledby="section-library-title">
+  <header class="library-heading"><p class="eyebrow">09 / Section standards</p><h2 id="section-library-title">Build a page from familiar sections.</h2><p class="lead">Start with the need, explain the work, show evidence, then offer a next step.</p><p class="fine-print">These are live component previews. The hero's H1 is a specimen; published pages should have only one.</p></header>
+  <nav class="recipe" aria-label="Suggested service page order"><a href="#hero-preview">Hero</a><span aria-hidden="true">→</span><a href="#outcomes-preview">Outcomes</a><span aria-hidden="true">→</span><a href="#patterns">Work example</a><span aria-hidden="true">→</span><a href="#process-preview">Process</a><span aria-hidden="true">→</span><a href="#faq-preview">FAQ</a><span aria-hidden="true">→</span><a href="#closing-preview">Enquiry</a></nav>
+
+  <article id="hero-preview" class="section-specimen">
+    <header class="preview-label"><h3>Service hero</h3><code>ServiceHero.astro</code><p>Open a service page with the customer need, a short introduction, one primary action and a supporting image. Use once at the top.</p></header>
+    <ServiceHero eyebrow="Website design and development" headline="A website that helps customers get in touch." intro="Clear pages, useful information and a simple next step. We help with the wording and build around your business." service="website" action="Discuss my website" image="/images/work/12grapes-website.jpg" imageAlt="12Grapes Vineyard Services website" website />
+  </article>
+
+  <article class="section-specimen">
+    <header class="preview-label"><h3>Service chooser</h3><code>ServiceLinks.astro</code><p>Compose your own links with ServiceChooser.Root and ServiceChooser.Link. Each link accepts its label, destination and optional description. ServiceLinks remains a preset for the usual site services.</p></header>
+    <div class="preview-content"><ServiceLinks id="service-links" includeStarter /></div>
+    <ServiceChooser.Root id="custom-chooser" eyebrow="Choose your next step" title="What are you working on?" copy="The same section can contain any set of links." theme="dark" framed>
+      <ServiceChooser.Link href={sitePath('/start-a-business/')} label="Starting something new" description="A small website, business email and essential account setup." />
+      <ServiceChooser.Link href={sitePath('/websites/')} label="Improving an existing website" description="Clearer pages, useful information and a better enquiry path." />
+    </ServiceChooser.Root>
+    <details class="variant-details"><summary>Compose a service chooser</summary><div class="preview-content"><pre><code>{`---
+import * as ServiceChooser from '../components/service-chooser';
+import { sitePath } from '../lib/site';
+---
+<ServiceChooser.Root
+  eyebrow="How can we help?"
+  title="Choose your next step."
+  copy="Start with the work you need done."
+  theme="light"
+  framed
+>
+  <ServiceChooser.Link
+    label="Website help"
+    description="New sites and focused improvements."
+    href={sitePath('/websites/')}
+  />
+  <ServiceChooser.Link
+    label="Business IT"
+    href={sitePath('/business-it/')}
+  />
+</ServiceChooser.Root>`}</code></pre><p class="fine-print">For imported data, map your array inside the root: links.map(link =&gt; &lt;ServiceChooser.Link &#123;...link&#125; /&gt;). The link styling stays in one place.</p></div></details>
+  </article>
+
+  <article id="outcomes-preview" class="section-specimen">
+    <header class="preview-label"><h3>Outcome section</h3><code>OutcomeGrid.astro</code><p>Use a two-column grid for task lists, three columns for a short set of benefits, or question rows for checks. Each item has one heading and one explanation.</p></header>
+    <div class="preview-content"><p class="eyebrow">Three-column variant</p><h2>Give customers what they came for.</h2><OutcomeGrid items={outcomes} variant="three" /></div>
+    <details class="variant-details"><summary>Compare the two-column and question variants</summary><div class="preview-content"><p class="eyebrow">Two-column grid</p><OutcomeGrid items={outcomes.slice(0, 2)} /><p class="eyebrow variant-heading">Question rows</p><OutcomeGrid variant="questions" items={[{icon:'user',title:'Can the right people sign in?',copy:'Set up stronger sign-in and sensible recovery details.'},{icon:'file',title:'Could you get your files back?',copy:'Review backups and the steps for restoring important files.'}]} /></div></details>
+  </article>
+
+  <article id="process-preview" class="section-specimen">
+    <header class="preview-label"><h3>Process section</h3><code>ProcessSteps.astro</code><p>Pass the eyebrow, title, steps, note and theme. Step numbers are automatic; up to three columns stack into a list on mobile. Use a unique id when placing multiple process sections on one page.</p></header>
+    <ProcessSteps title="Bring the business. We'll help with the website." steps={[{title:'Tell us what you do',copy:'A conversation and rough notes are enough to start.'},{title:'Check the draft',copy:'Check the details and ask for changes before it goes live.'},{title:'Launch and get shown how',copy:'We test the website and walk you through the essentials.'}]} note="Agree the scope, timing and cost before work begins." />
+    <details class="variant-details"><summary>Light theme with two steps</summary><ProcessSteps id="process-light-example" eyebrow="A smaller process" title="A clear plan before the work." theme="light" steps={[{title:'Describe the job',copy:'Tell us what needs to change.'},{title:'Agree the scope',copy:'Confirm the work, timing and cost.'}]} /></details>
+  </article>
+
+  <article id="faq-preview" class="section-specimen">
+    <header class="preview-label"><h3>Frequently asked questions</h3><code>FaqSection.astro</code><p>Pass a title, optional eyebrow and introduction, theme, and an array of questions and answers. The section owns the spacing and heading; FaqList owns the disclosure controls.</p></header>
+    <FaqSection id="faq-example" title="Useful details before you enquire." copy="A few things to know before the first conversation." items={[{question:'What should I include in my enquiry?',answer:'Describe your business, what you need help with and any timing you have in mind. Rough notes are enough.'},{question:'What happens before work starts?',answer:'We confirm the scope, price, responsibilities and timing before beginning the agreed work.'}]} />
+  </article>
+
+  <article id="closing-preview" class="section-specimen">
+    <header class="preview-label"><h3>Closing enquiry</h3><code>PageClose.astro</code><p>One template, with the content and appearance passed in as props. Set the eyebrow, title, copy, action, href and theme. Use compact for a short signpost or inlineForm for the existing enquiry form.</p></header>
+    <PageClose id="cta-dark-example" eyebrow="Ready for the next step?" title="Tell us about your website." copy="Tell us what your business does and what you need. Rough notes are enough." action="Discuss my website" href="#forms" theme="dark" compact />
+    <PageClose id="cta-light-example" eyebrow="Explore the options" title="Find the right help for your business." copy="See how we can help with your website, everyday IT and account security." action="See our services" href="#service-links-title" theme="light" compact />
+    <details class="variant-details"><summary>How to use this template</summary><div class="preview-content"><pre><code>{`---
+import PageClose from '../components/PageClose.astro';
+---
+<PageClose
+  eyebrow="Ready for the next step?"
+  title="Tell us about your website."
+  copy="A rough description is enough to start."
+  action="Discuss my website"
+  href="#consultation-form"
+  theme="dark"
+  compact
+/>`}</code></pre><p class="fine-print">Use theme="light" for silver or theme="dark" for charcoal. Omit href to use the contact page with service tracking. Text can also come from an imported data object.</p></div></details>
+  </article>
+  <p class="fine-print">The work example and enquiry form above complete this set. WebsiteOffer owns pricing and its disclosures; keep those together when reusing the pricing section.</p>
+</section>
+<section id="templates" class="library" aria-labelledby="templates-title">
+ <header class="library-heading"><p class="eyebrow">10 / Page templates</p><h2 id="templates-title">Articles and project stories.</h2><p class="lead">Pass metadata into the layout. Put the story in its content slots.</p><p class="fine-print">The two examples below are development-only. Existing advice pages and the 12Grapes project also use these shared layouts.</p></header>
+ <div class="template-grid">
+  <article class="template-card"><a href={sitePath('/style-guide/article/')}><img class="photo-frame" src={sitePath('/images/pages/advice-desk.webp')} alt="Preview illustration for the advice article template" width="1400" height="1120" loading="lazy" /></a><h3>Practical advice article</h3><code>ArticleLayout.astro</code><p>Topic, heading, summary, author, dates and reading time. Contents navigation, a readable body, tables, lists and a closing action.</p><a class="text-link" href={sitePath('/style-guide/article/')}>Open article example →</a></article>
+  <article class="template-card"><a href={sitePath('/style-guide/case-study/')}><img class="photo-frame" src={sitePath('/images/work/12grapes-website.jpg')} alt="12Grapes screenshot used in the project template" width="1425" height="891" loading="lazy" /></a><h3>Showcase or case study</h3><code>CaseStudyLayout.astro + ProjectSection.astro</code><p>Client, brief, project facts, images and delivered work. Add evidence and approved quotes when available. The example uses documented 12Grapes work.</p><a class="text-link" href={sitePath('/style-guide/case-study/')}>Open project example →</a></article>
+ </div>
+ <div class="layout-rules"><h3>Reference examples</h3><p>These informed the content structure. Both templates keep Servo ICT's existing materials and typography.</p><ul><li><a href="https://web.dev/articles/vitals">web.dev: Web Vitals</a> for article metadata and structured technical content.</li><li><a href="https://www.gov.uk/set-up-business">GOV.UK: Set up a business</a> for practical headings and next-step links.</li><li><a href="https://clearleft.com/work/building-at-speed-without-sacrificing-quality">Clearleft: Cranstoun WiSE</a> for project facts, narrative and captioned work.</li><li><a href="https://vercel.com/customers/how-code-and-theory-cut-time-to-prototype-75-with-v0">Vercel: Code and Theory</a> for a short, evidence-led customer story.</li></ul></div>
+</section>
+<style>
+  .template-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2rem; }
+  .template-card { min-width:0; padding:1.5rem; border:1px solid var(--line); border-radius:8px; }
+  .template-card img { aspect-ratio:1.6; object-fit:cover; object-position:top; margin-bottom:1.5rem; }
+  .template-card .text-link { margin-top:1rem; }
+  .library { margin-top:3rem; min-width:0; }
+  .library-heading { padding-block:2rem; border-top:1px solid var(--seam); }
+  .standard-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 2rem; }
+  .standard-grid article { padding-block:1.5rem; border-top:1px solid var(--line); min-width:0; }
+  .standard-grid p,.preview-label p { color:var(--muted); max-width:75ch; }
+  pre { overflow-x:auto; padding:1rem; border:1px solid var(--line); border-radius:6px; }
+  pre code { margin:0; }
+  code { display:block; margin-top:.75rem; font-size:.78rem; overflow-wrap:anywhere; }
+  .layout-rules { margin-top:1.5rem; padding:1.5rem; border-block:1px solid var(--line); }
+  .layout-rules ul { padding-left:1.2rem; margin-bottom:0; }
+  .layout-rules li+li { margin-top:.5rem; }
+  .recipe { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem 1rem; margin-bottom:2rem; }
+  .recipe a { display:inline-flex; align-items:center; min-height:44px; font-weight:700; }
+  .section-specimen { border:1px solid var(--line); border-radius:8px; margin-top:2rem; overflow:clip; }
+  .preview-label { padding:1.5rem 2rem; border-bottom:1px solid var(--line); }
+  .preview-label code { color:var(--muted); }
+  .preview-label p { font-size:.9rem; }
+  .preview-content { padding:var(--section-space-compact) 5.5%; }
+  .variant-details { border-top:1px solid var(--line); }
+  .variant-details summary { padding:1.2rem 2rem; font-weight:700; cursor:pointer; }
+  .variant-heading { margin-top:3rem; }
+  @media(max-width:900px) { .standard-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media(max-width:700px) { .template-grid { grid-template-columns:1fr; } .standard-grid { grid-template-columns:1fr; } .preview-label { padding:1.25rem; } .preview-content { padding:2rem 1.25rem; } }
+</style>

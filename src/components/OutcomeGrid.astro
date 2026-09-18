@@ -1,0 +1,13 @@
+---
+import PageIcon from './PageIcon.astro';
+interface Props {
+  items: Array<{ icon: string; title: string; copy: string }>;
+  variant?: 'grid' | 'three' | 'questions';
+}
+const { items, variant = 'grid' } = Astro.props;
+---
+<div class:list={variant === 'questions' ? ['question-list'] : ['outcome-grid', { three: variant === 'three' }]}>
+  {items.map(item => <div class="outcome">
+    {variant === 'questions' ? <><h3><PageIcon name={item.icon} size={36} />{item.title}</h3><p>{item.copy}</p></> : <><PageIcon name={item.icon} size={36} /><div><h3>{item.title}</h3><p>{item.copy}</p></div></>}
+  </div>)}
+</div>

@@ -1,0 +1,23 @@
+---
+interface Props {
+ id?: string;
+ eyebrow?: string;
+ title: string;
+ copy?: string;
+ theme?: 'light' | 'dark';
+ framed?: boolean;
+ navigationLabel?: string;
+}
+const { id = `services-${crypto.randomUUID()}`, eyebrow, title, copy, theme = 'light', framed = false, navigationLabel = 'Find the right service' } = Astro.props;
+---
+<section {id} class:list={['service-links', 'split', theme === 'dark' ? 'material-black' : 'material-silver', { framed }]} aria-labelledby={`${id}-title`}>
+ <div>{eyebrow && <p class="eyebrow">{eyebrow}</p>}<h2 id={`${id}-title`}>{title}</h2>{copy && <p class="lead">{copy}</p>}</div>
+ <nav aria-label={navigationLabel}><slot /></nav>
+</section>
+<style>
+ .service-links { align-items:start; }
+ .framed { padding:clamp(1.5rem,4vw,3rem); border-block:1px solid var(--line); }
+ h2 { max-width:16ch; }
+ nav { border-top:1px solid var(--line); min-width:0; }
+ @media(max-width:700px) { .framed { padding:1.5rem; } }
+</style>

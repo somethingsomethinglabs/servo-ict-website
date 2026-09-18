@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Icon from './Icon.svelte';
-	let { baseUrl = '/', active = '' }: { baseUrl?: string; active?: string } = $props();
+	let { baseUrl = '/', active = '', service, source = '' }: { baseUrl?: string; active?: string; service?: string; source?: string } = $props();
 	let menuOpen = $state(false);
 	let servicesOpen = $state(false);
 	let menuButton: HTMLButtonElement;
 	let serviceSummary: HTMLElement;
 	const path = (value: string) => baseUrl + value.replace(/^\//, '');
+	const contactQuery = $derived(new URLSearchParams({ ...(service ? { service } : {}), ...(source ? { source } : {}) }).toString());
+	const contactHref = $derived(active === 'contact' ? '#consultation-form' : `${path('/contact/')}${contactQuery ? `?${contactQuery}` : ''}#consultation-form`);
 	const close = () => { menuOpen = false; servicesOpen = false; };
 	function onKeydown(event: KeyboardEvent) {
 		if (event.key !== 'Escape') return;
@@ -18,14 +20,14 @@
 	<a class="brand" href={baseUrl} aria-label="Servo ICT home"><img src={path('/images/servo-ict-logo.png')} alt="" width="44" height="44" /><span>Servo ICT</span></a>
 	<button class="menu-toggle" type="button" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="site-navigation" bind:this={menuButton} onclick={() => { menuOpen = !menuOpen; servicesOpen = false; }}><Icon name={menuOpen ? 'close' : 'list'} /></button>
 	<nav id="site-navigation" class:open={menuOpen} aria-label="Main navigation">
-		<a href={baseUrl} onclick={close}>Start a business</a>
+		<a href={path('/start-a-business/')} aria-current={active === 'starter' ? 'page' : undefined} onclick={close}>Start a business</a>
 		<details bind:open={servicesOpen}>
 			<summary bind:this={serviceSummary} class:active={active === 'services'} onclick={(event) => { event.preventDefault(); servicesOpen = !servicesOpen; }}>Services</summary>
-			<div class="service-menu"><a href={path('/websites/')} onclick={close}>Websites</a><a href={path('/business-it/')} onclick={close}>Business IT</a><a href={path('/security/')} onclick={close}>Security</a></div>
+			<div class="service-menu"><a href={path('/websites/')} onclick={close}>Websites</a><a href={path('/business-it/')} onclick={close}>Business IT</a><a href={path('/security/')} onclick={close}>Account security</a></div>
 		</details>
 		<a href={path('/work/12grapes/')} aria-current={active === 'work' ? 'page' : undefined} onclick={close}>Our work</a>
-		<a href={path('/blog/')} aria-current={active === 'advice' ? 'page' : undefined} onclick={close}>Advice</a>
-		<a class="header-cta" href={active === 'contact' ? '#consultation-form' : path('/contact/')} aria-current={active === 'contact' ? 'page' : undefined} onclick={close}>Get in touch</a>
+		<a href={path('/about/')} aria-current={active === 'about' ? 'page' : undefined} onclick={close}>About</a>
+		<a class="header-cta" href={contactHref} aria-current={active === 'contact' ? 'page' : undefined} onclick={close}>Get in touch</a>
 	</nav>
 </header>
 <style>

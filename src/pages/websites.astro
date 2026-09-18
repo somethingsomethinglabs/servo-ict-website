@@ -3,7 +3,7 @@ import ServiceLayout from '../layouts/ServiceLayout.astro';
 import WebsiteOffer from '../components/WebsiteOffer.astro';
 import WebsiteTechnology from '../components/WebsiteTechnology.astro';
 
-export const prerender = true;
+export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
 ---
 
 <ServiceLayout
@@ -42,7 +42,7 @@ export const prerender = true;
 		handover: 'You receive the working website, agreed account access and practical notes for routine updates, along with any next steps agreed during the project.'
 	}}
 	closingTitle="Tell us about your website."
-	closingCopy="A rough description of the site you have, the result you need and what is getting in the way is enough to start."
+	closingCopy="Tell us what your business does and whether you need a new website or changes to an existing one. Rough notes are enough."
 >
 	<WebsiteOffer slot="offer" />
 	<WebsiteTechnology slot="technology" />

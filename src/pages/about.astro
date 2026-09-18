@@ -1,0 +1,16 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PageClose from '../components/PageClose.astro';
+import WorkExample from '../components/WorkExample.svelte';
+import { baseUrl, sitePath, enquiryPath } from '../lib/site';
+export const prerender = true;
+---
+<PageLayout title="About Servo ICT | Local help in Gippsland" description="Meet Rowan Paterson and find out how Servo ICT helps small businesses with websites, email and practical IT setup." canonicalPath="/about/" active="about">
+ <section class="section-space"><div class="container split"><div><p class="eyebrow">About Servo ICT</p><h1>Local help.<br />One point of contact.</h1><p class="lead">Servo ICT is owned and operated by Rowan Paterson in Gippsland. We help small businesses get their website, email and everyday technology working together.</p><div class="actions"><a class="button" href={enquiryPath('other', sitePath('/about/'))}>Tell us what you need</a><a class="text-link" href={sitePath('/start-a-business/')}>Starting a business?</a></div></div><div class="owner-detail"><h2>Practical experience, explained clearly.</h2><p>Cybersecurity experience, Microsoft Fundamentals training and Microsoft Azure consulting experience inform the work. The aim is a setup that suits your business, with a walkthrough of the things you need to know.</p><p>Work is remote by default. Visits in Gippsland can be arranged when a job needs hands-on help.</p></div></div></section>
+ <section class="process-band section-space"><div class="container"><p class="eyebrow">Working together</p><h2>You know what happens next.</h2><div class="working-steps"><div><h3>Start with your business</h3><p>Tell us what you are starting or what is getting in the way. Rough notes are enough; you do not need to diagnose a technical problem.</p></div><div><h3>Agree the work</h3><p>Your written quote sets out the scope, costs, timing and responsibilities before work begins.</p></div><div><h3>Keep control</h3><p>Your business accounts stay in your name. We agree access, handover and any later help as part of the work.</p></div></div><p class="fine-print">Planned project work. Urgent support depends on availability; there is no guaranteed emergency response.</p></div></section>
+ <section class="section-space"><div class="container"><WorkExample {baseUrl} compact /></div></section>
+ <PageClose title="A conversation is enough to start." copy="We aim to acknowledge enquiries within two business days. We will confirm whether we can help and what the next step involves." service="other" />
+</PageLayout>
+<style>
+ .owner-detail{border-left:1px solid var(--line);padding-left:clamp(1.5rem,4vw,3rem)}.owner-detail p,.working-steps p{color:var(--muted);line-height:1.65}.working-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem;margin-top:2.5rem}.working-steps h3{font-size:1.3rem}.fine-print{margin-top:2rem}@media(max-width:700px){.owner-detail{padding:0;border:0}.working-steps{grid-template-columns:1fr;gap:1rem}}
+</style>

@@ -2,6 +2,7 @@
 import '@fontsource-variable/inter/wght.css';
 import '../styles/brand.css';
 import LandingPage from '../components/LandingPage.svelte';
+import EnquiryMeasurement from '../components/EnquiryMeasurement.astro';
 import { getEnquirySettings } from '../lib/server/enquirySettings';
 
 export const prerender = import.meta.env.PUBLIC_SITE_MODE === 'static';
@@ -34,33 +35,34 @@ const organisationSchema = {
 		<meta name="generator" content={Astro.generator} />
 		<meta
 			name="description"
-			content="Starting a business in Gippsland? Get your website, business email and essential accounts set up together, with clear costs and a practical walkthrough."
+			content="Starting a business in Gippsland? Get a website, one business mailbox and essential account setup from A$1,500 plus third-party costs."
 		/>
 		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Servo ICT" />
 		<meta property="og:url" content={canonicalUrl} />
-		<meta property="og:title" content="Starting a business? Let's get the basics sorted." />
+		<meta property="og:title" content="Business starter setup from A$1,500 | Servo ICT" />
 		<meta
 			property="og:description"
-			content="Your website, business email and essential account setup, handled together. Clear costs before we start, and help with the few things you need to know."
+			content="A website, one business mailbox and essential account setup, handled together for a quote-confirmed A$1,500 setup fee."
 		/>
 		<meta property="og:image" content={socialImageUrl} />
 		<meta property="og:image:alt" content="Servo ICT: Websites and technology, built properly." />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Starting a business? Let's get the basics sorted." />
+		<meta name="twitter:title" content="Business starter setup from A$1,500 | Servo ICT" />
 		<meta
 			name="twitter:description"
-			content="Your website, business email and essential account setup, handled together. Clear costs before we start, and help with the few things you need to know."
+			content="A website, one business mailbox and essential account setup, handled together for a quote-confirmed A$1,500 setup fee."
 		/>
 		<meta name="twitter:image" content={socialImageUrl} />
 		<meta name="twitter:image:alt" content="Servo ICT: Websites and technology, built properly." />
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(organisationSchema)}></script>
-		<title>Servo ICT | Website &amp; business email setup in Gippsland</title>
+		<title>Business starter setup from A$1,500 | Servo ICT</title>
 	</head>
 	<body>
+		<EnquiryMeasurement service="starter" />
 		<LandingPage client:load {turnstileSiteKey} {consultationMode} {baseUrl} />
 		{
 			turnstileSiteKey && (
@@ -84,3 +86,8 @@ const organisationSchema = {
 		margin: 0;
 	}
 </style>
+
+<script>
+ import { initializeEnquiryLinkTracking } from '../lib/enquiryEvents';
+ initializeEnquiryLinkTracking();
+</script>

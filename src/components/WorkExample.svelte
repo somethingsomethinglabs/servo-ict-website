@@ -9,7 +9,7 @@
 		<p class="example-kicker">Client work / Gippsland</p>
 		<h2 id="work-example-title">{compact ? 'A local business, ready to be found.' : '12Grapes Vineyard Services'}</h2>
 		{#if !compact}
-			<p class="example-intro">A clearer service website and a simple estimator help growers prepare a useful enquiry before making contact.</p>
+			<p class="example-intro">The website explains the services and lets growers enter vineyard details before making contact.</p>
 			<details>
 				<summary>Inside the project</summary>
 				<dl>
@@ -25,7 +25,7 @@
 		<div class="project-preview">
 			<img src={sitePath('/images/work/12grapes-website.jpg')} alt="12Grapes website showing vineyard services and a ground-management cost estimator." width="1425" height="891" loading="lazy" />
 		</div>
-		<figcaption><strong>12Grapes Vineyard Services</strong><span>Website and cost estimator</span>{#if compact}<p>Services explained clearly, with an estimator to help growers start an enquiry.</p>{/if}</figcaption>
+		<figcaption><strong>12Grapes Vineyard Services</strong><span>Website and cost estimator</span>{#if compact}<p>The published site explains the services and includes an estimator for vineyard details.</p>{/if}</figcaption>
 	</figure>
 </section>
 

@@ -4,6 +4,8 @@ import ServiceHero from '../components/ServiceHero.astro';
 import PageClose from '../components/PageClose.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import PageIcon from '../components/PageIcon.astro';
+import OutcomeGrid from '../components/OutcomeGrid.astro';
+import FaqSection from '../components/FaqSection.astro';
 import WorkExample from '../components/WorkExample.svelte';
 import { getEnquirySettings } from '../lib/server/enquirySettings';
 import { baseUrl, sitePath, services } from '../lib/site';
@@ -37,6 +39,7 @@ interface Props {
 const { title, description, canonicalPath, headline, intro, eyebrow, enquiryService, beforeEnquiring, goodFit, exampleScope, closingTitle, closingCopy } = Astro.props;
 const website = enquiryService === 'website';
 const security = enquiryService === 'security';
+const hasProof = Astro.slots.has('proof');
 const {consultationMode,turnstileSiteKey} = getEnquirySettings();
 const action = website ? 'Discuss my website' : security ? 'Discuss my security' : 'Talk about my IT';
 const outcomes = website ? [
@@ -80,32 +83,70 @@ const image = website ? '/images/work/12grapes-website.jpg' : security ? '/image
 const imageAlt = website ? '12Grapes Vineyard Services website.' : security ? 'Illustrative sign-in check beside a laptop and phone on a business desk.' : 'A Windows laptop and workplace Wi-Fi access point on a tidy business desk.';
 const schema = { '@context':'https://schema.org', '@type':'Service', name:headline, description, provider:{ '@type':'ProfessionalService',name:'Servo ICT',url:new URL(baseUrl,Astro.site).toString(),areaServed:['Gippsland','Victoria'] } };
 ---
-<PageLayout {title} {description} {canonicalPath} active="services" turnstileSiteKey={website ? undefined : turnstileSiteKey}>
+<PageLayout {title} {description} {canonicalPath} active="services" {turnstileSiteKey}>
  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
  <nav class="service-tabs" aria-label="Compare services">{services.map(s => <a href={sitePath(s.path)} aria-current={s.path === canonicalPath ? 'page' : undefined}>{s.label}</a>)}</nav>
  <ServiceHero {eyebrow} {headline} {intro} service={enquiryService} {action} {image} {imageAlt} {website} />
- {!security && <aside class="starter-strip"><div class="container ownership-strip"><PageIcon name="shield" size={30} /><span>Starting a business? Get your website, email and account setup together.</span><a class="text-link" href={`${baseUrl}#included`}>See the startup offer<PageIcon name="arrowRight" /></a></div></aside>}
+ <nav class="service-contents container" aria-label="On this page">
+  <a href="#typical-work">Work covered</a>
+  <a href={website ? '#website-offer' : '#costs'}>Costs</a>
+  <a href={website ? '#work-example' : '#example-scope'}>{website ? 'Our work' : 'Example project'}</a>
+  <a href="#process">Process</a>
+  <a href="#before-enquiring">Questions</a>
+ </nav>
+ {security && <aside class="urgent-note"><div class="container"><strong>Active cyber incident?</strong> This service is for planned improvements and does not guarantee incident response. Call the Australian Cyber Security Hotline on <a href="tel:1300292371">1300 CYBER1 (1300 292 371)</a>.</div></aside>}
  <section id="typical-work" class="outcomes ruled-section section-space"><div class="container">
   <p class="eyebrow">{website ? 'How a website helps' : security ? 'Get clarity' : 'What we help with'}</p>
   <h2>{website ? 'Give customers what they came for.' : security ? 'Start with the things you depend on.' : 'Make the everyday jobs easier.'}</h2>
-  <div class:list={security ? ['question-list'] : ['outcome-grid', {three:website}]}>{outcomes.map(item => <div class="outcome">{security ? <><h3><PageIcon name={item.icon} size={36} />{item.title}</h3><p>{item.copy}</p></> : <><PageIcon name={item.icon} size={36}/><div><h3>{item.title}</h3><p>{item.copy}</p></div></>}</div>)}</div>
-  {website ? <p class="fine-print">An existing booking link takes customers to your booking provider. Custom booking systems are quoted separately.</p> : <p class="ownership-strip"><PageIcon name="shield" size={30} />Your business keeps control of its accounts and access.</p>}
+  <OutcomeGrid items={outcomes} variant={security ? 'questions' : website ? 'three' : 'grid'} />
+  {website ? <p class="fine-print">An existing booking link takes customers to your booking provider. Custom booking systems are quoted separately.</p> : <p class="service-limit">Your business keeps control of its accounts and access. {security ? 'Defined security projects, with no continuous monitoring or guaranteed incident response.' : 'Planned setup and improvement projects. Day-to-day management stays with your business; urgent help depends on availability.'}</p>}
+  <div class="service-fit split fit-grid">
+   <h3>{website ? 'Is this the right website service?' : security ? 'When to ask about security' : 'When to ask about Business IT'}</h3>
+   <ul>{goodFit.map(item => <li>{item}</li>)}</ul>
+  </div>
+  {!website && !security && <p class="starter-signpost">Starting a business? <a href={sitePath('/start-a-business/')}>The starter package</a> combines a small website, business email and essential account setup.</p>}
  </div></section>
  {website ? <div class="container"><slot name="offer" /></div> : <section class="ruled-section section-space" id="costs"><div class="container split cost-grid"><div><p class="eyebrow">Pricing</p><h2>{security ? 'Agree the work before anything changes.' : 'A clear scope. A written quote.'}</h2><p class="lead">We confirm availability before booking the work.</p></div><dl class="cost-list">{costs.map(item => <div><dt><PageIcon name={item.icon} size={30}/>{item.title}</dt><dd>{item.copy}</dd></div>)}</dl></div></section>}
- {website ? <section class="proof-band section-space"><div class="container"><WorkExample {baseUrl} compact /></div></section> : <section class="handover-band section-space"><div class="container split">
-  <figure class="handover-figure"><img class="handover-image" src={sitePath(security ? '/images/pages/security-handover.webp' : '/images/pages/it-handover.webp')} width="1200" height="800" loading="lazy" alt={security ? 'Example handover: account access record, recovery notes and priority next steps.' : 'Example handover: business email, devices, account owners and routine tasks.'}/></figure>
-  <div><p class="eyebrow">Your handover</p><h2>{security ? 'Leave with a plan you can use.' : 'A setup your business can manage.'}</h2><p class="lead">{security ? 'The agreed changes, a clear record and practical steps for later.' : 'Clear access records, practical notes and a walkthrough.'}</p><p>{security ? 'Windows security tools are a starting point where suitable. Additional software is considered during scoping.' : 'Optional check-ins can review devices, access, updates and recovery, roughly every six months.'}</p></div>
- </div></section>}
+ <section id={website ? undefined : 'example-scope'} class="proof-band section-space"><div class="container">
+  {website ? <WorkExample {baseUrl} compact /> : <>
+   <div class="split scope-grid">
+    <div><p class="eyebrow">Illustrative scope</p><h2>What a project could involve.</h2><p>{exampleScope.scenario}</p><p class="fine-print">This example explains the process. It is not a client result or a fixed package.</p>
+     <figure class="handover-figure"><img class="handover-image" src={sitePath(security ? '/images/pages/security-handover.webp' : '/images/pages/it-handover.webp')} width="1200" height="800" loading="lazy" alt={security ? 'Example handover: account access record, recovery notes and priority next steps.' : 'Example handover: business email, devices, account owners and routine tasks.'}/></figure>
+    </div>
+    <dl><dt>The work</dt><dd>{exampleScope.work}</dd><dt>What you provide</dt><dd>{exampleScope.inputs}</dd><dt>Before work begins</dt><dd>{exampleScope.timing}</dd><dt>Handover</dt><dd>{exampleScope.handover}</dd><dt>Later help</dt><dd>{security ? 'Windows security tools are a starting point where suitable. Additional software is considered during scoping.' : 'Optional check-ins can review devices, access, updates and recovery, roughly every six months.'}</dd></dl>
+   </div>
+   <div class="service-experience">
+    {hasProof ? <slot name="proof" /> : <><h3>Experience behind the work</h3><p>Servo ICT brings Microsoft Fundamentals training, Azure consulting experience and cybersecurity experience to planned small business projects. This describes the experience behind the service, not a client outcome.</p></>}
+   </div>
+  </>}
+  {website && hasProof && <div class="service-experience"><slot name="proof" /></div>}
+  <div class="service-followup">
+   <div><p>Servo ICT is owned and operated by Rowan Paterson in Gippsland.</p><a class="text-link" href={sitePath('/about/')}>About Servo ICT<PageIcon name="arrowRight" /></a></div>
+   <a class="text-link" href="#consultation-form">{action}<PageIcon name="arrowRight" /></a>
+  </div>
+ </div></section>
  <ProcessSteps title={website ? "Bring the business. We'll help with the website." : security ? 'We make security straightforward.' : 'You explain the problem. We work through the setup.'} {steps} note={website ? "Need hours, photos or service details changed later? Send us what's new. We confirm the timing and any cost first." : security ? 'Planned improvements. No continuous monitoring or guaranteed incident response.' : 'Windows is our core desktop platform. We use UniFi for suitable workplace networks. Other setups can be discussed.'} />
- <section id="before-enquiring" class="service-faq"><div class="container"><details class="all-details"><summary>Useful details about {website ? "website" : security ? "security" : "IT"} projects</summary><div class="detail-list">
-  {beforeEnquiring.map(item => <details><summary>{item.question}</summary><p>{item.answer}</p></details>)}
-  <details><summary>Is this the right help for me?</summary><ul>{goodFit.map(item => <li>{item}</li>)}</ul></details>
-  <details id="example-scope"><summary>What could a project involve?</summary><p>{exampleScope.scenario} This is an illustrative scope.</p><dl><dt>The work</dt><dd>{exampleScope.work}</dd><dt>What you provide</dt><dd>{exampleScope.inputs}</dd><dt>Before we begin</dt><dd>{exampleScope.timing}</dd><dt>Handover</dt><dd>{exampleScope.handover}</dd></dl></details>
-  {!website && <details><summary>Experience behind the work</summary><p>Servo ICT brings Microsoft Fundamentals training, Azure consulting experience and cybersecurity experience to small business projects.</p></details>}
- </div>{website && <div class="technology-detail"><slot name="technology" /></div>}</details></div></section>
- <PageClose inlineForm={!website} {consultationMode} {turnstileSiteKey} returnPath={sitePath(canonicalPath)} title={closingTitle} copy={closingCopy} {action} service={enquiryService} note={security ? 'Please keep passwords and recovery codes out of your enquiry.' : !website ? 'Planned project work. Urgent help depends on availability.' : undefined} />
+ <FaqSection id="before-enquiring" title="Useful details before you enquire." items={beforeEnquiring}>{website && <div class="technology-detail"><slot name="technology" /></div>}</FaqSection>
+ <PageClose inlineForm {consultationMode} {turnstileSiteKey} returnPath={sitePath(canonicalPath)} title={closingTitle} copy={closingCopy} {action} service={enquiryService} source={canonicalPath} note={security ? 'Please keep passwords and recovery codes out of your enquiry. This service does not provide guaranteed incident response.' : !website ? 'Planned project work. Urgent help depends on availability.' : 'We aim to acknowledge enquiries within two business days.'} />
 </PageLayout>
 <style>
- .handover-figure{margin:0}.technology-detail{margin-top:2rem}.service-faq{padding-block:var(--section-space-compact)}
- .all-details>summary{min-height:56px;padding:1rem 0;font-size:1.15rem;font-weight:700;cursor:pointer}.all-details{border-block:1px solid var(--line)}.all-details[open]{padding-bottom:2rem}.all-details .detail-list{margin-top:1.5rem}
+ .service-contents{display:flex;flex-wrap:wrap;gap:.25rem 1.5rem;padding-block:var(--band-space)}
+ .service-contents a{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
+ .technology-detail{margin-top:2rem}
+ .service-fit{margin-top:2rem;padding-top:2rem;border-top:1px solid var(--line)}
+ .fit-grid,.scope-grid{align-items:start}
+ .fit-grid ul{margin:0;padding-left:1.25rem;max-width:var(--reading-measure);color:var(--muted);line-height:1.7}
+ .fit-grid li+li{margin-top:.7rem}
+ .service-limit,.starter-signpost{margin-top:1.5rem}
+ .handover-figure{margin:2rem 0 0}
+ .scope-grid dl{margin:0}
+ .scope-grid dt{margin-top:1rem;font-weight:700}
+ .scope-grid dt:first-child{margin-top:0}
+ .scope-grid dd{margin:.35rem 0 1rem;color:var(--muted);line-height:1.65}
+ .service-experience{margin-top:2rem;padding-top:var(--band-space);border-top:1px solid var(--line)}
+ .service-followup{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem 2rem;margin-top:2rem;padding-top:var(--band-space);border-top:1px solid var(--line)}
+ .service-followup p{margin:0}
+ .urgent-note{padding-block:1.2rem;background:var(--plastic-black);color:var(--ink-on-black);line-height:1.6}
+ .urgent-note a{color:inherit;font-weight:700}
+ .urgent-note strong{margin-right:.35rem}
 </style>

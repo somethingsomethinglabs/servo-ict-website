@@ -1,0 +1,24 @@
+---
+import { sitePath } from '../lib/site';
+const { service = 'unsure' } = Astro.props;
+// Node pages may be prerendered. Keep the hook available for runtime configuration.
+const enabled = import.meta.env.PUBLIC_SITE_MODE !== 'static';
+---
+{enabled && <span hidden data-enquiry-measurement={sitePath('/api/enquiry-events')} data-service={service}></span>}
+<script>
+	import { createEnquiryEvent, enquiryEventName, type EnquiryEventDetail } from '../lib/enquiryEvents';
+	const marker = document.querySelector<HTMLElement>('[data-enquiry-measurement]');
+	const privacy = navigator as Navigator & { globalPrivacyControl?: boolean };
+	if (marker && navigator.doNotTrack !== '1' && !privacy.globalPrivacyControl) {
+		const endpoint = marker.dataset.enquiryMeasurement!;
+		const send = (detail: object) => {
+			void fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(detail), keepalive: true, credentials: 'omit', referrerPolicy: 'no-referrer' }).catch(() => {});
+		};
+		window.addEventListener(enquiryEventName, (event) => {
+			const detail = (event as CustomEvent<EnquiryEventDetail>).detail;
+			// Confirmed delivery is counted by the mail endpoint, never by the browser.
+			if (detail.event !== 'submission_confirmed') send(detail);
+		});
+		send({ ...createEnquiryEvent('form_start', { service: marker.dataset.service, source: location.pathname, pagePath: location.pathname }), event: 'page_view' });
+	}
+</script>

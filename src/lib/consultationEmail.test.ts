@@ -59,16 +59,25 @@ describe('buildConsultationEmailDraft', () => {
 		const draft = buildConsultationEmailDraft(form);
 
 		expect(draft.body).toContain('Email or phone: 0412 345 678');
-		expect(draft.body).toContain('Project type: New business essentials');
+		expect(draft.body).toContain("Project type: I'm not sure yet");
 		expect(draft.plainText).toContain('To: support@servoict.com');
+	});
+
+	it('includes service and originating-page context in the static email draft', () => {
+		const form = consultationForm();
+		form.set('source', 'service_page');
+		form.set('originPath', '/websites/');
+		const draft = buildConsultationEmailDraft(form);
+		expect(draft.body).toContain('Source: service_page');
+		expect(draft.body).toContain('Page: /websites/');
 	});
 });
 
 describe('enquiry client helpers', () => {
 	it('preserves known service context and rejects inherited object keys', () => {
 		expect(resolveConsultationService('security')).toBe('security');
-		expect(resolveConsultationService('toString')).toBe('starter');
-		expect(resolveConsultationService(null)).toBe('starter');
+		expect(resolveConsultationService('toString')).toBe('unsure');
+		expect(resolveConsultationService(null)).toBe('unsure');
 	});
 
 	it('rejects malformed endpoint responses', () => {
@@ -83,6 +92,8 @@ describe('enquiry client helpers', () => {
 		expect(resolveConsultationMode({ staticSite: false, hasTurnstileSiteKey: false, allowInsecureLocal: true, isDevelopment: true })).toBe('server');
 		expect(resolveConsultationMode({ staticSite: false, hasTurnstileSiteKey: false, allowInsecureLocal: true, isDevelopment: false })).toBe('email');
 		expect(resolveConsultationMode({ staticSite: true, hasTurnstileSiteKey: true, allowInsecureLocal: true, isDevelopment: true })).toBe('email');
+		expect(resolveConsultationMode({ staticSite: false, hasTurnstileSiteKey: true, hasServerDeliveryConfiguration: false, allowInsecureLocal: false, isDevelopment: false })).toBe('email');
+		expect(resolveConsultationMode({ staticSite: false, hasTurnstileSiteKey: true, hasTurnstileSecretKey: false, allowInsecureLocal: false, isDevelopment: false })).toBe('email');
 	});
 
 	it('uses a help-focused heading in nonstarter drafts', () => {

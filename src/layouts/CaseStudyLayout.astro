@@ -1,0 +1,47 @@
+---
+import PageLayout from './PageLayout.astro';
+import PageIcon from '../components/PageIcon.astro';
+import { sitePath } from '../lib/site';
+interface Props {
+ title: string;
+ description: string;
+ canonicalPath: string;
+ headline: string;
+ client: string;
+ intro: string;
+ eyebrow?: string;
+ theme?: 'light' | 'dark';
+ facts: Array<{ label: string; value: string; icon?: string }>;
+ hero: { src: string; alt: string; width: number; height: number; caption?: string };
+ projectLink?: { href: string; label: string };
+ backLink?: { href: string; label: string };
+}
+const { headline, client, intro, eyebrow = 'Selected work', theme = 'light', facts, hero, projectLink, backLink = { href:sitePath('/websites/#work-example'), label:'Our work' } } = Astro.props;
+---
+<PageLayout title={Astro.props.title} description={Astro.props.description} canonicalPath={Astro.props.canonicalPath} image={hero.src} active="work">
+ <slot name="head" slot="head" />
+ <nav class="container breadcrumb" aria-label="Breadcrumb"><a href={backLink.href}>{backLink.label}</a><span aria-hidden="true">/</span><span aria-current="page">{client}</span></nav>
+ <article>
+  <header class:list={['project-hero', 'section-space', theme === 'dark' ? 'material-black' : 'material-silver']}>
+   <div class="container split">
+    <div>{eyebrow && <p class="eyebrow">{eyebrow}</p>}<h1>{headline}</h1><p class="project-name">{client}</p><p class="lead">{intro}</p>
+     <dl class="project-facts">{facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.icon && <PageIcon name={fact.icon} size={24} />}{fact.value}</dd></div>)}</dl>
+    </div>
+    <figure><img class="photo-frame" src={sitePath(hero.src)} alt={hero.alt} width={hero.width} height={hero.height} fetchpriority="high" />{hero.caption && <figcaption>{hero.caption}</figcaption>}{projectLink && <a class="text-link" href={projectLink.href}>{projectLink.label}<PageIcon name="arrowUpRight" /></a>}</figure>
+   </div>
+  </header>
+  <slot />
+ </article>
+ <slot name="closing" />
+</PageLayout>
+<style>
+ .project-hero { padding-top:var(--section-space-compact); }
+ .project-name { font-size:clamp(1.5rem,2.5vw,2.3rem); line-height:1.25; letter-spacing:-.04em; margin-top:2rem; }
+ .project-facts { display:flex; flex-wrap:wrap; gap:1.5rem 2rem; margin:2.5rem 0 0; padding-top:1.5rem; border-top:1px solid var(--line); }
+ .project-facts div { min-width:0; }
+ dt { font-size:.75rem; color:var(--muted); margin-bottom:.4rem; }
+ dd { display:flex; align-items:center; gap:.6rem; margin:0; font-size:.9rem; font-weight:700; }
+ figure { margin:0; min-width:0; }
+ figure .text-link { margin-top:1.5rem; }
+ figcaption { margin-top:1rem; color:var(--muted); font-size:.9rem; }
+</style>

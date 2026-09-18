@@ -1,0 +1,30 @@
+---
+import { sitePath } from '../lib/site';
+interface Props {
+ id?: string;
+ eyebrow?: string;
+ title: string;
+ copy?: string;
+ theme?: 'light' | 'dark';
+ image?: { src: string; alt: string; width: number; height: number; caption?: string };
+}
+const { id = `project-section-${crypto.randomUUID()}`, eyebrow, title, copy, theme = 'light', image } = Astro.props;
+---
+<section {id} class:list={['project-section', 'ruled-section', 'section-space', theme === 'dark' ? 'material-black' : 'material-silver']} aria-labelledby={`${id}-title`}>
+ <div class="container split project-section-grid">
+  <div>{eyebrow && <p class="eyebrow">{eyebrow}</p>}<h2 id={`${id}-title`}>{title}</h2>{copy && <p class="lead">{copy}</p>}</div>
+  <div class="project-section-body">
+   {image && <figure><img class="photo-frame" src={sitePath(image.src)} alt={image.alt} width={image.width} height={image.height} loading="lazy" />{image.caption && <figcaption>{image.caption}</figcaption>}</figure>}
+   <slot />
+  </div>
+ </div>
+</section>
+<style>
+ .project-section-grid { align-items:start; }
+ .project-section-body { min-width:0; color:var(--muted); }
+ .project-section-body :global(> :first-child) { margin-top:0; }
+ .project-section-body :global(h3) { color:var(--ink); }
+ .project-section-body :global(li + li) { margin-top:.6rem; }
+ figure { margin:0 0 1.5rem; }
+ figcaption { margin-top:.8rem; font-size:.9rem; }
+</style>

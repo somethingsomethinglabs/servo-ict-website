@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
-import BlogLayout from '../layouts/BlogLayout.astro';
+import ArticleLayout from '../layouts/ArticleLayout.astro';
 import PageIcon from '../components/PageIcon.astro';
 import PageClose from '../components/PageClose.astro';
 import { sitePath, enquiryPath } from '../lib/site';
@@ -13,53 +13,29 @@ interface Props { post:CollectionEntry<'blog'> }
 const {post} = Astro.props;
 const {Content,headings} = await render(post);
 const contents = headings.filter(heading => heading.depth === 2);
-const related = (await getCollection('blog', ({data}) => !data.draft)).filter(candidate => candidate.id !== post.id && (post.data.topic === 'Devices and updates' || candidate.data.topic !== 'Devices and updates')).sort((a,b) => b.data.publishedAt.valueOf()-a.data.publishedAt.valueOf()).slice(0,2);
-const formatDate = (date:Date) => new Intl.DateTimeFormat('en-AU',{day:'numeric',month:'long',year:'numeric',timeZone:'Australia/Melbourne'}).format(date);
+const related = (await getCollection('blog', ({data}) => !data.draft)).filter(candidate => candidate.id !== post.id && candidate.data.topic === post.data.topic).sort((a,b) => b.data.publishedAt.valueOf()-a.data.publishedAt.valueOf()).slice(0,2);
 const readingTime = Math.max(1,Math.ceil((post.body?.split(/\s+/).length ?? 0)/200));
+const startupArticle = post.data.topic === 'Starting a business';
 const computerArticle = post.data.topic === 'Devices and updates';
+const enquiryService = startupArticle ? 'starter' : computerArticle ? 'technology' : 'security';
+const helpPath = startupArticle ? '/start-a-business/' : computerArticle ? '/business-it/' : '/security/';
 ---
-<BlogLayout title={`${post.data.title} | Servo ICT`} description={post.data.description} canonicalPath={`/${post.id}/`} image={post.data.featuredImage} type="article" publishedAt={post.data.publishedAt} updatedAt={post.data.updatedAt}>
- <article>
-  <header class="article-header section-space"><div class="container"><a class="back-link" href={sitePath('/blog/')}><span aria-hidden="true">←</span> All advice</a><div class="split article-hero"><div><p class="eyebrow">{post.data.topic}</p><h1>{post.data.title}</h1><p class="lead">{post.data.description}</p><p class="byline">By {post.data.author}<span aria-hidden="true">·</span><time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time><span>{readingTime} min read</span></p></div><div class="article-photo"><img class="photo-frame" src={sitePath(post.data.featuredImage)} alt={post.data.featuredImageAlt} width="1400" height="1120" fetchpriority="high" /></div></div></div></header>
-  <div class="container article-grid section-space">
-   <aside class="contents"><nav aria-label="In this article"><p class="eyebrow">In this article</p><ol>{contents.map(heading => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol><a class="text-link" href={sitePath(computerArticle ? '/business-it/' : '/security/')}>Need a hand?<PageIcon name="arrowRight" size={20}/></a></nav></aside>
-   <div class="article-copy"><div class="prose"><Content /></div><aside class="article-help"><PageIcon name={computerArticle ? 'laptop' : 'shield'} size={38}/><div><h2>{computerArticle ? 'Need help with your computers?' : 'Want a hand with account security?'}</h2><p>We can work through the setup with you and show you what you need to know.</p><a class="text-link" href={enquiryPath(computerArticle ? 'technology' : 'security')}>Talk it through<PageIcon name="arrowRight" size={20} /></a></div></aside></div>
-  </div>
- </article>
- <section class="related section-space ruled-section"><div class="container"><div class="related-inner"><p class="eyebrow">Keep reading</p><h2>More useful advice.</h2><nav class="related-list" aria-label="Related advice">{related.map(item => <a href={sitePath(`/${item.id}/`)}><PageIcon name="file" size={28}/><span>{item.data.title}</span><PageIcon name="arrowRight" size={22}/></a>)}</nav></div></div></section>
- <PageClose compact title="A rough description is enough to get started." copy="We can talk through the work and the next steps." service={computerArticle ? 'technology' : 'security'} />
-</BlogLayout>
+<ArticleLayout enquiryTopic={enquiryService} title={`${post.data.title} | Servo ICT`} headline={post.data.title} description={post.data.description} canonicalPath={`/${post.id}/`} image={post.data.featuredImage} imageAlt={post.data.featuredImageAlt} topic={post.data.topic} author={post.data.author} publishedAt={post.data.publishedAt} updatedAt={post.data.updatedAt} {readingTime} headings={contents} helpLink={{href:sitePath(helpPath),label:'Need a hand?'}}>
+ <Content />
+ <Fragment slot="after-content"><aside class="article-help"><PageIcon name={computerArticle ? 'laptop' : 'shield'} size={38}/><div><h2>{startupArticle ? 'Ready to get your business set up?' : computerArticle ? 'Need help with your computers?' : 'Want a hand with account security?'}</h2><p>We can work through the setup with you and show you what you need to know.</p><a class="text-link" href={enquiryPath(enquiryService, sitePath(`/${post.id}/`))}>Talk it through<PageIcon name="arrowRight" size={20} /></a></div></aside></Fragment>
+ <Fragment slot="after-article">
+ {related.length > 0 && <section class="related section-space ruled-section"><div class="container"><div class="related-inner"><p class="eyebrow">Keep reading</p><h2>More useful advice.</h2><nav class="related-list" aria-label="Related advice">{related.map(item => <a href={sitePath(`/${item.id}/`)}><PageIcon name="file" size={28}/><span>{item.data.title}</span><PageIcon name="arrowRight" size={22}/></a>)}</nav></div></div></section>}
+ <PageClose compact title="A rough description is enough to get started." copy="We can talk through the work and the next steps." service={enquiryService} />
+ </Fragment>
+</ArticleLayout>
 <style>
- .article-header { background-color:var(--plastic); border-bottom:1px solid var(--seam); box-shadow:inset 0 -1px 0 var(--edge); padding-top:2rem; }
- .back-link { display:inline-flex; gap:.8rem; align-items:center; min-height:44px; margin-bottom:2rem; color:var(--muted); font-size:.95rem; font-weight:700; text-decoration:none; }
- .article-hero { grid-template-columns:1.2fr 1fr; }
- .article-hero h1 { font-size:clamp(2.5rem,4.8vw,4.65rem); }
- .article-photo { padding:0 1rem 1rem 0; }
- .article-photo img { aspect-ratio:1.12; height:auto; object-fit:cover; }
- .byline { display:flex; flex-wrap:wrap; gap:.4rem .75rem; margin-top:2rem; color:var(--muted); font-size:.85rem; }
- .byline > span:last-child { flex-basis:100%; }
- .article-grid { display:grid; grid-template-columns:clamp(140px,17vw,220px) minmax(0,1fr); gap:clamp(3rem,7vw,7rem); align-items:start; }
- .contents { position:sticky; top:2rem; }
- .contents ol { list-style:none; padding:0; margin:0; }
- .contents li { border-bottom:1px solid var(--line); }
- .contents li a { display:block; min-height:44px; padding:.8rem 0; color:var(--muted); font-size:.95rem; }
- .contents .text-link { margin-top:1.5rem; }
- .article-copy { max-width:46rem; }
- .prose { font-size:1.1rem; line-height:1.78; color:var(--muted); }
- .prose :global(> :first-child) { margin-top:0; }
- .prose :global(h2) { margin:3.5rem 0 1.2rem; padding-top:1.5rem; border-top:1px solid var(--line); color:var(--ink); font-size:clamp(1.7rem,2.5vw,2.4rem); line-height:1.18; letter-spacing:-.045em; }
- .prose :global(h3) { margin:2rem 0 .8rem; color:var(--ink); font-size:1.35rem; }
- .prose :global(p),.prose :global(ul),.prose :global(ol) { margin:1.2rem 0; }
- .prose :global(li + li) { margin-top:.6rem; }
- .prose :global(a) { color:var(--ink); font-weight:700; text-decoration-color:var(--ink); text-decoration-thickness:2px; overflow-wrap:anywhere; }
- .prose :global(blockquote) { margin:2rem 0; padding:1rem 1.5rem; border-left:5px solid var(--ink); background-color:var(--plastic); }
  .article-help { display:flex; gap:1.5rem; padding:2rem; margin-top:3.5rem; background-color:var(--plastic); border:1px solid var(--line); }
  .article-help h2 { font-size:clamp(1.5rem,2.2vw,2rem); line-height:1.15; }
  .article-help .text-link { margin-top:1rem; }
- .related-inner { margin-left:calc(clamp(140px,17vw,220px) + clamp(3rem,7vw,7rem)); max-width:46rem; }
+ .related-inner { margin-left:calc(clamp(140px,17vw,220px) + clamp(3rem,7vw,7rem)); max-width:var(--reading-measure); }
  .related-list { display:grid; margin-top:2rem; }
  .related-list a { display:flex; align-items:center; gap:1.25rem; padding:1.3rem 0; border-bottom:1px solid var(--line); font-weight:700; text-decoration:none; }
  .related-list a span { margin-right:auto; }
- @media(max-width:1050px){.article-grid{gap:2.5rem}.related-inner{margin-left:calc(clamp(140px,17vw,220px) + 2.5rem)}}
- @media(max-width:700px){.article-hero,.article-grid{grid-template-columns:1fr}.article-header{padding-top:1.5rem}.contents{position:static}.contents ol{display:grid;gap:0}.article-grid{gap:3rem}.article-copy{min-width:0}.prose{font-size:1.05rem;line-height:1.8}.article-help{padding:1.5rem;gap:1rem;display:block}.article-help h2{margin-top:1rem}.related-inner{margin:0}.related-list a{gap:1rem}}
+ @media(max-width:1050px){.related-inner{margin-left:calc(clamp(140px,17vw,220px) + 2.5rem)}}
+ @media(max-width:700px){.article-help{padding:1.5rem;gap:1rem;display:block}.article-help h2{margin-top:1rem}.related-inner{margin:0}.related-list a{gap:1rem}}
 </style>

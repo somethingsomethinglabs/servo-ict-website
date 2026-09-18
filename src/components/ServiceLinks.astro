@@ -1,24 +1,15 @@
 ---
-import PageIcon from './PageIcon.astro';
-import { baseUrl, sitePath } from '../lib/site';
-interface Props { title?: string; copy?: string; includeStarter?: boolean; framed?: boolean }
-const { title = 'Looking for help with a job?', copy = 'Here are some common places to start.', includeStarter = false, framed = false } = Astro.props;
+import * as ServiceChooser from './service-chooser';
+import { sitePath } from '../lib/site';
+interface Props { id?: string; eyebrow?: string; title?: string; copy?: string; includeStarter?: boolean; framed?: boolean; theme?: 'light' | 'dark' }
+const { id, eyebrow, title = 'Looking for help with a job?', copy = 'Here are some common places to start.', includeStarter = false, framed = false, theme = 'light' } = Astro.props;
 const links = [
- ...(includeStarter ? [{label:'Starting a business',href:`${baseUrl}#included`}] : []),
+ ...(includeStarter ? [{label:'Starting a business',href:sitePath('/start-a-business/')}] : []),
  {label:'Website help',href:sitePath('/websites/')},
  {label:'Computers, email and Wi-Fi',href:sitePath('/business-it/')},
  {label:'Account security',href:sitePath('/security/')}
 ];
 ---
-<section class:list={['service-links', 'split', {framed}]} aria-labelledby="service-links-title">
- <div><h2 id="service-links-title">{title}</h2><p class="lead">{copy}</p></div>
- <nav aria-label="Find the right service">{links.map(link => <a href={link.href}>{link.label}<PageIcon name="arrowRight" /></a>)}</nav>
-</section>
-<style>
- .service-links { align-items:start; }
- .framed { padding:clamp(1.5rem,4vw,3rem); border-block:1px solid var(--line); }
- h2 { max-width:16ch; }
- nav { border-top:1px solid var(--line); }
- nav a { display:flex; justify-content:space-between; gap:1.5rem; align-items:center; min-height:70px; padding:1rem 0; border-bottom:1px solid var(--line); font-size:1.05rem; font-weight:700; text-decoration:none; }
- @media(max-width:700px) { .framed{padding:1.5rem}nav a{min-height:64px} }
-</style>
+<ServiceChooser.Root {id} {eyebrow} {title} {copy} {framed} {theme}>
+ {links.map(link => <ServiceChooser.Link {...link} />)}
+</ServiceChooser.Root>

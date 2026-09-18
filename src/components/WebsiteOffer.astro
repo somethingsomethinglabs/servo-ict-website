@@ -1,13 +1,16 @@
 ---
-import { enquiryPath } from '../lib/site';
-const enquiryUrl = enquiryPath('website');
+import { sitePath } from '../lib/site';
 ---
 
 <section class="website-offer" id="website-offer" aria-labelledby="website-offer-title">
+	<div class="starter-choice">
+		<div><p class="eyebrow">Starting a business?</p><h2>A smaller package has its own scope.</h2><p>The starter package is for a new business that needs a small website, business email and essential account setup together. The prices below cover larger or custom website work.</p></div>
+		<a class="text-link" href={sitePath('/start-a-business/')}>See the starter package <span aria-hidden="true">→</span></a>
+	</div>
 	<div class="offer-heading">
 		<div><p class="eyebrow">Larger or custom websites</p>
 		<h2 id="website-offer-title">Know the cost<br />before we build.</h2></div>
-		<a class="text-link" href="#website-terms">Ownership, exclusions and payment details <span aria-hidden="true">↓</span></a>
+		<a class="text-link" href="#website-terms">Read the ownership and care terms <span aria-hidden="true">↓</span></a>
 	</div>
 
 	<div class="pricing" aria-label="Website pricing">
@@ -15,7 +18,7 @@ const enquiryUrl = enquiryPath('website');
 			<p class="price-label">Project price</p>
 			<p class="price">From <span>A$6,500</span></p>
 			<p>Planning, design and writing for up to five core pages, one agreed interactive feature and two review rounds.</p>
-			<a href={enquiryUrl}>Discuss a website project <span aria-hidden="true">→</span></a>
+			<a href="#consultation-form">Discuss a website project <span aria-hidden="true">→</span></a>
 		</div>
 		<div class="price-card managed">
 			<p class="price-label">Managed payment option</p>
@@ -28,15 +31,17 @@ const enquiryUrl = enquiryPath('website');
 	<p class="offer-currency">All prices are in AUD. GST is not currently charged. The proposal confirms timing once the scope, content, access and review process are understood.</p>
 
 	<div class="offer-disclosures" id="website-terms">
-		<details><summary>What the custom scope includes</summary><ul><li>One planning workshop and a written project scope</li><li>Custom structure, design and writing for up to five core pages</li><li>One focused interactive feature with agreed inputs and outputs</li><li>Two consolidated review rounds</li><li>Search and analytics setup, enquiry testing, launch and handover</li></ul></details>
-		<details><summary>Managed care after launch</summary><p>Available where included in the project proposal. It covers the scoped build plus hosting, backups, monitoring, scheduled form checks, up to 30 minutes of small edits each month and a quarterly review. After the 24-month term, choose handover to your own hosting or ask for a separately quoted care arrangement.</p></details>
-		<details><summary>Ownership and responsibilities</summary><p>Your domain and business accounts stay in your name. Before work starts, the proposal sets out hosting costs, care limits, the payment schedule, how launch delays affect billing, and the ownership, cancellation and early-handover terms. Monitoring does not include a staffed 24-hour response.</p></details>
-		<details><summary>Work that needs a separate quote</summary><p>Online shops, customer accounts, complex booking systems, external integrations and larger data-backed tools sit outside the starting scope. Large content migrations, photography, logo work, legal writing and third-party fees are also quoted separately when needed.</p></details>
+		<section><h3>What the custom scope includes</h3><ul><li>One planning workshop and a written project scope</li><li>Custom structure, design and writing for up to five core pages</li><li>One focused interactive feature with agreed inputs and outputs</li><li>Two consolidated review rounds</li><li>Search and analytics setup, enquiry testing, launch and handover</li></ul></section>
+		<section><h3>Managed care limits</h3><p>Where included in the proposal, managed care covers hosting, backups, monitoring, scheduled form checks, up to 30 minutes of small edits each month and a quarterly review. Unused edit time does not roll over. New pages, redesigns, new features, content production and urgent or after-hours work need a separate quote. Monitoring does not include a staffed 24-hour response. After 24 months, choose handover to your own hosting or ask for a separately quoted care arrangement.</p></section>
+		<section><h3>Website ownership and handover</h3><p>Your domain and business accounts stay in your name. Once the agreed project payments are complete, you receive the website files and the final content created for your project. Third-party software, fonts, images and services remain subject to their own licences. The proposal records any exceptions and the process for cancellation or early handover before work starts.</p></section>
+		<section><h3>Work that needs a separate quote</h3><p>Online shops, customer accounts, complex booking systems, external integrations and larger data-backed tools sit outside the starting scope. Large content migrations, photography, logo work, legal writing and third-party fees are also quoted separately when needed.</p></section>
 	</div>
 </section>
 
 <style>
  .website-offer { padding-block:var(--section-space); border-top:1px solid var(--seam); box-shadow:inset 0 1px 0 var(--edge); }
+ .starter-choice{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(12rem,.7fr);align-items:end;gap:2rem;margin-bottom:var(--section-space);padding:clamp(1.5rem,3vw,2.5rem);background:var(--plastic);border:1px solid var(--line)}
+ .starter-choice h2{font-size:clamp(1.8rem,3vw,2.8rem)}.starter-choice p:not(.eyebrow){max-width:46rem;color:var(--muted);line-height:1.65}.starter-choice .text-link{justify-self:end}
  .offer-heading { display:flex; justify-content:space-between; gap:2rem; align-items:start; margin-bottom:3rem; }
  .offer-heading .text-link { font-size:.95rem; }
  .pricing { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; }
@@ -50,10 +55,12 @@ const enquiryUrl = enquiryPath('website');
  .price-card .total { margin-top:.6rem; color:var(--ink); }
  .price-card a { display:inline-flex; align-items:center; gap:1.5rem; min-height:44px; margin-top:1rem; font-weight:700; }
  .offer-currency { font-size:.9rem; color:var(--muted); }
+ .offer-exclusions { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--line); }
+ .offer-exclusions p { color:var(--muted); }
  .offer-disclosures { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 3rem; margin-top:2rem; }
- .offer-disclosures details { border-bottom:1px solid var(--line); }
- .offer-disclosures summary { min-height:60px; padding-block:1.2rem; cursor:pointer; font-weight:700; }
+ .offer-disclosures section { padding:1.5rem 0; border-top:1px solid var(--line); }
+ .offer-disclosures h3 { margin:0 0 .8rem; font-size:1.1rem; }
  .offer-disclosures p,.offer-disclosures ul { margin:0 0 1.5rem; font-size:1rem; color:var(--muted); line-height:1.7; }
  .offer-disclosures li+li { margin-top:.5rem; }
- @media(max-width:760px) { .offer-heading{display:block}.offer-heading .text-link{margin-top:1.5rem}.pricing,.offer-disclosures{grid-template-columns:1fr}.price-card{padding:1.5rem} }
+ @media(max-width:760px) { .starter-choice{grid-template-columns:1fr}.starter-choice .text-link{justify-self:start}.offer-heading{display:block}.offer-heading .text-link{margin-top:1.5rem}.pricing,.offer-disclosures{grid-template-columns:1fr}.price-card{padding:1.5rem} }
 </style>

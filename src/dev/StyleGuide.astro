@@ -1,0 +1,197 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import SectionLibrary from './SectionLibrary.astro';
+import PageIcon from '../components/PageIcon.astro';
+import EnquiryForm from '../components/EnquiryForm.svelte';
+import WorkExample from '../components/WorkExample.svelte';
+import { baseUrl, sitePath } from '../lib/site';
+const sections = ['Typography', 'Materials', 'Buttons', 'Images', 'Icons', 'Patterns', 'Forms', 'Components', 'Sections', 'Templates'];
+const icons = ['arrowRight', 'arrowUpRight', 'envelope', 'phone', 'file', 'pencil', 'laptop', 'wifi', 'users', 'user', 'shield', 'gear', 'tag', 'plus', 'pin', 'chat'];
+const images = [
+  { src: '/images/illustrations/new-business-storefront.webp', label: 'Illustration', alt: 'Illustrated small business storefront', treatment: 'photo-frame' },
+  { src: '/images/pages/business-it-desk.webp', label: 'Service image', alt: 'Business IT desk', treatment: 'photo-frame' },
+  { src: '/images/pages/local-help-note.webp', label: 'Handwritten annotation', alt: 'Handwritten local help annotation', treatment: 'hero-note' },
+  { src: '/images/work/12grapes-website.jpg', label: 'Website preview', alt: '12Grapes website preview', treatment: 'photo-frame' },
+];
+---
+<PageLayout title="Style guide | Servo ICT" description="Development reference for the Servo ICT website." canonicalPath="/style-guide/">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <div class="guide container">
+    <header class="guide-intro">
+      <p class="eyebrow">Servo ICT / Development only</p>
+      <h1>Style guide</h1>
+      <p class="lead">The website's type, materials and components, together in one place.</p>
+      <p class="fine-print">Live site styles. Hover, tab and click to inspect the controls. Form submissions stay on this page.</p>
+    </header>
+    <nav class="guide-nav" aria-label="Style guide sections">
+      {sections.map((section, index) => <a href={`#${section.toLowerCase()}`}><small>{String(index + 1).padStart(2, '0')}</small> {section}</a>)}
+    </nav>
+
+    <div class="guide-grid">
+      <section id="typography" class="specimen wide" aria-labelledby="type-title">
+        <h2 id="type-title" class="specimen-title">01 / Typography</h2>
+        <p class="specimen-note">Arial · Helvetica · sans-serif. Shared content-page styles; individual components may use their own scale.</p>
+        <div class="type-row"><code>h1</code><h1>Technology, sorted.</h1></div>
+        <div class="type-row"><code>h2</code><h2>Ready for what comes next.</h2></div>
+        <div class="type-row"><code>h3</code><h3>A clear next step for your business.</h3></div>
+        <div class="type-row"><code>.eyebrow</code><p class="eyebrow">Local help / Gippsland</p></div>
+        <div class="type-row"><code>.lead</code><p class="lead">A website, business email and practical help getting started.</p></div>
+        <div class="type-row"><code>p</code><p>Talk through what you need. We'll explain the options and <a href={sitePath('/about/')}>help you choose</a>. <strong>Clear advice</strong>, with <em>room for questions</em>.</p></div>
+        <div class="type-row"><code>.fine-print</code><p class="fine-print">Small supporting details, captions and notes.</p></div>
+      </section>
+
+      <section id="materials" class="specimen wide" aria-labelledby="materials-title">
+        <h2 id="materials-title" class="specimen-title">02 / Materials & colours</h2>
+        <div class="pair">
+          {['silver', 'black'].map((material) => <div class={`material-${material} material-sample`}>
+            <h3>{material === 'silver' ? 'Silver plastic' : 'Charcoal plastic'}</h3>
+            <p>Primary ink <span class="muted">/ muted ink</span></p>
+            <div class="swatches">{['plastic', 'ink', 'ink-muted', 'seam', 'error', 'success'].map((token) => <div><span class="swatch" style={`background:var(--${token})`}></span><code>--{token}</code></div>)}</div>
+            <p class="fine-print">{material === 'silver' ? '#c8cbcd surface · #303234 ink' : '#242628 surface · #c9cbcc ink'}</p>
+          </div>)}
+        </div>
+      </section>
+
+      <section id="buttons" class="specimen wide" aria-labelledby="buttons-title">
+        <h2 id="buttons-title" class="specimen-title">03 / Buttons & links</h2>
+        <p class="specimen-note">Primary actions use the textured button. Secondary actions use a text link. The outline sample is a guide-only proposal.</p>
+        <div class="pair">
+          {['silver', 'black'].map((material) => <div class={`material-${material} material-sample`}>
+            <p class="eyebrow">On {material}</p>
+            <div class="button-samples">
+              <div><small>Primary / .button</small><button class="button" type="button" data-demo>Let's talk <PageIcon name="arrowRight" size={20} /></button></div>
+              <div><small>Secondary / .text-link</small><a class="text-link" href="#patterns">See our work <PageIcon name="arrowRight" size={20} /></a></div>
+              <div><small>Outline / proposed</small><button class="button guide-outline" type="button" data-demo>View details <PageIcon name="arrowUpRight" size={20} /></button></div>
+              <div><small>Disabled</small><button class="button" type="button" disabled>Unavailable <PageIcon name="arrowRight" size={20} /></button></div>
+            </div>
+            <p class="fine-print">Hover for the raised edge, hold to press, or use Tab to see the focus ring.</p>
+          </div>)}
+        </div>
+        <p id="demo-status" class="fine-print" role="status" aria-live="polite">Button preview ready.</p>
+      </section>
+
+      <section id="images" class="specimen wide" aria-labelledby="images-title">
+        <h2 id="images-title" class="specimen-title">04 / Images</h2>
+        <div class="image-grid">{images.map((item) => <figure><div class="image-stage"><img class={item.treatment} src={sitePath(item.src)} alt={item.alt} loading="lazy" /></div><figcaption>{item.label}<code>.{item.treatment}</code></figcaption></figure>)}</div>
+      </section>
+
+      <section id="icons" class="specimen" aria-labelledby="icons-title">
+        <h2 id="icons-title" class="specimen-title">05 / Icons & identity</h2>
+        <p class="specimen-note">Phosphor regular icons · 24px · current text colour.</p>
+        <div class="icon-grid">{icons.map((name) => <div><PageIcon {name} /><code>{name}</code></div>)}</div>
+        <div class="logo-sample"><img src={sitePath('/images/servo-ict-logo.png')} alt="Servo ICT logo" width="48" height="48" /><strong>Servo ICT · Gippsland</strong></div>
+      </section>
+
+      <section class="specimen" aria-labelledby="details-title">
+        <h2 id="details-title" class="specimen-title">Details & lists</h2>
+        <div class="detail-list">
+          <details open><summary>Expanded detail</summary><p>Used for service explanations and frequently asked questions. Click the heading to collapse this content.</p></details>
+          <details><summary>Collapsed detail</summary><ul><li>A website that explains your services.</li><li>Email using your business name.</li><li>Help with the next step.</li></ul></details>
+        </div>
+        <div class="outcome"><PageIcon name="shield" size={32} /><div><h3>Service outcome</h3><p>An icon, a short heading and supporting copy.</p></div></div>
+      </section>
+
+      <section id="patterns" class="specimen wide" aria-labelledby="patterns-title">
+        <h2 id="patterns-title" class="specimen-title">06 / Work example</h2>
+        <p class="specimen-note">The shared WorkExample component, including its image, caption and project details.</p>
+        <WorkExample {baseUrl} />
+      </section>
+
+      <section id="forms" class="specimen wide" aria-labelledby="forms-title">
+        <h2 id="forms-title" class="specimen-title">07 / Forms & feedback</h2>
+        <p class="specimen-note">The shared enquiry form, rendered as a local demo. Enter sample values to inspect inputs, selection, focus and native validation.</p>
+        <div class="pair form-pair">
+          <div class="material-black material-sample form-demo">
+            <fieldset class="demo-fields" disabled><EnquiryForm {baseUrl} source="style-guide" /></fieldset>
+            <noscript>Enable JavaScript to try the form controls.</noscript>
+          </div>
+          <div class="material-silver material-sample feedback">
+            <h3>Feedback states</h3>
+            <p class="success">Success: your enquiry has been received.</p>
+            <p class="error">Error: enter an email address or phone number.</p>
+            <p class="fine-print">Helper: a personal email address is fine.</p>
+            <div class="material-black material-sample">
+              <h3>On charcoal</h3>
+              <p class="success">Success: your enquiry has been received.</p>
+              <p class="error">Error: enter an email address or phone number.</p>
+              <p class="fine-print">Helper: a personal email address is fine.</p>
+            </div>
+            <p id="form-demo-status" role="status" aria-live="polite" class="fine-print">Demo only. Nothing is sent.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <SectionLibrary />
+  </div>
+</PageLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-demo]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.querySelector('#demo-status')!.textContent = `${button.textContent?.trim()} clicked. This is a button preview.`;
+    });
+  });
+  const form = document.querySelector<HTMLFormElement>('.form-demo form');
+  if (form) {
+    // Remove the real endpoint even though the component is deliberately not hydrated.
+    form.removeAttribute('action');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      document.querySelector('#form-demo-status')!.textContent = 'Demo complete. Nothing was sent.';
+    });
+    document.querySelector<HTMLFieldSetElement>('.demo-fields')!.disabled = false;
+  }
+</script>
+
+<style>
+  .demo-fields { border:0; margin:0; padding:0; min-width:0; }
+  .guide { padding-block: 3rem 5rem; }
+  .guide-intro { max-width: 60rem; }
+  .guide-nav { display:flex; flex-wrap:wrap; gap:.25rem 1.5rem; padding-block:1.2rem; margin-block:2rem; border-block:1px solid var(--line); }
+  .guide-nav a { display:inline-flex; align-items:center; gap:.5rem; min-height:44px; font-size:.9rem; font-weight:700; }
+  .guide-nav small { color:var(--muted); font-weight:400; }
+  .guide-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; }
+  .specimen { min-width:0; padding:clamp(1.2rem,3vw,2rem); border:1px solid var(--line); border-radius:8px; box-shadow:var(--insert-shadow); }
+  .wide { grid-column:1/-1; }
+  .guide .specimen-title { font-size:.8rem; letter-spacing:.1em; line-height:1.5; text-transform:uppercase; margin-bottom:1.25rem; }
+  .guide .specimen-note { margin:0 0 1.5rem; color:var(--muted); font-size:.9rem; max-width:75ch; }
+  code { font-size:.73rem; overflow-wrap:anywhere; }
+  .type-row { display:grid; grid-template-columns:6rem minmax(0,1fr); gap:1rem; align-items:baseline; padding-block:1rem; border-top:1px solid var(--line); }
+  .guide .type-row p { margin:0; }
+  .pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; }
+  .material-sample { padding:1.5rem; border:1px solid var(--seam); border-radius:8px; box-shadow:var(--panel-shadow); min-width:0; }
+  .muted { color:var(--ink-muted); }
+  .swatches { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.5rem; }
+  .swatch { display:block; height:42px; border:1px solid var(--line); border-radius:4px; margin-bottom:.3rem; }
+  .button-samples { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem 1rem; }
+  .button-samples small { display:block; color:var(--muted); font-size:.75rem; margin-bottom:.75rem; }
+  .guide .guide-outline { background:transparent; box-shadow:none; border-color:var(--ink-muted); }
+  .guide .guide-outline:hover { background:color-mix(in srgb,var(--ink) 8%,transparent); }
+  .guide .guide-outline:active { box-shadow:inset 0 2px 3px rgb(0 0 0 / 20%); }
+  .image-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1.25rem; }
+  figure { margin:0; min-width:0; }
+  .image-stage { height:180px; display:grid; place-items:center; }
+  .image-stage img { width:100%; height:100%; min-height:0; object-fit:cover; }
+  .image-stage .hero-note { object-fit:contain; }
+  figcaption { margin-top:.75rem; font-size:.85rem; font-weight:700; }
+  figcaption code { display:block; font-weight:400; color:var(--muted); }
+  .icon-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1.25rem .5rem; }
+  .icon-grid > div { display:grid; justify-items:center; gap:.5rem; text-align:center; }
+  .logo-sample { display:flex; align-items:center; gap:1rem; border-top:1px solid var(--line); padding-top:1.5rem; margin-top:1.5rem; }
+  .logo-sample img { object-fit:contain; filter:grayscale(1); }
+  .guide .detail-list { margin-top:0; }
+  .form-pair { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); align-items:start; }
+  .success { color:var(--success); font-weight:600; }
+  .error { color:var(--error); }
+  .feedback > .material-sample { margin-top:1.5rem; }
+  @media (max-width:1050px) { .button-samples { grid-template-columns:1fr; } .image-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:700px) {
+    .guide { padding-top:2rem; }
+    .guide-grid,.pair,.form-pair { grid-template-columns:1fr; }
+    .type-row { grid-template-columns:1fr; gap:.6rem; }
+    .material-sample { padding:1.1rem; }
+    .image-grid { grid-template-columns:1fr; }
+    .image-stage { height:230px; }
+    .icon-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  }
+</style>

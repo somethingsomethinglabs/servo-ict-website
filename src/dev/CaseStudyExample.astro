@@ -1,0 +1,31 @@
+---
+import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
+import ProjectSection from '../components/ProjectSection.astro';
+import PageClose from '../components/PageClose.astro';
+import { sitePath } from '../lib/site';
+const project = {
+ title: 'Project template example | Servo ICT',
+ description: 'A development preview using the documented 12Grapes website project.',
+ canonicalPath: '/style-guide/case-study/',
+ eyebrow: 'Development preview / project template',
+ headline: 'Make the next step clear for growers.',
+ client: '12Grapes Vineyard Services',
+ intro: 'A service website and enquiry estimator for a Gippsland vineyard business.',
+ facts: [{label:'Client',value:'12Grapes Vineyard Services'},{label:'Location',value:'Gippsland'},{label:'Work',value:'Website design and writing'},{label:'Feature',value:'Enquiry estimator'}],
+ hero: {src:'/images/work/12grapes-website.jpg',alt:'12Grapes website showing vineyard services and an enquiry estimator',width:1425,height:891,caption:'The existing website provides the imagery and facts for this template example.'},
+ backLink: {href:sitePath('/style-guide/#templates'),label:'Template library'},
+};
+---
+<CaseStudyLayout {...project}>
+ <meta slot="head" name="robots" content="noindex, nofollow" />
+ <ProjectSection eyebrow="01 / The brief" title="Explain the work. Help people enquire." copy="The website needs to explain the vineyard services and give growers a useful way to start a conversation.">
+  <h3>The business need</h3><p>Make the service information clear and help customers describe the work they have in mind.</p><p>This is an alternative layout for an existing project. It introduces no new client results or performance claims.</p>
+ </ProjectSection>
+ <ProjectSection eyebrow="02 / What was built" title="Useful details before the conversation." copy="The enquiry estimator lets growers choose their vineyard area and the work required to see an indicative planning range." image={{src:'/images/pages/project-enquiry-flow.webp',alt:'Illustrative flow from describing the work to starting an enquiry',width:1400,height:933,caption:'An illustration of the enquiry flow, rather than a screenshot of the estimator.'}}>
+  <p>The estimate explains what can change the price and directs growers to confirm the job with the operator.</p>
+ </ProjectSection>
+ <ProjectSection eyebrow="03 / Delivered work" title="Show what the project does." copy="Use concrete delivery facts when measured business results are not available." theme="dark">
+  <ul><li>Service information for vineyard customers.</li><li>Clear contact routes.</li><li>A project-specific enquiry estimator.</li></ul><p>A longer case study can add measured results, methodology and an approved client quote here when those are available.</p>
+ </ProjectSection>
+ <PageClose slot="closing" title="What does your website need to do?" copy="Start with the business and the next step you want customers to take." action="See website services" href={sitePath('/websites/')} theme="light" compact />
+</CaseStudyLayout>

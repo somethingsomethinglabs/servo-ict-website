@@ -4,6 +4,9 @@ const mail = vi.hoisted(() => ({ sendMail: vi.fn(), createTransport: vi.fn() }))
 vi.mock('nodemailer', () => ({ default: { createTransport: mail.createTransport } }));
 
 import { POST } from './consultation';
+import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 function request(values: Record<string, string>, json = true) {
 	const form = new FormData();
@@ -18,17 +21,33 @@ async function post(req: Request) {
 }
 
 describe('consultation endpoint', () => {
+	it('counts owner SMTP acceptance once even if acknowledgement fails, but never counts a failed owner send', async () => {
+		const directory = await mkdtemp(join(tmpdir(), 'servo-delivered-'));
+		vi.stubEnv('ENQUIRY_METRICS_DIR', directory);
+		try {
+			mail.sendMail.mockResolvedValueOnce({ messageId: 'owner' }).mockRejectedValue(new Error('SMTP failure'));
+			const fields = { name: 'Alex', contact: 'alex@example.test', message: 'Starting a new shop', source: 'home', service: 'starter', originPath: '/', 'cf-turnstile-response': 'valid' };
+			expect((await post(request(fields))).status).toBe(200);
+			expect((await post(request(fields))).status).toBe(500);
+			const files = await readdir(directory);
+			expect(files).toHaveLength(1);
+			const counts = JSON.parse(await readFile(join(directory, files[0]), 'utf8'));
+			expect(counts).toEqual({ '["submission_confirmed","starter","home","/","server",""]': 1 });
+		} finally { await rm(directory, { recursive: true, force: true }); }
+	});
+
 	beforeEach(() => {
 		Object.assign(process.env, {
 			SMTP_USER: 'local-test', SMTP_PASSWORD: 'local-test', CONSULTATION_TO_EMAIL: 'owner@example.test',
 			CONSULTATION_FROM_EMAIL: 'website@example.test', TURNSTILE_SECRET_KEY: 'test-secret'
 		});
+		vi.stubEnv('ENQUIRY_METRICS_DIR', '');
 		mail.sendMail.mockReset();
 		mail.createTransport.mockReset().mockReturnValue({ sendMail: mail.sendMail });
-		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true, action: 'consultation' }), { status: 200 })));
+		vi.stubGlobal('fetch', vi.fn().mockImplementation(async () => new Response(JSON.stringify({ success: true, action: 'consultation' }), { status: 200 })));
 	});
 
-	afterEach(() => vi.unstubAllGlobals());
+	afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
 	it('delivers a phone-only enquiry without sending an acknowledgement', async () => {
 		mail.sendMail.mockResolvedValue({ messageId: 'owner' });
@@ -56,6 +75,20 @@ describe('consultation endpoint', () => {
 		expect(email.text).toContain('Timing: Before November <opening>');
 		expect(email.html).toContain('Before November &lt;opening&gt;');
 		expect(await result.text()).toContain('href="/servo-ict-website/contact/#consultation-form"');
+	});
+
+	it('delivers topic and safe source context to the owner', async () => {
+		mail.sendMail.mockResolvedValue({ messageId: 'owner' });
+		const result = await post(request({
+			name: 'Alex', contact: 'alex@example.com', service: 'security', message: 'Please help secure our accounts.',
+			source: '/security/', originPath: '/security/', 'cf-turnstile-response': 'valid'
+		}));
+		expect(result.status).toBe(200);
+		const email = mail.sendMail.mock.calls[0][0];
+		expect(email.text).toContain('Project type: Secure setup or tidy-up');
+		expect(email.text).toContain('Source: security');
+		expect(email.text).toContain('Page: /security/');
+		expect(email.html).toContain('<strong>Source:</strong> security');
 	});
 
 	it('keeps success when only the visitor acknowledgement fails', async () => {

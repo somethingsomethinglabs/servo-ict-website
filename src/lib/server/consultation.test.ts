@@ -8,10 +8,24 @@ function form(values: Record<string, string>) {
 }
 
 describe('parseConsultationRequest', () => {
-	it('accepts a phone-only short enquiry and supplies the starter service', () => {
+	it('accepts a phone-only short enquiry and supplies the unsure topic', () => {
 		expect(parseConsultationRequest(form({ name: 'Alex', contact: '0412 345 678', message: 'Opening a new cafe' }))).toEqual({
-			name: 'Alex', phone: '0412 345 678', service: 'starter', message: 'Opening a new cafe'
+			name: 'Alex', phone: '0412 345 678', service: 'unsure', message: 'Opening a new cafe', source: undefined, originPath: undefined
 		});
+	});
+
+	it('retains safe service and page context without accepting query strings', () => {
+		const submission = parseConsultationRequest(form({
+			name: 'Alex', contact: 'alex@example.com', message: 'Please help with our new website.',
+			service: 'website', source: 'case_study', originPath: '/work/12grapes/'
+		}));
+		expect(submission).toMatchObject({ service: 'website', source: 'case_study', originPath: '/work/12grapes/' });
+
+		const privateContext = parseConsultationRequest(form({
+			name: 'Alex', contact: 'alex@example.com', message: 'Please help with our new website.',
+			source: 'alex@example.com', originPath: '/contact/?email=alex@example.com'
+		}));
+		expect(privateContext).toMatchObject({ source: 'website', originPath: undefined });
 	});
 
 	it('accepts and normalises a personal email address', () => {

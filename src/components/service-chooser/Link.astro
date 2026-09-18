@@ -1,0 +1,16 @@
+---
+import PageIcon from '../PageIcon.astro';
+interface Props { href: string; label: string; description?: string; external?: boolean }
+const { href, label, description, external = false } = Astro.props;
+---
+<a class="service-choice" {href}>
+ <span><span class="choice-label">{label}</span>{description && <span class="choice-description">{description}</span>}</span>
+ <PageIcon name={external ? 'arrowUpRight' : 'arrowRight'} />
+</a>
+<style>
+ .service-choice { display:flex; justify-content:space-between; gap:1.5rem; align-items:center; min-height:70px; padding:1rem 0; border-bottom:1px solid var(--line); font-size:1.05rem; font-weight:700; text-decoration:none; }
+ .service-choice > span { min-width:0; }
+ .choice-label { overflow-wrap:anywhere; }
+ .choice-description { display:block; margin-top:.35rem; color:var(--muted); font-size:.93rem; font-weight:400; line-height:1.5; }
+ @media(max-width:700px) { .service-choice { min-height:64px; } }
+</style>

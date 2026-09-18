@@ -2,10 +2,12 @@
 import '@fontsource-variable/inter/wght.css';
 import '../styles/brand.css';
 import '../styles/pages.css';
+import EnquiryMeasurement from '../components/EnquiryMeasurement.astro';
 import SiteHeader from '../components/SiteHeader.svelte';
-import { baseUrl, sitePath } from '../lib/site';
-interface Props { title: string; description: string; canonicalPath: string; active?: string; image?: string; type?: 'website' | 'article'; publishedAt?: Date; updatedAt?: Date; turnstileSiteKey?: string }
-const { title, description, canonicalPath, active = '', image = '/og.png', type = 'website', publishedAt, updatedAt, turnstileSiteKey } = Astro.props;
+import { baseUrl, enquiryPath, sitePath } from '../lib/site';
+interface Props { title: string; description: string; canonicalPath: string; active?: string; image?: string; type?: 'website' | 'article'; publishedAt?: Date; updatedAt?: Date; turnstileSiteKey?: string; enquiryTopic?: string }
+const { title, description, canonicalPath, active = '', image = '/og.png', type = 'website', publishedAt, updatedAt, turnstileSiteKey, enquiryTopic } = Astro.props;
+const enquiryService = enquiryTopic ?? (canonicalPath === '/start-a-business/' ? 'starter' : canonicalPath === '/websites/' || canonicalPath.startsWith('/work/') ? 'website' : canonicalPath === '/business-it/' ? 'technology' : canonicalPath === '/security/' ? 'security' : undefined);
 const origin = Astro.site ?? new URL('https://servoict.com');
 const canonicalUrl = new URL(sitePath(canonicalPath), origin);
 const socialImage = new URL(sitePath(image), origin);
@@ -21,14 +23,20 @@ const socialImage = new URL(sitePath(image), origin);
 		<slot name="head" />
 	</head>
 	<body class="content-page">
+		<EnquiryMeasurement service={enquiryService} />
 		<a class="skip-link" href="#main-content">Skip to content</a>
-		<SiteHeader client:load {baseUrl} {active} />
+		<SiteHeader client:load {baseUrl} {active} service={enquiryService} source={sitePath(canonicalPath)} />
 		<main id="main-content"><slot /></main>
 		<footer class="page-footer container">
 			<a class="footer-brand" href={baseUrl}><img src={sitePath('/images/servo-ict-logo.png')} alt="" width="42" height="42" /><span>Servo ICT · Gippsland</span></a>
-			<nav aria-label="Footer navigation"><a href={sitePath('/websites/')}>Websites</a><a href={sitePath('/business-it/')}>Business IT</a><a href={sitePath('/security/')}>Security</a><a href={sitePath('/blog/')}>Advice</a><a href={sitePath('/work/12grapes/#about')}>About</a><a href={sitePath('/contact/')}>Contact</a><a href={sitePath('/privacy/')}>Privacy</a></nav>
+			<nav aria-label="Footer navigation"><a href={sitePath('/start-a-business/')}>Start a business</a><a href={sitePath('/websites/')}>Websites</a><a href={sitePath('/business-it/')}>Business IT</a><a href={sitePath('/security/')}>Account security</a><a href={sitePath('/blog/')}>Advice</a><a href={sitePath('/about/')}>About</a><a href={enquiryPath(enquiryService, sitePath(canonicalPath))}>Contact</a><a href={sitePath('/privacy/')}>Privacy</a></nav>
 			<div class="footer-contact"><a href="tel:0341488665">(03) 4148 8665</a><a href="mailto:support@servoict.com">support@servoict.com</a><small>© {new Date().getFullYear()} Servo ICT</small></div>
 		</footer>
 		{turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 	</body>
 </html>
+
+<script>
+ import { initializeEnquiryLinkTracking } from '../lib/enquiryEvents';
+ initializeEnquiryLinkTracking();
+</script>

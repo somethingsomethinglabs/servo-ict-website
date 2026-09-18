@@ -3,20 +3,20 @@
  interface Post { id:string; title:string; description:string; topic:string; category:string; image:string; imageAlt:string; href:string; date:string; }
  let { posts }:{posts:Post[]} = $props();
  let selected = $state('All advice');
- const categories = ['All advice','Accounts & security','Computers'];
+ const categories = ['All advice','Starting a business','Accounts & security','Computers'];
  let visible = $derived(posts.filter(post => selected === 'All advice' || post.category === selected));
- let featured = $derived(visible.find(post => post.id === '3-key-steps-to-protect-your-business-accounts'));
+ let featured = $derived(visible[0]);
  let remaining = $derived(visible.filter(post => post.id !== featured?.id));
 </script>
 <div class="filters" role="group" aria-label="Filter advice by topic">{#each categories as category}<button type="button" aria-pressed={selected === category} onclick={() => selected = category}>{category}</button>{/each}</div>
 <p class="visually-hidden" role="status">{visible.length} {visible.length === 1 ? 'guide' : 'guides'} shown.</p>
 {#if featured}
  <article class="featured">
-  <div><p class="topic">{featured.category}</p><h2><a href={featured.href}>{featured.title}</a></h2><p class="intro">Unique passwords, a password manager and a second sign-in check.</p><a class="button" href={featured.href}>Read the guide<Icon name="arrowRight" size={22} /></a></div>
+  <div><p class="topic">{featured.category}</p><h2><a href={featured.href}>{featured.title}</a></h2><p class="intro">{featured.description}</p><a class="button" href={featured.href}>Read the guide<Icon name="arrowRight" size={22} /></a></div>
   <img src={featured.image} alt={featured.imageAlt} width="1400" height="1120" loading="lazy" />
  </article>
 {/if}
-<h2 class="reading-title">{featured ? 'More useful reading.' : 'Advice for your computers.'}</h2>
+{#if remaining.length > 0}<h2 class="reading-title">{featured ? 'More useful reading.' : 'Practical advice.'}</h2>{/if}
 <div class="reading-list">{#each remaining as post}<article class="reading-row"><a class="thumbnail" href={post.href} tabindex="-1" aria-hidden="true"><img src={post.image} alt="" width="1400" height="1120" loading="lazy" /></a><div><p class="topic">{post.category}</p><h3><a href={post.href}>{post.title}</a></h3><p class="description">{post.description}</p><a class="text-link" href={post.href}>Read the article<Icon name="arrowRight" size={22} /></a></div></article>{/each}</div>
 <style>
  .filters { display:flex; flex-wrap:wrap; gap:1rem 3rem; margin-bottom:3rem; }

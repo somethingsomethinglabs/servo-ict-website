@@ -12,7 +12,11 @@
 	--section-space: clamp(3.5rem, 6.5vw, 6rem);
 	--section-space-compact: clamp(2.75rem, 4.5vw, 4.5rem);
 	--home-section-space: clamp(3rem, 4.8vw, 4.5rem);
-	--page-inset: max(5.5%, calc((100% - 1280px) / 2));
+	--band-space: clamp(1.5rem, 2.5vw, 2rem);
+	--reading-measure: 65ch;
+	--content-max: 1280px;
+	--content-width: min(89%, var(--content-max));
+	--page-inset: max(5.5%, calc((100% - var(--content-max)) / 2));
 	font-family: Arial, Helvetica, sans-serif;
 	font-synthesis: none;
 }
@@ -42,10 +46,10 @@
 .page-shell > footer,
 .content-page .page-footer,
 .process-section,
-.process-band,
+.process-band:not(.material-silver),
 .contact-section,
 .contact-panel,
-.page-close {
+.page-close:not(.material-silver) {
 	--plastic: var(--plastic-black);
 	--ink: var(--ink-on-black);
 	--ink-muted: var(--ink-muted-on-black);
@@ -125,6 +129,8 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
 body { margin: 0; }
+.page-shell, .content-page { overflow-wrap: anywhere; }
+:is(.split, .hero-inner, .offer-grid, .process-grid, .contact-grid, .work-example, .next-steps, .outcome, .pricing, .starter-choice) > * { min-inline-size: 0; }
 button, input, textarea, select { font: inherit; }
 a { color: inherit; text-underline-offset: .25em; }
 img { max-width: 100%; }
@@ -243,7 +249,7 @@ summary,
 .email-example img { mix-blend-mode: multiply; }
 
 @media (max-width: 700px) {
-	:root { --page-inset: 1.25rem; }
+	:root { --page-inset: min(1.25rem, 5vw); --content-width: calc(100% - var(--page-inset) - var(--page-inset)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
