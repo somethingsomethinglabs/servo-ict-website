@@ -51,4 +51,4 @@ Move a low-risk computer first. Once the software, printers and sign-in process 
 
 Compatible computers can use Microsoft's [Windows 11 installation options](https://www.microsoft.com/en-au/software-download/windows11). Older computers may need replacement. Compare the cost of replacement with the time and risk involved in keeping an unsupported device working.
 
-[Ask Servo ICT to help plan the move](../contact/?service=technology#consultation-form).
+[Ask Servo ICT to help plan the move](../contact/?service=technology&source=%2Fnavigating-windows-10s-end-of-life-a-guide-for-small-businesses%2F#consultation-form).

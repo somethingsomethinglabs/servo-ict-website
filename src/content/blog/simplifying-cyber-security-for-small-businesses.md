@@ -69,4 +69,4 @@ What stops if your internet, computer or cloud service is unavailable? Document 
 
 Cyber security is not about reaching perfection. It is about reducing avoidable risks and knowing how the business will recover when something goes wrong.
 
-[Talk to Servo ICT about your setup](../contact/?service=security#consultation-form).
+[Talk to Servo ICT about your setup](../contact/?service=security&source=%2Fsimplifying-cyber-security-for-small-businesses%2F#consultation-form).

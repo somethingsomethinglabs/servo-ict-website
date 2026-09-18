@@ -53,4 +53,4 @@ Collect feedback from everyone who needs to approve the site and return one cons
 
 Once the final facts and content are approved, the site can be tested and prepared for launch.
 
-[Read the full website and email preparation checklist](../what-to-prepare-for-your-business-website-and-email/), or [tell us what you are starting](../contact/?service=starter#consultation-form).
+[Read the full website and email preparation checklist](../what-to-prepare-for-your-business-website-and-email/), or [tell us what you are starting](../contact/?service=starter&source=%2Fcan-you-start-a-website-before-your-content-is-ready%2F#consultation-form).

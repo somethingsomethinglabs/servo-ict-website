@@ -44,19 +44,23 @@ All four workstreams delivered their implementation. The three sub-agents used `
 | 4 and 5 | About page and shared navigation implemented; legacy homepage anchors retained. |
 | 7, 8 and 9 | Service journeys updated, essential fit and limits visible, website form embedded, nested FAQ disclosure removed. |
 | 10 | Case study provides separate starter and website enquiry paths; legacy About anchor retained. |
-| 11 | Startup preparation article published in the local build, with a matching category and enquiry destination. |
-| 12 | Privacy-bounded event adapter and click/form instrumentation implemented. Analytics storage and a real baseline remain deployment work. |
+| 11 | Three startup advice articles cover preparation, annual running costs and starting before content is ready, with matching enquiry destinations. |
+| 12 | First-party aggregate measurement storage and private report implemented and tested locally. Production storage configuration and a real traffic baseline remain external work. |
 
 ## Verification
 
-- 34 automated tests pass, including endpoint delivery behavior, draft construction, request validation, measurement sanitization and server readiness.
+- 43 automated tests pass, including endpoint delivery behavior, draft construction, request validation, measurement sanitization and server readiness.
 - Astro check reports zero errors, warnings or hints.
 - Server and static production builds pass.
-- Static build contains 15 pages. All 389 checked internal links and anchors resolve. Evidence: `audit/customer-flow-2026-09-19/static-links.json`.
+- Final static build contains 17 pages. All 477 checked internal links and anchors resolve. Evidence: `audit/completion-2026-09-19/static-links.json`.
 - Browser checks covered shared mobile navigation, Escape behavior, startup offer anchors, About, startup advice filtering, article-to-contact handoff and editable service selection.
 - A local copied draft retained `Source: start_business` after moving from the starter page to Contact and changing the topic to unsure. A website draft retained website context. No test enquiry was sent externally.
 - Invalid contact details produced an inline error and preserved typed information.
 - Narrow IT and security pages had one form each, no nested details and no horizontal document overflow at the measured 339 CSS-pixel width. Home and Contact also had no document overflow at the measured 416 CSS-pixel width. Requested viewport overrides differed from reported browser dimensions, so these are the actual measurements.
 - Desktop Contact and mobile Home were visually inspected. No full accessibility audit or real customer usability study was performed.
 
-The site has not been deployed. Review the [starter assumptions](starter-offer-assumptions.md) before publishing the offer. Configure production delivery and an analytics collector according to [enquiry setup](enquiry-setup.md), then verify inbox receipt and establish a real enquiry baseline.
+The site has not been deployed. Review the [starter assumptions](starter-offer-assumptions.md) before publishing the offer. Configure production delivery and persistent aggregate measurement storage according to [enquiry setup](enquiry-setup.md), then verify inbox receipt and establish a real enquiry baseline.
+
+## Completion follow-up
+
+The remaining page-level gaps are closed: essential exclusions and website terms stay visible, the annual budget is labelled as provisional, proof and article links preserve enquiry context, and privacy opens without losing the draft. See [the recommendation comparison and updated diagrams](customer-flow-completion-2026-09-19.md) and [final local verification](../audit/completion-2026-09-19/README.md).

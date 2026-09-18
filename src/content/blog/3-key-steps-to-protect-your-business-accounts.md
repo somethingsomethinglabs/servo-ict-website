@@ -37,4 +37,4 @@ Review business accounts when a staff member or supplier leaves. Remove their ac
 
 Small changes here prevent a surprisingly large number of account problems.
 
-[Ask Servo ICT for help securing your accounts](../contact/?service=security#consultation-form).
+[Ask Servo ICT for help securing your accounts](../contact/?service=security&source=%2F3-key-steps-to-protect-your-business-accounts%2F#consultation-form).

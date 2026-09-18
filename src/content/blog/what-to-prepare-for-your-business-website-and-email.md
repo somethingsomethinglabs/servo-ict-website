@@ -38,4 +38,4 @@ Before you approve work, check what the setup includes, which recurring services
 
 Tell us what you are starting, what you already have and any date you are aiming for. We can work through the missing details together and confirm what needs to happen before launch.
 
-[See the website and email startup offer](../start-a-business/), or [tell us about your business](../contact/?service=starter#consultation-form). A personal email address or phone number is fine for the first conversation.
+[See the website and email startup offer](../start-a-business/), or [tell us about your business](../contact/?service=starter&source=%2Fwhat-to-prepare-for-your-business-website-and-email%2F#consultation-form). A personal email address or phone number is fine for the first conversation.

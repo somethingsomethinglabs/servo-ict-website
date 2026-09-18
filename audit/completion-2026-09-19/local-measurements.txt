@@ -1,0 +1,6 @@
+Aggregate event counts 2026-09-19 through 2026-09-19 (inclusive UTC dates). Counts are not unique visitors or a conversion rate.
+┌─────────┐
+│ (index) │
+├─────────┤
+└─────────┘
+No measurements in this period.
