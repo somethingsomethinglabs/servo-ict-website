@@ -63,3 +63,9 @@ Added faint grain within h1/h2 and brand lettering, using the existing 256px tex
 Desktop silver/black sections were visually checked in the browser. Conservative textured-ink contrast bounds are 4.92:1 on silver and 4.96:1 on black. Astro check and the 12-page static build pass; forced-colour/print fallbacks were source-reviewed.
 
 Added a static subpixel edge glint to the same textured headings and brand lettering: a faint upper-left highlight and lower-right shadow, each offset by less than half a CSS pixel. The filters follow the painted glyph edges without covering the grain or changing the ink face. Body text and controls remain unfiltered. Print and forced-colour modes remove the effect. Silver and black sections were visually checked; Astro check and the static build pass. This is a visual suggestion of thickness, not a physical measurement.
+
+## Recessed control openings
+
+Buttons now have a 2px clearance gap surrounded by a faint tapered rim, using a shaded upper edge and reflected lower edge. Pressed states change the face shading while keeping the opening stationary. Inputs and textareas use a finer 1px gap with the same rim treatment. Their focus outline sits 4px clear of the control edge. Material colours, content, hit areas and layout are unchanged.
+
+Desktop silver/black controls and the narrow-screen form were visually checked. Keyboard focus remains distinct from the rim and there is no horizontal overflow. Pressed/disabled and reduced-motion treatments were source-checked. Astro check and the 12-page static build pass; the form markup and scripts match the previous commit byte-for-byte.

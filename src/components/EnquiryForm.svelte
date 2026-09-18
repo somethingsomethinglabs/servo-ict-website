@@ -152,7 +152,7 @@
 	input { min-height: 48px; }
 	textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
 	input::placeholder, textarea::placeholder { color: var(--ink-muted); opacity: 1; }
-	input:focus, textarea:focus { outline: 2px solid var(--focus); outline-offset: 3px; }
+	input:focus, textarea:focus { outline: 2px solid var(--focus); outline-offset: 4px; }
 	[aria-invalid='true'] { border-color: var(--error); border-width: 2px; }
 	small, .error { color: var(--error); font-size: .875rem; line-height: 1.5; }
 	.help { color: var(--ink-muted); }
