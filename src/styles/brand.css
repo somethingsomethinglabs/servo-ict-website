@@ -76,6 +76,8 @@
 .contact-panel,
 .page-close {
 	--panel-shadow: inset 0 1px 0 var(--edge), 0 1px 2px rgb(0 0 0 / 16%);
+	--insert-shadow: inset 0 1px 0 var(--edge), inset 0 -1px 0 rgb(0 0 0 / 9%), 0 1px 0 var(--seam), 0 2px 2px rgb(0 0 0 / 12%);
+	--image-recess: 0 -1px 2px rgb(0 0 0 / 18%), 0 1px 0 var(--edge);
 	/* A narrow clearance gap, then the dark upper/light lower rim of the opening. */
 	--socket-gap: color-mix(in srgb, var(--seam), black 28%);
 	--button-socket: 0 0 0 2px var(--socket-gap), 0 -1px 1px 3px rgb(0 0 0 / 16%), 0 1px 1px 3px var(--edge);
@@ -258,4 +260,53 @@ summary,
 @media (forced-colors: active) {
 	:focus-visible { outline: 2px solid Highlight; outline-offset: 4px; }
 	:is(.button, .header-cta, .menu-button, .menu-toggle, button[type='submit'], input, textarea) { border-color: ButtonText; }
+}
+
+/* Fixed inserts have a shallow lip, without the clearance gap of a control. */
+:is(.page-shell, .content-page) .price-card {
+	border-color: var(--line);
+	border-radius: 8px;
+	box-shadow: var(--insert-shadow);
+}
+
+/* Dark upper/left edges and a reflected lower edge seat photographs in the panel. */
+:is(.page-shell, .content-page) :is(img.storefront, img.photo-frame, img.handover-image, .work-example .project-preview) {
+	border-color: var(--seam);
+	border-top-color: color-mix(in srgb, var(--seam), black 25%);
+	border-left-color: color-mix(in srgb, var(--seam), black 15%);
+	box-shadow: var(--image-recess);
+}
+
+/* The overlay sits over the image, so its inward shadow remains visible. */
+:is(.page-shell, .content-page) .project-preview {
+	position: relative;
+}
+:is(.page-shell, .content-page) .project-preview::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	box-shadow: inset 1px 2px 3px rgb(0 0 0 / 24%);
+	pointer-events: none;
+}
+
+/* A shallow channel appears beneath an expanded heading, in either material. */
+:is(.page-shell, .content-page) main details[open] > summary {
+	position: relative;
+	margin-bottom: .75rem;
+}
+:is(.page-shell, .content-page) main details[open] > summary::after {
+	content: '';
+	position: absolute;
+	inset: auto 0 0;
+	height: 1px;
+	background: var(--line);
+	box-shadow: 0 1px 0 var(--edge), 0 3px 3px rgb(0 0 0 / 10%);
+	pointer-events: none;
+}
+
+@media (forced-colors: active) {
+	:is(.page-shell, .content-page) .price-card { border-color: CanvasText; }
+	:is(.page-shell, .content-page) .project-preview::after,
+	:is(.page-shell, .content-page) main details[open] > summary::after { display: none; }
 }

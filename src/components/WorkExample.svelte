@@ -44,11 +44,11 @@
 	.project-link { display: inline-flex; align-items: center; gap: 1.5rem; min-height: 48px; margin-top: .4rem; font-size: 1rem; font-weight:700; text-decoration-thickness: 2px; text-underline-offset: .3em; }
 	.project-link:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
 	figure { min-width: 0; margin: 0; }
-	.project-preview { border: 1px solid var(--seam); border-radius:8px; box-shadow:var(--panel-shadow); background-color:var(--plastic); overflow: hidden; }
+	.project-preview { border: 1px solid var(--seam); border-radius:8px; box-shadow:var(--image-recess); background-color:var(--plastic); overflow: hidden; }
 	img { display: block; width: 100%; height: auto; }
 	.compact h2 { font-size: clamp(1.9rem, 3.25vw, 3rem); }
 	.compact figure { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .95fr); align-items: center; gap: 2rem; }
-	.compact .project-preview { border:1px solid var(--seam); box-shadow:var(--panel-shadow); }
+	.compact .project-preview { border:1px solid var(--seam); box-shadow:var(--image-recess); }
 	.compact img { aspect-ratio: 1.6; object-fit: cover; object-position: top; }
 	figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; margin-top: 1.2rem; font-size: .875rem; line-height: 1.5; }
 	.compact figcaption { display: block; margin: 0; font-size: .95rem; }
@@ -66,7 +66,7 @@
 		.work-example:not(.compact) { padding: 1.5rem; }
 		h2 { font-size: clamp(2.3rem, 8.5vw, 3.4rem); }
 		.example-intro { font-size: 1rem; }
-		.project-preview { box-shadow:var(--panel-shadow); }
+		.project-preview { box-shadow:var(--image-recess); }
 		figcaption { font-size: .875rem; line-height: 1.6; }
 		.compact figure { grid-template-columns: 1fr; gap: 1.25rem; }
 		.compact h2 { max-width: 16ch; font-size: clamp(2.1rem, 8vw, 3rem); }
